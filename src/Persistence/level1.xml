@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<level>
+    <tile type = "chap">
+        <x>4</x>
+        <y>4</y>
+    </tile>
+
+    <tile type = "info">
+        <x>4</x>
+        <y>3</y>
+    </tile>
+
+    <tile type = "exitLock">
+        <x>4</x>
+        <y>1</y>
+    </tile>
+
+    <tile type = "exit">
+        <x>4</x>
+        <y>0</y>
+    </tile>
+
+    <!--treasures-->
+    <tile type = "treasure">
+        <x>1</x>
+        <y>0</y>
+    </tile>
+    <tile type = "treasure">
+        <x>7</x>
+        <y>0</y>
+    </tile>
+    <tile type = "treasure">
+        <x>2</x>
+        <y>4</y>
+    </tile>
+    <tile type = "treasure">
+        <x>6</x>
+        <y>4</y>
+    </tile>
+    <tile type = "treasure">
+        <x>4</x>
+        <y>6</y>
+    </tile>
+    <tile type = "treasure">
+        <x>0</x>
+        <y>3</y>
+    </tile>
+    <tile type = "treasure">
+        <x>8</x>
+        <y>3</y>
+    </tile>
+    <tile type = "treasure">
+        <x>0</x>
+        <y>5</y>
+    </tile>
+    <tile type = "treasure">
+        <x>8</x>
+        <y>5</y>
+    </tile>
+
+    <!-- key & door -->
+    <tile type = "key">
+        <col>blue</col>
+        <x>2</x>
+        <y>3</y>
+    </tile>
+    <tile type = "key">
+        <col>blue</col>
+        <x>1</x>
+        <y>2</y>
+    </tile>
+    <tile type = "key">
+        <col>red</col>
+        <x>6</x>
+        <y>3</y>
+    </tile>
+    <tile type = "key">
+        <col>red</col>
+        <x>7</x>
+        <y>2</y>
+    </tile>
+    <tile type = "key">
+        <col>blue</col>
+        <x>2</x>
+        <y>5</y>
+    </tile>
+    <tile type = "key">
+        <col>blue</col>
+        <x>7</x>
+        <y>6</y>
+    </tile>
+    <tile type = "key">
+        <col>red</col>
+        <x>6</x>
+        <y>5</y>
+    </tile>
+    <tile type = "key">
+        <col>red</col>
+        <x>1</x>
+        <y>6</y>
+    </tile>
+
+
+<!--    <repeat_tile >-->
+<!--        <type>dinkar</type>-->
+<!--        <x_start>4</x_start>-->
+<!--        <y_start>4</y_start>-->
+<!--        <x_end>8</x_end>-->
+<!--        <y_start>4</y_start>-->
+<!--    </repeat_tile>-->
+
+<!--    <wallTile id="1" x="3" y="0"/>-->
+<!--    <wallTile id="2" x="0.50" y="0.70"/>-->
+<!--    <wallTile id="3" x="0.50" y="0.70"/><wallTile id="4" x="0.50" y="0.70"/><wallTile id="5" x="0.50" y="0.70"/>-->
+<!--    <wallTile id="6" x="0.50" y="0.70"/><wallTile id="7" x="0.50" y="0.70"/><wallTile id="8" x="0.50" y="0.70"/>-->
+<!--    <wallTile id="9" x="0.50" y="0.70"/>-->
+<!--    <wallTile id="10" x="0.50" y="0.70"/>-->
+<!--    <wallTile id="11" x="0.50" y="0.70"/><wallTile id="12" x="0.50" y="0.70"/>-->
+<!--    <wallTile id="13" x="0.50" y="0.70"/><wallTile id="14" x="0.50" y="0.70"/>-->
+<!--    <wallTile id="15" x="0.50" y="0.70"/>-->
+<!--    <wallTile id="16" x="0.50" y="0.70"/>-->
+<!--    <wallTile id="17" x="0.50" y="0.70"/><wallTile id="18" x="0.50" y="0.70"/><wallTile id="19" x="0.50" y="0.70"/>-->
+<!--    <wallTile id="20" x="0.50" y="0.70"/><wallTile id="21" x="0.50" y="0.70"/><wallTile id="22" x="0.50" y="0.70"/>-->
+<!--    <wallTile id="23" x="0.50" y="0.70"/>-->
+<!--    <wallTile id="24" x="0.50" y="0.70"/>-->
+<!--    <wallTile id="25" x="0.50" y="0.70"/>-->
+
+</level>
