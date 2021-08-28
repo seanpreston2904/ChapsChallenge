@@ -1,77 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <level>
-    <tile type = "chap"><x>5</x><y>4</y></tile>
 
-    <tile type = "info"><x>4</x><y>4</y></tile>
+    <tile type = "chap" image="chapIcon.png"><x>5</x><y>4</y></tile>
 
-    <tile type = "exitLock"><x>5</x><y>2</y></tile>
+    <tile type = "info" image="infoIcon.png"><x>4</x><y>4</y></tile>
 
-    <tile type = "exit"><x>5</x><y>1</y></tile>
+    <tile type = "exitLock" image="ELIcon.png"><x>5</x><y>2</y></tile>
+
+    <tile type = "exit" image="EIcon.png"><x>5</x><y>1</y></tile>
 
     <!--treasures-->
-    <tile type = "treasure"><x>2</x><y>2</y></tile>
-    <tile type = "treasure"><x>8</x><y>1</y></tile>
-    <tile type = "treasure"><x>1</x><y>4</y></tile>
-    <tile type = "treasure"><x>9</x><y>4</y></tile>
-    <tile type = "treasure"><x>3</x><y>5</y></tile>
-    <tile type = "treasure"><x>7</x><y>5</y></tile>
-    <tile type = "treasure"><x>1</x><y>6</y></tile>
-    <tile type = "treasure"><x>9</x><y>6</y></tile>
-    <tile type = "treasure"><x>5</x><y>7</y></tile>
+    <tile type = "treasure" image="treasureIcon.png"><x>2</x><y>2</y></tile>
+    <tile type = "treasure" image="treasureIcon.png"><x>8</x><y>1</y></tile>
+    <tile type = "treasure" image="treasureIcon.png"><x>1</x><y>4</y></tile>
+    <tile type = "treasure" image="treasureIcon.png"><x>9</x><y>4</y></tile>
+    <tile type = "treasure" image="treasureIcon.png"><x>3</x><y>5</y></tile>
+    <tile type = "treasure" image="treasureIcon.png"><x>7</x><y>5</y></tile>
+    <tile type = "treasure" image="treasureIcon.png"><x>1</x><y>6</y></tile>
+    <tile type = "treasure" image="treasureIcon.png"><x>9</x><y>6</y></tile>
+    <tile type = "treasure" image="treasureIcon.png"><x>5</x><y>7</y></tile>
 
     <!-- keys & doors -->
-    <tile type = "door"><col>blue</col><x>2</x><y>3</y></tile>
-    <tile type = "key"><col>blue</col><x>3</x><y>4</y></tile>
+    <tile type = "door" image="blueDoorIcon.png"><col>blue</col><x>2</x><y>3</y></tile>
+    <tile type = "key" image="blueKeyIcon.png"><col>blue</col><x>3</x><y>4</y></tile>
 
-    <tile type = "door"><col>red</col><x>8</x><y>3</y></tile>
-    <tile type = "key"><col>red</col><x>7</x><y>4</y></tile>
+    <tile type = "door" image="redDoorIcon.png"><col>red</col><x>8</x><y>3</y></tile>
+    <tile type = "key" image="redKeyIcon.png"><col>red</col><x>7</x><y>4</y></tile>
 
-    <tile type = "door"><col>blue</col><x>8</x><y>7</y></tile>
-    <tile type = "key"><col>blue</col><x>3</x><y>6</y></tile>
+    <tile type = "door" image="blueDoorIcon.png"><col>blue</col><x>8</x><y>7</y></tile>
+    <tile type = "key" image="blueKeyIcon.png"><col>blue</col><x>3</x><y>6</y></tile>
 
-    <tile type = "door"><col>red</col><x>2</x><y>7</y></tile>
-    <tile type = "key"><col>red</col><x>7</x><y>6</y></tile>
+    <tile type = "door" image="redDoorIcon.png"><col>red</col><x>2</x><y>7</y></tile>
+    <tile type = "key" image="redKeyIcon.png"><col>red</col><x>7</x><y>6</y></tile>
 
-    <tile type = "door"><col>green</col><x>3</x><y>2</y></tile>
-    <tile type = "key"><col>green</col><x>4</x><y>7</y></tile>
+    <tile type = "door" image="greenDoorIcon.png"><col>green</col><x>3</x><y>2</y></tile>
+    <tile type = "key" image="greenKeyIcon.png"><col>green</col><x>4</x><y>7</y></tile>
 
-    <tile type = "door"><col>green</col><x>7</x><y>2</y></tile>
-    <tile type = "key"><col>green</col><x>6</x><y>7</y></tile>
+    <tile type = "door" image="greenDoorIcon.png"><col>green</col><x>7</x><y>2</y></tile>
+    <tile type = "key" image="greenKeyIcon.png"><col>green</col><x>6</x><y>7</y></tile>
 
     <!-- random wallTile -->
-    <tile type = "wallTile"><x>4</x><y>1</y></tile> <tile type = "wallTile"><x>8</x><y>1</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>4</x><y>1</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>8</x><y>1</y></tile>
 
-    <tile type = "wallTile"><x>1</x><y>2</y></tile> <tile type = "wallTile"><x>2</x><y>2</y></tile>
-    <tile type = "wallTile"><x>4</x><y>2</y></tile> <tile type = "wallTile"><x>6</x><y>2</y></tile>
-    <tile type = "wallTile"><x>8</x><y>2</y></tile> <tile type = "wallTile"><x>9</x><y>2</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>1</x><y>2</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>2</x><y>2</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>4</x><y>2</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>6</x><y>2</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>8</x><y>2</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>9</x><y>2</y></tile>
 
-    <tile type = "wallTile"><x>2</x><y>4</y></tile> <tile type = "wallTile"><x>8</x><y>4</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>2</x><y>4</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>8</x><y>4</y></tile>
 
-    <tile type = "wallTile"><x>1</x><y>5</y></tile> <tile type = "wallTile"><x>2</x><y>5</y></tile>
-    <tile type = "wallTile"><x>8</x><y>5</y></tile> <tile type = "wallTile"><x>9</x><y>5</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>1</x><y>5</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>2</x><y>5</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>8</x><y>5</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>9</x><y>5</y></tile>
 
-    <tile type = "wallTile"><x>2</x><y>6</y></tile> <tile type = "wallTile"><x>8</x><y>6</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>2</x><y>6</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>8</x><y>6</y></tile>
 
     <!-- top wallTile -->
-    <repeatTile type = "wallTile">
+    <repeatTile type = "wallTile" image="wallIcon.png">
         <x_start>0</x_start><y_start>0</y_start>
         <x_end>10</x_end><y_end>0</y_end>
     </repeatTile>
 
     <!-- bottom wallTile -->
-    <repeatTile type = "wallTile">
+    <repeatTile type = "wallTile" image="wallIcon.png">
         <x_start>0</x_start><y_start>8</y_start>
         <x_end>10</x_end><y_end>8</y_end>
     </repeatTile>
 
     <!-- left wallTile -->
-    <repeatTile type = "wallTile">
+    <repeatTile type = "wallTile" image="wallIcon.png">
         <x_start>0</x_start><y_start>0</y_start>
         <x_end>0</x_end><y_end>8</y_end>
     </repeatTile>
 
     <!-- right wallTile -->
-    <repeatTile type = "wallTile">
+    <repeatTile type = "wallTile" image="wallIcon.png">
         <x_start>10</x_start><y_start>0</y_start>
         <x_end>10</x_end><y_end>8</y_end>
     </repeatTile>
