@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<level>
+
+    <tile type = "chap" image="chapIcon.png"><x>9</x><y>4</y></tile>
+
+    <tile type = "info" image="infoIcon.png"><x>9</x><y>3</y></tile>
+
+    <tile type = "exitLock" image="ELIcon.png"><x>2</x><y>4</y></tile>
+
+    <tile type = "exit" image="EIcon.png"><x>1</x><y>4</y></tile>
+
+    <!--treasures-->
+    <tile type = "treasure" image="chipIcon.png"><x>9</x><y>1</y></tile>
+    <tile type = "treasure" image="chipIcon.png"><x>9</x><y>7</y></tile>
+    <tile type = "treasure" image="chipIcon.png"><x>6</x><y>1</y></tile>
+    <tile type = "treasure" image="chipIcon.png"><x>6</x><y>7</y></tile>
+    <tile type = "treasure" image="chipIcon.png"><x>1</x><y>1</y></tile>
+    <tile type = "treasure" image="chipIcon.png"><x>1</x><y>7</y></tile>
+
+
+    <!-- random wallTile -->
+    <tile type = "wallTile" image="wallIcon.png"><x>1</x><y>3</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>2</x><y>3</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>1</x><y>5</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>2</x><y>5</y></tile>
+
+    <tile type = "wallTile" image="wallIcon.png"><x>6</x><y>3</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>6</x><y>4</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>6</x><y>5</y></tile>
+    <tile type = "wallTile" image="wallIcon.png"><x>7</x><y>4</y></tile>
+
+    <!-- top wallTile -->
+    <repeatTile type = "wallTile" image="wallIcon.png">
+        <x_start>0</x_start><y_start>0</y_start>
+        <x_end>10</x_end><y_end>0</y_end>
+    </repeatTile>
+
+    <!-- bottom wallTile -->
+    <repeatTile type = "wallTile" image="wallIcon.png">
+        <x_start>0</x_start><y_start>8</y_start>
+        <x_end>10</x_end><y_end>8</y_end>
+    </repeatTile>
+
+    <!-- left wallTile -->
+    <repeatTile type = "wallTile" image="wallIcon.png">
+        <x_start>0</x_start><y_start>0</y_start>
+        <x_end>0</x_end><y_end>8</y_end>
+    </repeatTile>
+
+    <!-- right wallTile -->
+    <repeatTile type = "wallTile" image="wallIcon.png">
+        <x_start>10</x_start><y_start>0</y_start>
+        <x_end>10</x_end><y_end>8</y_end>
+    </repeatTile>
+
+    <!--bugs-->
+    <movingTile type = "bug" image="bugIcon.png">
+        <bugStartPos>
+            <position x = "4" y = "2"/>
+            <position x = "4" y = "4"/>
+            <position x = "4" y = "6"/>
+        </bugStartPos>
+
+    </movingTile>
+
+
+
+</level>
