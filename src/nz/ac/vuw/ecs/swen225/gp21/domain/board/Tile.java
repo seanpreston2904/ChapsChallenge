@@ -5,7 +5,7 @@ import java.awt.*;
 public abstract class Tile {
 
     public enum TileType {
-        WALL, FREE, DOOR, EXIT
+        WALL, FREE, EXIT
     }
 
     Dimension location;

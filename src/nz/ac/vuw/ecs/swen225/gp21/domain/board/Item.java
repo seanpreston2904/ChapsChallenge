@@ -3,7 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp21.domain.board;
 public abstract class Item {
 
     public enum ItemType {
-        KEY, TREASURE, INFO, EXIT_LOCK
+        KEY, TREASURE, INFO, EXIT_LOCK, DOOR_LOCK
     }
 
     ItemType type;
