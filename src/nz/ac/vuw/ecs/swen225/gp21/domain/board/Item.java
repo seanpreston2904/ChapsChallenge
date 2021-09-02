@@ -6,13 +6,15 @@ public abstract class Item {
         KEY, TREASURE, INFO, EXIT_LOCK, DOOR_LOCK
     }
 
-    ItemType type;
+    private ItemType type;
+    private boolean impassable;
 
     /**
      * Constructor
      */
-    public Item(ItemType type) {
+    public Item(ItemType type, boolean impassable) {
         this.type = type;
+        this.impassable = impassable;
     }
 
     /**
@@ -28,10 +30,11 @@ public abstract class Item {
     }
 
     /**
-     * set type
+     * get whether you can move through
+     * @return
      */
-    public void setType(ItemType type) {
-        this.type = type;
+    public boolean isImpassable() {
+        return impassable;
     }
 
     /**
