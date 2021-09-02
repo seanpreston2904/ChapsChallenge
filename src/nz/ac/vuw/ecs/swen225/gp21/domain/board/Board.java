@@ -8,11 +8,27 @@ public class Board {
 
     Tile[][] board;
 
+    Dimension playerStartPosition;
+
     /**
      * Constructor
      */
     public Board(Tile[][] board) {
         this.board = board;
+    }
+
+    /**
+     * get where the player begins the game
+     */
+    public Dimension getPlayerStartPosition() {
+        return playerStartPosition;
+    }
+
+    /**
+     * set where the player begins the game
+     */
+    public void setPlayerStartPosition(Dimension playerStartPosition) {
+        this.playerStartPosition = playerStartPosition;
     }
 
     /**
