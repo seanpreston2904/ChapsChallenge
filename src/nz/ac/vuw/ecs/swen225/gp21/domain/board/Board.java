@@ -1,6 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain.board;
 
 
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
+
 import java.awt.*;
 import java.util.Arrays;
 
@@ -8,7 +10,7 @@ public class Board {
 
     Tile[][] board;
 
-    Dimension playerStartPosition;
+    Coordinate playerStartPosition;
 
     /**
      * Constructor
@@ -20,14 +22,14 @@ public class Board {
     /**
      * get where the player begins the game
      */
-    public Dimension getPlayerStartPosition() {
+    public Coordinate getPlayerStartPosition() {
         return playerStartPosition;
     }
 
     /**
      * set where the player begins the game
      */
-    public void setPlayerStartPosition(Dimension playerStartPosition) {
+    public void setPlayerStartPosition(Coordinate playerStartPosition) {
         this.playerStartPosition = playerStartPosition;
     }
 
@@ -37,8 +39,8 @@ public class Board {
      * @param p
      * @return
      */
-    public Tile getTile(Dimension p) {
-        return board[p.width][p.height];
+    public Tile getTile(Coordinate p) {
+        return board[p.getX()][p.getY()];
     }
 
     /**
@@ -47,9 +49,37 @@ public class Board {
      * @param p
      * @param tile
      */
-    public void setTile(Dimension p, Tile tile) {
-        board[p.width][p.height] = tile;
+    public void setTile(Coordinate p, Tile tile) {
+        board[p.getX()][p.getY()] = tile;
     }
+
+
+    /**
+     * Utility method to check for walls, doors and other impassable
+     *
+     * @param moveTo - the place to check
+     * @return
+     */
+    public boolean validMove(Coordinate moveTo) {
+        // is it null
+        if (moveTo == null) {
+            throw new NullPointerException("Illegal moveTo location");
+        }
+
+        // is it a wall
+        if (board[moveTo.getX()][moveTo.getY()].getType().equals(Tile.TileType.WALL)) {
+            return false;
+        }
+
+        // check for impassible items
+        if (board[moveTo.getX()][moveTo.getY()].getItem().isImpassable()) {
+            return false;
+        }
+
+        // otherwise return true
+        return true;
+    }
+
 
     /**
      * @return the board
