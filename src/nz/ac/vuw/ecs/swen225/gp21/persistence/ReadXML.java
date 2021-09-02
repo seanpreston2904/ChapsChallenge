@@ -1,4 +1,4 @@
-package Persistence;
+package nz.ac.vuw.ecs.swen225.gp21.persistence;
 
 import java.io.File;
 import java.util.List;

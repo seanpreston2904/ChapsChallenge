@@ -1,4 +1,4 @@
-package Persistence;
+package nz.ac.vuw.ecs.swen225.gp21.persistence;
 
 import org.junit.Test;
 
