@@ -20,6 +20,11 @@ public class Tile {
     public Tile(Coordinate location, TileType type, Item item) {
         this.location = location;
         this.type = type;
+        this.item = item;
+    }
+    public Tile(Coordinate location, TileType type) {
+        this.location = location;
+        this.type = type;
     }
 
     /**
