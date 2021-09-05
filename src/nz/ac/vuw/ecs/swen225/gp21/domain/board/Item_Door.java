@@ -17,6 +17,14 @@ public class Item_Door extends Item implements PreMove {
         this.color = color;
     }
 
+    /**
+     * get color
+     */
+    public String getColor() {
+        return color;
+    }
+
+
     @Override
     public void interact(Actor actor) {}
 
