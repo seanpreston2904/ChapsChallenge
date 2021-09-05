@@ -19,9 +19,8 @@ import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
 /**
- * The persistence module.
- * It is responsible for reading map files and reading/writing files.
- * representing the current game state (in JSON format) in order for the player to resume games.
+ * reading map files and saved game files from XML.
+ * representing the current game state in order for the player to resume games.
  *
  * @author Rae 300535154
  */

@@ -4,7 +4,7 @@
     <tile type = "chap" image="chapIcon.png"><x>9</x><y>4</y></tile>
 
     <tile type = "INFO" image="infoIcon.png">
-        <message>You need to collect all the chips to unlock the exit!</message>
+        <message>You need to collect all the chips to unlock the exit! Bugs are dangerous!</message>
         <x>9</x><y>3</y>
     </tile>
 
