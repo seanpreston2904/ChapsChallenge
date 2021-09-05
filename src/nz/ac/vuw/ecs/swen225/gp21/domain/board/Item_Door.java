@@ -7,12 +7,12 @@ import java.awt.*;
 
 public class Item_Door extends Item implements PreMove {
 
-    private Color color;
+    private String color;
 
     /**
      * Constructor initializes type LOCK_DOOR and impassable = true
      */
-    public Item_Door(Color color) {
+    public Item_Door(String color) {
         super(ItemType.LOCK_DOOR, true);
         this.color = color;
     }
