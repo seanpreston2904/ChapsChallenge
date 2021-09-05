@@ -1,9 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain.board;
 
+import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
+
 public abstract class Item {
 
     public enum ItemType {
-        KEY, TREASURE, INFO, EXIT_LOCK, DOOR_LOCK
+        KEY, TREASURE, INFO, LOCK_DOOR, LOCK_EXIT
     }
 
     private ItemType type;
@@ -20,7 +22,14 @@ public abstract class Item {
     /**
      * The key method of the item class is what happens when you interact. This is declared in the objects
      */
-    public abstract void interact();
+    public abstract void interact(Actor actor);
+
+    /**
+     * In order to locate items in the inventory we need n ID
+     */
+    public String getId() {
+        return "ID: " + type;
+    }
 
     /**
      * get type
@@ -36,6 +45,7 @@ public abstract class Item {
     public boolean isImpassable() {
         return impassable;
     }
+
 
     /**
      * @return type
