@@ -4,7 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 
 import java.awt.*;
 
-public abstract class Tile {
+public class Tile {
 
     public enum TileType {
         WALL, FREE, EXIT
@@ -18,6 +18,11 @@ public abstract class Tile {
      * Constructor
      */
     public Tile(Coordinate location, TileType type, Item item) {
+        this.location = location;
+        this.type = type;
+        this.item = item;
+    }
+    public Tile(Coordinate location, TileType type) {
         this.location = location;
         this.type = type;
     }

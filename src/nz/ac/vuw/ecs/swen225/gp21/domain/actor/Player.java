@@ -13,4 +13,30 @@ public class Player extends Actor {
         super(initial);
     }
 
+    /**
+     * Utility method for setting items
+     *
+     * @param item
+     */
+    public void addToInventory(Item item) {
+        inventory.add(item);
+    }
+
+    /**
+     * Utility method for removing items
+     *
+     * @param itemID
+     * @return - returns true ONLY if it was removed
+     */
+    public boolean removeFromInventory(String itemID) {
+
+        // loop through to find and remove
+        for (Item item : inventory) {
+            if (item.getId().equals(itemID)) {
+                return inventory.remove(item);
+            }
+        }
+
+        return false;
+    }
 }

@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain.board;
 
 
+import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 
 import java.awt.*;
@@ -11,6 +12,8 @@ public class Board {
     Tile[][] board;
 
     Coordinate playerStartPosition;
+
+    Player player;
 
     /**
      * Constructor
@@ -72,7 +75,15 @@ public class Board {
         }
 
         // check for impassible items
-        if (board[moveTo.getX()][moveTo.getY()].getItem().isImpassable()) {
+        // check for items that interaction will allow us to pass through
+        Item item = board[moveTo.getX()][moveTo.getY()].getItem();
+        if (item.isImpassable()) {
+
+            // attempt to interact with
+            if (item instanceof PreMove) {
+                return ((PreMove)item).preInteract(player);
+            }
+
             return false;
         }
 
