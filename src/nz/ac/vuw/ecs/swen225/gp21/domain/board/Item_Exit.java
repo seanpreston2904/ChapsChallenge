@@ -10,7 +10,7 @@ public class Item_Exit extends Item implements PreMove {
     /**
      * Constructor initializes type LOCK_EXIT and impassable = true
      */
-    public Item_Exit(Color color) {
+    public Item_Exit() {
         super(ItemType.LOCK_EXIT, true);
     }
 
