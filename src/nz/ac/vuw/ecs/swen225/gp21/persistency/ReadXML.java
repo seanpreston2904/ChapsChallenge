@@ -36,22 +36,30 @@ public class ReadXML {
 
     public static void main(String[] args) {
         ReadXML p = new ReadXML();
-        //p.readGameLevel("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml");
-        p.printTheBoard();
+        p.getBoardCopy("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
+        //p.getBoardCopy("src/nz/ac/vuw/ecs/swen225/gp21/persistency/game.XML");
     }
 
-    public Board printTheBoard(){
+    /**
+     * get the copy of the board, which contains all essential information of each tile.
+     * Tile type & Tile coordinate & (info message | key/door color)
+     *
+     * @return the completed board
+     */
+    public Board getBoardCopy(String fileName){
         Board newBoard = new Board(new Tile[WIDTH][HEIGHT]);
-        loadGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml");
 
-//        isMap = false;
-//        loadGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/game.XML");
+        if(fileName.equals("src/nz/ac/vuw/ecs/swen225/gp21/persistency/game.XML")){
+            isMap = false;
+        }
+        //parse the game file
+        loadGame(fileName);
 
         for (int x = 0; x < WIDTH; x++){
             for (int y = 0; y < HEIGHT; y++){
                 newBoard.setTile(new Coordinate(x,y),this.board.getTile(new Coordinate(x,y)));
                 Tile tile = board.getTile(new Coordinate(x,y));
-                System.out.println(tile.getType() +","+tile.getLocation()+", "+tile.getItem());
+                System.out.println(tile.getType() +", "+tile.getLocation()+", "+tile.getItem());
             }
         }
 
@@ -83,6 +91,7 @@ public class ReadXML {
             if (isMap) {
                 parseMapFile(document);
             }else {
+                System.out.println("NB: This is a copy of the saved game.");
                 readGameFromXML(document);
             }
 
