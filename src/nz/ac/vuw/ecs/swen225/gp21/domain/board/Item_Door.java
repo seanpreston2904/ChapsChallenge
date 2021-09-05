@@ -20,6 +20,9 @@ public class Item_Door extends Item implements PreMove {
     @Override
     public void interact(Actor actor) {}
 
+    public String getColor() {
+        return color;
+    }
 
     /**
      * PreInteract void fires upon player attempting to enter the cell
