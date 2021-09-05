@@ -3,7 +3,10 @@
 
     <tile type = "chap" image="chapIcon.png"><x>5</x><y>4</y></tile>
 
-    <tile type = "info" image="infoIcon.png"><x>4</x><y>4</y></tile>
+    <tile type = "info" image="infoIcon.png">
+        <message>You need to collect all the chips to unlock the exit!</message>
+        <x>4</x><y>4</y>
+    </tile>
 
     <tile type = "exitLock" image="ELIcon.png"><x>5</x><y>2</y></tile>
 
