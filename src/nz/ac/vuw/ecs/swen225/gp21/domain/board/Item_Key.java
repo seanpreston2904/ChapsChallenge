@@ -7,12 +7,12 @@ import java.awt.*;
 
 public class Item_Key extends Item {
 
-    private Color color;
+    private String color;
 
     /**
      * Constructor initializes type KEY and impassable = false
      */
-    public Item_Key(Color color) {
+    public Item_Key(String color) {
         super(ItemType.KEY, false);
         this.color = color;
     }
