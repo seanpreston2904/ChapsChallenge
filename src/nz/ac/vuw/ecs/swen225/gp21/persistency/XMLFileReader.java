@@ -24,7 +24,7 @@ import org.dom4j.io.SAXReader;
  *
  * @author Rae 300535154
  */
-public class ReadXML {
+public class XMLFileReader {
     private final int HEIGHT = 9;
     private final int WIDTH = 11;
     private final String[] nodes = {"tile","repeatTile","movingTile","treasureTile", "wallTile", "doorTile", "keyTile"};
@@ -52,7 +52,7 @@ public class ReadXML {
     }
 
     public static void main(String[] args) {
-        ReadXML p = new ReadXML();
+        XMLFileReader p = new XMLFileReader();
         p.printBoard();
     }
     /* ------------------------------------------------------------------------------------------ */
