@@ -7,7 +7,7 @@ import org.dom4j.Element;
  *
  * @author Rae 300535154
  */
-public class WriteToXML {
+public class XMLFileWriter {
 
     /**
      * convert the game objects to XML file.

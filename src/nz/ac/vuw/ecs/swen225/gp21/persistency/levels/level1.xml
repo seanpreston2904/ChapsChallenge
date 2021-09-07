@@ -28,7 +28,7 @@
     <tile type = "chap" image="chapIcon.png"><x>5</x><y>4</y></tile>
 
     <tile type = "INFO" image="infoIcon.png">
-        <message>You need to collect all the chips to unlock the exit!</message>
+        <message>COLLECT CHIPS TO GET PAST THE CHIP SOCKET. USE KEYS TO OPEN DOORS!</message>
         <x>5</x><y>5</y>
     </tile>
 
