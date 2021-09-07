@@ -19,6 +19,14 @@ public class Item_Info extends Item {
     }
 
     /**
+     * getter for info string
+     */
+    public String getInfo() {
+        return info;
+    }
+
+
+    /**
      * Interact void fires upon player entering the cell
      *
      * Info blurb pops up
