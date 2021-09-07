@@ -2,8 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp21.domain.board;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
-
-import java.awt.*;
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
 
 public class Item_Key extends Item {
 
@@ -41,5 +40,23 @@ public class Item_Key extends Item {
             player.addToInventory(this);
         }
 
+    }
+
+    /**
+     * In order to locate items in the inventory we need an ID
+     */
+    @Override
+    public String getId() {
+        return "ID: " + ItemType.KEY + " " + color;
+    }
+
+    /**
+     * @return type & color
+     */
+    @Override
+    public String toString() {
+        return "Item{" +
+                "type=" + ItemType.KEY + "," + color +
+                '}';
     }
 }

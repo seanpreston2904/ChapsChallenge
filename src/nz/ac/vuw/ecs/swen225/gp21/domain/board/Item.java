@@ -1,12 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain.board;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
 
 public abstract class Item {
-
-    public enum ItemType {
-        KEY, TREASURE, INFO, LOCK_DOOR, LOCK_EXIT
-    }
 
     private ItemType type;
     private boolean impassable;
@@ -31,7 +28,7 @@ public abstract class Item {
     public abstract void interact(Actor actor);
 
     /**
-     * In order to locate items in the inventory we need n ID
+     * In order to locate items in the inventory we need an ID
      */
     public String getId() {
         return "ID: " + type;

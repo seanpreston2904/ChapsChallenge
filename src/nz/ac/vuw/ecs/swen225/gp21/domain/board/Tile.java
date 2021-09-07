@@ -1,14 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain.board;
 
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 
-import java.awt.*;
-
 public class Tile {
-
-    public enum TileType {
-        WALL, FREE, EXIT
-    }
 
     private Coordinate location;
     private TileType type;

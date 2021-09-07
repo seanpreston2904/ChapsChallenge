@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp21.domain.board;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
 
 public class Item_Info extends Item {
 
