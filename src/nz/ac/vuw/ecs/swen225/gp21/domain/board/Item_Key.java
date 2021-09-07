@@ -17,10 +17,6 @@ public class Item_Key extends Item {
         this.color = color;
     }
 
-    public String getColor() {
-        return color;
-    }
-
     /**
      * get color
      */
@@ -43,9 +39,6 @@ public class Item_Key extends Item {
 
             // add to inventory
             player.addToInventory(this);
-
-            // remove from board
-            // TODO
         }
 
     }

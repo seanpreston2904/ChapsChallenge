@@ -10,6 +10,7 @@ public abstract class Item {
 
     private ItemType type;
     private boolean impassable;
+    private boolean oneTimeUse = true; // special criteria which determines if it is removed on interact
 
     /**
      * Constructor
@@ -17,6 +18,11 @@ public abstract class Item {
     public Item(ItemType type, boolean impassable) {
         this.type = type;
         this.impassable = impassable;
+    }
+    public Item(ItemType type, boolean impassable, boolean oneTimeUse) {
+        this.type = type;
+        this.impassable = impassable;
+        this.oneTimeUse = oneTimeUse;
     }
 
     /**
@@ -46,6 +52,12 @@ public abstract class Item {
         return impassable;
     }
 
+    /**
+     * getter for oneTimeUse
+     */
+    public boolean isOneTimeUse() {
+        return oneTimeUse;
+    }
 
     /**
      * @return type

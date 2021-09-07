@@ -8,9 +8,11 @@ import java.util.ArrayList;
 public class Player extends Actor {
 
     private ArrayList<Item> inventory;
+    private int treasure;
 
     public Player(Coordinate initial) {
         super(initial);
+        inventory = new ArrayList<>();
     }
 
     /**
@@ -38,5 +40,19 @@ public class Player extends Actor {
         }
 
         return false;
+    }
+
+    /**
+     * getter for treasure count
+     */
+    public int getTreasure() {
+        return treasure;
+    }
+
+    /**
+     * setter for treasure count
+     */
+    public void setTreasure(int treasure) {
+        this.treasure = treasure;
     }
 }

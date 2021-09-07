@@ -26,10 +26,8 @@ public class Item_Treasure extends Item {
             Player player = (Player)actor;
 
             // add to treasure
-            // TODO
+            player.setTreasure(player.getTreasure()+1);
 
-            // remove from board
-            // TODO
         }
 
     }

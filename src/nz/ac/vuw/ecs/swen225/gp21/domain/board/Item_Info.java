@@ -9,16 +9,18 @@ public class Item_Info extends Item {
 
     /**
      * Constructor initializes type TREASURE and impassable = false
+     *
+     * We also initialize with a special criteria "oneTimeUse = false" which means it is not removed
      */
     public Item_Info(String info) {
-        super(ItemType.INFO, false);
+        super(ItemType.INFO, false, false);
         this.info = info;
     }
 
     /**
      * Interact void fires upon player entering the cell
      *
-     * Treasure is added to treasure stash
+     * Info blurb pops up
      */
     @Override
     public void interact(Actor actor) {

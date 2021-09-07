@@ -46,4 +46,12 @@ public abstract class Actor {
         this.position = position;
     }
 
+    /**
+     * getter for the object's location
+     *
+     * @return position
+     */
+    public Coordinate getPosition() {
+        return this.position;
+    }
 }

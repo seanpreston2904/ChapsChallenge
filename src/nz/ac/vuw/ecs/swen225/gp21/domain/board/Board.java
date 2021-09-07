@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain.board;
 
 
+import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 
@@ -12,8 +13,6 @@ public class Board {
     Tile[][] board;
 
     Coordinate playerStartPosition;
-
-    Player player;
 
     /**
      * Constructor
@@ -63,7 +62,7 @@ public class Board {
      * @param moveTo - the place to check
      * @return
      */
-    public boolean validMove(Coordinate moveTo) {
+    public boolean validMove(Coordinate moveTo, Actor actor) {
         // is it null
         if (moveTo == null) {
             throw new NullPointerException("Illegal moveTo location");
@@ -81,7 +80,7 @@ public class Board {
 
             // attempt to interact with
             if (item instanceof PreMove) {
-                return ((PreMove)item).preInteract(player);
+                return ((PreMove)item).preInteract(actor);
             }
 
             return false;
