@@ -24,10 +24,13 @@
 
     Level 1: 
     - time 60sec
-    - total chaips: 9
-    - 4 pairs of keys and doors with 2 different colors
+    - total chip: 9
+    - key-door: 3 pairs 
+    NB: use a matching color key to open the door.
 
     Level 2:  
-   
+    - time 90sec
+    - total chip: 6
+    NB: watch out the monsters.
 
 
