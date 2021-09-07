@@ -17,6 +17,10 @@ public class Item_Key extends Item {
         this.color = color;
     }
 
+    public String getColor() {
+        return color;
+    }
+
     /**
      * get color
      */
