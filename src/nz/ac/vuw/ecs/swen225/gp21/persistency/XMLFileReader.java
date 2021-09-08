@@ -30,19 +30,27 @@ public class XMLFileReader {
     private final String[] nodes = {"tile","repeatTile","movingTile","treasureTile", "wallTile", "doorTile", "keyTile"};
 
     private Board board;
-    private boolean isMap = true;
     private List<Coordinate> bugStartPos = new ArrayList<>();
 
 
     /*----------------The debug function--------------------------------------------------------*/
     public void printBoard(){
-        //loadOriginGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
-        loadSavedGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedGame.xml");
+        loadOriginGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
+        //loadSavedGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedGame.xml");
 
         for (int x = 0; x < WIDTH; x++){
             for (int y = 0; y < HEIGHT; y++){
                 Tile tile = board.getTile(new Coordinate(x,y));
-                System.out.println(tile.getType() +", "+tile.getLocation()+", "+tile.getItem());
+                String col = null;
+                if(tile.getItem() != null) {
+                    if (tile.getItem().getType().toString().equals("KEY")) {
+                        col = ((Item_Key) tile.getItem()).getColor();
+                    }
+                    if (tile.getItem().getType().toString().equals("LOCK_DOOR")){
+                        col = ((Item_Door) tile.getItem()).getColor();
+                    }
+                }
+                System.out.println(tile.getType() +", "+tile.getLocation()+", "+tile.getItem()+" "+col);
             }
         }
 
@@ -64,12 +72,11 @@ public class XMLFileReader {
      * @param fileName game levels
      * @return the completed board
      */
-     public Board loadOriginGame(String fileName) {
-         isMap = true;
-         //parse the game file
-         loadGame(fileName);
+    public Board loadOriginGame(String fileName) {
+        //parse the game level file
+        readGameFile(fileName, true);
         return this.board;
-     }
+    }
 
     /**
      * load the board from saved game state, with updated tile status.
@@ -78,9 +85,9 @@ public class XMLFileReader {
      * @return the saved board
      */
     public Board loadSavedGame(String fName) {
-         isMap = false;
-         loadGame(fName);
-         return this.board;
+        //parse the saved game file
+        readGameFile(fName, false);
+        return this.board;
     }
 
     /**
@@ -90,7 +97,7 @@ public class XMLFileReader {
      *
      * @param fileName the input file
      */
-    private void loadGame(String fileName) {
+    private void readGameFile(String fileName, boolean isMap) {
         try {
             File input = new File(fileName);
             //InputStream inputStream = this.getClass().getResourceAsStream("/level"+level+".xml");
@@ -103,6 +110,7 @@ public class XMLFileReader {
             //parse the each node in the file
             if (isMap) {
                 parseMapFile(document);
+                System.out.println("Game level loaded.");
             }else {
                 System.out.println("NB: This is a copy of the saved game.");
                 parseSavedFile(document);
@@ -277,7 +285,7 @@ public class XMLFileReader {
     }
 
     /**
-     * set the reset of tiles on the board.
+     * set the rest of tiles on the board.
      *
      * @param type tile type
      * @param pos coordinate
