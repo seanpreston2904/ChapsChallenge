@@ -1,4 +1,4 @@
-package app;
+package nz.ac.vuw.ecs.swen225.gp21.app;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,7 +13,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import board.Board;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
+
 
 public class TitleScreen{
 	private Board board;
@@ -30,13 +31,13 @@ public class TitleScreen{
 		frame.setSize(714,420);
 		frame.setVisible(true);
 		
-		JLabel gameName = new JLabel("CHAP CHALLENGE");
+		JLabel gameName = new JLabel("CHAP'S CHALLENGE");
 		gameName.setFont(new Font("Monospaced", Font.BOLD, 25));
 		gameName.setForeground(Color.GREEN);
 		gameName.setBounds(250,50,300,70);
 		frame.add(gameName);
 		
-		JLabel gameName2 = new JLabel("CHAP CHALLENGE");
+		JLabel gameName2 = new JLabel("CHAP'S CHALLENGE");
 		gameName2.setFont(new Font("Monospaced", Font.BOLD, 25));
 		gameName2.setForeground(Color.WHITE);
 		gameName2.setBounds(253,51,300,70);
@@ -60,8 +61,11 @@ public class TitleScreen{
 		newGameButton.setBounds(300,0,100,50);
 		newGameButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-            	System.out.println("new game button pressed");
+            public void actionPerformed(ActionEvent e) {            	
+//            	XMLFileReader fileReader = new XMLFileReader();
+//            	this.board = loadOriginGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
+            	App app = new App(board);            	           	          	
+            	frame.dispose();            	
             }
         });
 		frame.add(newGameButton);
@@ -74,12 +78,12 @@ public class TitleScreen{
 		exitGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	System.out.println("exit game button pressed");
+            	frame.dispose();
             }
         });
 		frame.add(exitGameButton);
 						
-		ImageIcon img = new ImageIcon("src/app/resized_gif.gif");
+		ImageIcon img = new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp21/app/resized_gif.gif");
 		JLabel label = new JLabel();
 		label.setIcon(img);
 		label.setBounds(0,0,714,420);
