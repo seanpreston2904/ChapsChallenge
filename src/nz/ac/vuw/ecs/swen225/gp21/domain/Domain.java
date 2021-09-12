@@ -9,6 +9,9 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 
 import java.util.Random;
 
+/**
+ * The effective game class.
+ */
 public class Domain {
 
 
@@ -19,7 +22,7 @@ public class Domain {
     Player hero;
 
     /**
-     * The Domain initializes with a board from Persistence, this is the only req. for the Domain to launch
+     * The Domain initializes with a board from Persistence, this is the only req. for the Domain to launch.
      */
     public Domain(Board board) {
         this.board = board;
@@ -30,7 +33,7 @@ public class Domain {
     // what events can and cannot happen is controlled by the following methods
 
     /**
-     * Core method that handles the actor movement and checks for exceptions
+     * Core method that handles the actor movement and checks for exceptions.
      *
      * @param actor
      * @param direction
@@ -80,7 +83,7 @@ public class Domain {
     // - other ... ?
 
     /**
-     * When you step on an item you interact with the item
+     * When you step on an item you interact with the item.
      */
     public void interactWithItem(Actor actor) {
         Coordinate current = actor.getPosition();
