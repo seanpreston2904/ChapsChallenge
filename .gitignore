@@ -1,4 +1,8 @@
 # Default ignored IDEA files
 /.idea
 /out/*
+/.settings/
+.classpath
+.project
 a3-chaps-challenge.iml
+/bin/
