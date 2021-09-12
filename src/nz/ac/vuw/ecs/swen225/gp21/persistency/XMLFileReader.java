@@ -25,15 +25,22 @@ import org.dom4j.io.SAXReader;
  * @author Rae 300535154
  */
 public class XMLFileReader {
-    private final int HEIGHT = 9;
-    private final int WIDTH = 11;
-    private final String[] nodes = {"tile","repeatTile","movingTile","treasureTile", "wallTile", "doorTile", "keyTile"};
+    private final int HEIGHT = 9;  // the height of the board
+    private final int WIDTH = 11;  // the width of the board
+
+    // an array of all tilesNodes
+    private final String[] nodes =
+            {"tile","repeatTile","movingTile","treasureTile", "wallTile", "doorTile", "keyTile"};
 
     private Board board;
     private List<Coordinate> bugStartPos = new ArrayList<>();
 
 
     /*----------------The debug function--------------------------------------------------------*/
+
+    /**
+     * print the board with all tiles
+     */
     public void printBoard(){
         loadOriginGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
         //loadSavedGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedGame.xml");
