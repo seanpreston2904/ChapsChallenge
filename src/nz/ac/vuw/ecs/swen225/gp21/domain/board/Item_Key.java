@@ -9,7 +9,7 @@ public class Item_Key extends Item {
     private String color;
 
     /**
-     * Constructor initializes type KEY and impassable = false
+     * Constructor initializes type KEY and impassable = false.
      */
     public Item_Key(String color) {
         super(ItemType.KEY, false);
@@ -17,16 +17,16 @@ public class Item_Key extends Item {
     }
 
     /**
-     * get color
+     * Get color.
      */
     public String getColor() {
         return color;
     }
 
     /**
-     * Interact void fires upon player entering the cell
+     * Interact void fires upon player entering the cell.
      *
-     * Key is added to inventory
+     * Key is added to inventory.
      */
     @Override
     public void interact(Actor actor) {
@@ -43,16 +43,13 @@ public class Item_Key extends Item {
     }
 
     /**
-     * In order to locate items in the inventory we need an ID
+     * In order to locate items in the inventory we need an ID.
      */
     @Override
     public String getId() {
         return "ID: " + ItemType.KEY + " " + color;
     }
 
-    /**
-     * @return type & color
-     */
     @Override
     public String toString() {
         return "Item{" +

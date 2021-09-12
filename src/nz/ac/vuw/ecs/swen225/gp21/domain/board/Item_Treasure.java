@@ -7,16 +7,16 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
 public class Item_Treasure extends Item {
 
     /**
-     * Constructor initializes type TREASURE and impassable = false
+     * Constructor initializes type TREASURE and impassable = false.
      */
     public Item_Treasure() {
         super(ItemType.TREASURE, false);
     }
 
     /**
-     * Interact void fires upon player entering the cell
+     * Interact void fires upon player entering the cell.
      *
-     * Treasure is added to treasure stash
+     * Treasure is added to treasure stash.
      */
     @Override
     public void interact(Actor actor) {

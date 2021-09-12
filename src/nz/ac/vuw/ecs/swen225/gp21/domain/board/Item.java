@@ -10,7 +10,7 @@ public abstract class Item {
     private boolean oneTimeUse = true; // special criteria which determines if it is removed on interact
 
     /**
-     * Constructor
+     * Constructor.
      */
     public Item(ItemType type, boolean impassable) {
         this.type = type;
@@ -23,26 +23,26 @@ public abstract class Item {
     }
 
     /**
-     * The key method of the item class is what happens when you interact. This is declared in the objects
+     * The key method of the item class is what happens when you interact. This is declared in the objects.
      */
     public abstract void interact(Actor actor);
 
     /**
-     * In order to locate items in the inventory we need an ID
+     * In order to locate items in the inventory we need an ID.
      */
     public String getId() {
         return "ID: " + type;
     }
 
     /**
-     * get type
+     * Get type.
      */
     public ItemType getType() {
         return type;
     }
 
     /**
-     * get whether you can move through
+     * get whether you can move through.
      * @return
      */
     public boolean isImpassable() {
@@ -50,15 +50,12 @@ public abstract class Item {
     }
 
     /**
-     * getter for oneTimeUse
+     * Getter for oneTimeUse.
      */
     public boolean isOneTimeUse() {
         return oneTimeUse;
     }
 
-    /**
-     * @return type
-     */
     @Override
     public String toString() {
         return "Item{" +

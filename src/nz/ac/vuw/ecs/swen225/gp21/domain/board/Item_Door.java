@@ -9,7 +9,7 @@ public class Item_Door extends Item implements PreMove {
     private String color;
 
     /**
-     * Constructor initializes type LOCK_DOOR and impassable = true
+     * Constructor initializes type LOCK_DOOR and impassable = true.
      */
     public Item_Door(String color) {
         super(ItemType.LOCK_DOOR, true);
@@ -17,7 +17,7 @@ public class Item_Door extends Item implements PreMove {
     }
 
     /**
-     * get color
+     * Get color.
      */
     public String getColor() {
         return color;
@@ -28,7 +28,7 @@ public class Item_Door extends Item implements PreMove {
     public void interact(Actor actor) {}
 
     /**
-     * PreInteract void fires upon player attempting to enter the cell
+     * PreInteract void fires upon player attempting to enter the cell.
      * @return
      */
     @Override
@@ -50,9 +50,6 @@ public class Item_Door extends Item implements PreMove {
         return false;
     }
 
-    /**
-     * @return type & color
-     */
     @Override
     public String toString() {
         return "Item{" +

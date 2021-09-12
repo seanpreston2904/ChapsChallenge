@@ -9,9 +9,9 @@ public class Item_Info extends Item {
     private String info;
 
     /**
-     * Constructor initializes type TREASURE and impassable = false
+     * Constructor initializes type TREASURE and impassable = false.
      *
-     * We also initialize with a special criteria "oneTimeUse = false" which means it is not removed
+     * We also initialize with a special criteria "oneTimeUse = false" which means it is not removed.
      */
     public Item_Info(String info) {
         super(ItemType.INFO, false, false);
@@ -19,7 +19,7 @@ public class Item_Info extends Item {
     }
 
     /**
-     * getter for info string
+     * Getter for info string.
      */
     public String getInfo() {
         return info;
@@ -27,9 +27,9 @@ public class Item_Info extends Item {
 
 
     /**
-     * Interact void fires upon player entering the cell
+     * Interact void fires upon player entering the cell.
      *
-     * Info blurb pops up
+     * Info blurb pops up.
      */
     @Override
     public void interact(Actor actor) {

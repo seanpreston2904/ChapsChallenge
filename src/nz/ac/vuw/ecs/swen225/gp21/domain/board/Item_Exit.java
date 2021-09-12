@@ -7,7 +7,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
 public class Item_Exit extends Item implements PreMove {
 
     /**
-     * Constructor initializes type LOCK_EXIT and impassable = true
+     * Constructor initializes type LOCK_EXIT and impassable = true.
      */
     public Item_Exit() {
         super(ItemType.LOCK_EXIT, true);
@@ -18,7 +18,7 @@ public class Item_Exit extends Item implements PreMove {
     public void interact(Actor actor) {}
 
     /**
-     * PreInteract void fires upon player attempting to enter the cell
+     * PreInteract void fires upon player attempting to enter the cell.
      * @return
      */
     @Override
