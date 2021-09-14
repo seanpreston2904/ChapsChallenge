@@ -14,15 +14,22 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.XMLFileReader;
 
-
+/**
+ * A title screen before the game starts.
+ * 
+ */
 public class TitleScreen{
-	private Board board;
-	private String gameLink;
+	//private String gameLink;
 	private JButton loadGameButton = new JButton();
 	private JButton newGameButton = new JButton();
 	private JButton exitGameButton = new JButton();
 	
+	/**
+	 * Constructor for a title screen object.
+	 * 
+	 */
 	public TitleScreen() {
 		
 		JFrame frame = new JFrame();
@@ -60,11 +67,12 @@ public class TitleScreen{
 		newGameButton.setFont(new Font("Dialog", Font.PLAIN, 15));
 		newGameButton.setBounds(300,0,100,50);
 		newGameButton.addActionListener(new ActionListener() {
-            @Override
+
+			@Override
             public void actionPerformed(ActionEvent e) {            	
-//            	XMLFileReader fileReader = new XMLFileReader();
-//            	this.board = loadOriginGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
-            	App app = new App(board);            	           	          	
+            	XMLFileReader fileReader = new XMLFileReader();
+            	Board board = fileReader.loadOriginGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
+            	new App(board);     
             	frame.dispose();            	
             }
         });
