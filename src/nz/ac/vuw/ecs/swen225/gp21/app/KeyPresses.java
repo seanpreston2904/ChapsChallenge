@@ -9,50 +9,71 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.XMLFileReader;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.XMLFileWriter;
 
-
-
-
+/**
+ * Class for the key presses implementation.
+ */
 public class KeyPresses implements KeyListener {
 	
-	private Board board;
-	private Player hero = new Player(null);
-	private Enemy enemy = null;
+//	private Board board;
+//	private Player hero = new Player(null);
 	private Domain domain;
-	private App app;
 	private CountdownPanel countdownPanel;
 	private JFrame frame;
-	private Recorder recorder;
 	
 	public KeyPresses(App app, JFrame frame, Domain domain) {
-		
+		if(frame == null) {
+			System.out.println("frame is null");
+		}
 		this.domain = domain;
-		//this.hero = domain.hero;
-		//this.board = domain.board;
+//		this.hero = domain.hero;
+//		this.board = domain.board;
 	
 		this.frame = frame;
-		this.app = app;
+//		this.app = app;
 		this.countdownPanel = app.getCoundownPanel();
 		
-		frame.addKeyListener(this);	
-
-		// create a new recorder module
-		this.recorder = new Recorder();	
+		frame.addKeyListener(this);
 		
 	}
 
-
+	/**
+	 * actions when a key is pressed.
+	 * 
+	 * @param e event
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 				
 		int key = e.getKeyCode();
+		
+		if ((e.getKeyCode() == 49) && ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
+			
+			frame.dispose();
+   	 		XMLFileReader fileReader = new XMLFileReader();
+   	 		Board new_board = fileReader.loadOriginGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
+			new App(new_board);  
+			
+		}
+	
+		//CTRL-2 start new game lv2
+		if ((e.getKeyCode() == 50) && ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
+			
+			frame.dispose();
+   	 		XMLFileReader fileReader = new XMLFileReader();
+   	 		Board new_board = fileReader.loadOriginGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml");
+			new App(new_board);  
+			
+		}
 		
 		//only perform action when the game is not paused
 		if(countdownPanel.getStarted()) {
 			if(key == 37) {
 				domain.moveActor(Direction.EAST);
 				//TODO redraw the board in 2d
-				recorder.saveAction(Direction.EAST, board);
+				
 			}
 		
 			if(key == 38) {
@@ -85,6 +106,7 @@ public class KeyPresses implements KeyListener {
 			//CTRL-S is pressed to save and exit the game
 			if ((e.getKeyCode() == KeyEvent.VK_S) && ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
 				//TODO save the game
+				XMLFileWriter fileWriter = new XMLFileWriter();				
 				frame.dispose();
 			}
 		
@@ -93,19 +115,6 @@ public class KeyPresses implements KeyListener {
 			
 			}
 		
-			//CTRL-1 start new game lv1
-			if ((e.getKeyCode() == 49) && ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
-				frame.dispose();
-//       	 	XMLFileReader fileReader = new XMLFileReader();
-//   	     	this.board = loadOriginGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
-				new App(board);            	           	          	
-
-			}
-		
-			//CTRL-2 start new game lv2
-			if ((e.getKeyCode() == 50) && ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
-				System.out.println("ctrl-2");
-			}
 		}
 		else {
 			System.out.println("hahahahahahahah");
