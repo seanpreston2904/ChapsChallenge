@@ -22,6 +22,7 @@ public class KeyPresses implements KeyListener {
 	private App app;
 	private CountdownPanel countdownPanel;
 	private JFrame frame;
+	private Recorder recorder;
 	
 	public KeyPresses(App app, JFrame frame, Domain domain) {
 		
@@ -33,7 +34,10 @@ public class KeyPresses implements KeyListener {
 		this.app = app;
 		this.countdownPanel = app.getCoundownPanel();
 		
-		frame.addKeyListener(this);		
+		frame.addKeyListener(this);	
+
+		// create a new recorder module
+		this.recorder = new Recorder();	
 		
 	}
 
@@ -48,7 +52,7 @@ public class KeyPresses implements KeyListener {
 			if(key == 37) {
 				domain.moveActor(Direction.EAST);
 				//TODO redraw the board in 2d
-			
+				recorder.saveAction(Direction.EAST, board);
 			}
 		
 			if(key == 38) {
