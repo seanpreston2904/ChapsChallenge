@@ -56,7 +56,11 @@ public class Domain {
         actor.setPosition(moveToCoordinate);
 
         // call the item's interact event
-        interactWithItem(actor);
+        try {
+            interactWithItem(actor);
+        } catch (IllegalStateException e) {
+            // This is okay, it just means that no item was in this tile. Any other exception is an issue though.
+        }
     }
 
     /**
