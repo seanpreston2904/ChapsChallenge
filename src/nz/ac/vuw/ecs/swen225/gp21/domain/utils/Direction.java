@@ -2,7 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp21.domain.utils;
 
 public enum Direction {
     /**
-     * Using base Swing coordinate design
+     * Using base Swing coordinate design.
      *
      * North is -1 y
      * East is +1 x
