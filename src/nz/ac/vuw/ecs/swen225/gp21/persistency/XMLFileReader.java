@@ -36,42 +36,6 @@ public class XMLFileReader {
     private List<Coordinate> bugStartPos = new ArrayList<>();
 
 
-    /*----------------The debug function--------------------------------------------------------*/
-
-    /**
-     * print the board with all tiles
-     */
-    public void printBoard(){
-        loadOriginGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
-        //loadSavedGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedGame.xml");
-
-        for (int x = 0; x < WIDTH; x++){
-            for (int y = 0; y < HEIGHT; y++){
-                Tile tile = board.getTile(new Coordinate(x,y));
-                String col = null;
-                if(tile.getItem() != null) {
-                    if (tile.getItem().getType().toString().equals("KEY")) {
-                        col = ((Item_Key) tile.getItem()).getColor();
-                    }
-                    if (tile.getItem().getType().toString().equals("LOCK_DOOR")){
-                        col = ((Item_Door) tile.getItem()).getColor();
-                    }
-                }
-                System.out.println(tile.getType() +", "+tile.getLocation()+", "+tile.getItem()+" "+col);
-            }
-        }
-
-        if(!this.bugStartPos.isEmpty()) {
-            System.out.println("\n--------------------\nBug starts pos: " + this.bugStartPos);
-        }
-    }
-
-    public static void main(String[] args) {
-        XMLFileReader p = new XMLFileReader();
-        p.printBoard();
-    }
-    /* ------------------------------------------------------------------------------------------ */
-
     /**
      * load the board from the original game levels, which contains all essential information of each tile.
      * Tile type & Tile coordinate & (info message | key/door color)
@@ -96,6 +60,51 @@ public class XMLFileReader {
         readGameFile(fName, false);
         return this.board;
     }
+
+    /**
+     * get the starting coordinates of all bugs.
+     *
+     * @return a list of coordinates
+     */
+    public List<Coordinate> getBugStartPos() {
+        return bugStartPos;
+    }
+
+    /*----------------The debug function--------------------------------------------------------*/
+
+    /**
+     * print the board with all tiles
+     */
+    public void printBoard(){
+        Board board = loadOriginGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
+        //loadSavedGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedGame.xml");
+
+        for (int x = 0; x < WIDTH; x++){
+            for (int y = 0; y < HEIGHT; y++){
+                Tile tile = board.getTile(new Coordinate(x,y));
+                String col = null;
+                if(tile.getItem() != null) {
+                    if (tile.getItem().getType().toString().equals("KEY")) {
+                        col = ((Item_Key) tile.getItem()).getColor();
+                    }
+                    if (tile.getItem().getType().toString().equals("LOCK_DOOR")){
+                        col = ((Item_Door) tile.getItem()).getColor();
+                    }
+                }
+                System.out.println(tile.getType() +", "+tile.getLocation()+", "+tile.getItem()+" "+col);
+            }
+        }
+
+        if(!getBugStartPos().isEmpty()) {
+            System.out.println("\n--------------------\nBug starts pos: " + this.bugStartPos);
+        }
+    }
+
+    public static void main(String[] args) {
+        XMLFileReader p = new XMLFileReader();
+        p.printBoard();
+    }
+    /* ------------------------------------------------------------------------------------------ */
 
     /**
      * loads game from XML files.
@@ -326,12 +335,12 @@ public class XMLFileReader {
             case "LOCK_DOOR":
                 board.setTile(pos, new Tile(pos, Tile.TileType.FREE, new Item_Door(col)));
                 break;
+            case "FREE":
+                board.setTile(pos, new Tile(pos, Tile.TileType.FREE, null));
+                break;
             case "bug":
                 //TODO set BUG tile at corresponding position
                 this.bugStartPos.add(pos);
-                break;
-            case "FREE":
-                board.setTile(pos, new Tile(pos, Tile.TileType.FREE, null));
                 break;
             default:
                 System.out.println("No match tile found.");
