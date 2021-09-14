@@ -16,7 +16,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
-
+/**
+ * The class countdown panel that creates the countdown panel
+ * on the right of the main frame.
+ */
 public class CountdownPanel implements ActionListener {
 	
 //	private Board board;
@@ -52,7 +55,7 @@ public class CountdownPanel implements ActionListener {
 	
 	
 	 /**
-     * Constructor for the coundown panel
+     * Constructor for the coundown panel.
      *
      * @param time duration given in the level
      * @param current_level level player is playing
@@ -66,7 +69,7 @@ public class CountdownPanel implements ActionListener {
 		start_pause.setFocusable(false);
 		seconds_remaining = time;	
 		
-        // the title of each number boxes (TIME, LEVEL, CHIPSLEFT)
+		/*----------------Initialising all the JLabels----------------------------------*/
 		JLabel timer_title = titleLabel("TIME", Color.RED);		
         JLabel chips_title = titleLabel("CHIPS",Color.RED);  
         JLabel left_title  = titleLabel("LEFT", Color.RED);
@@ -76,16 +79,17 @@ public class CountdownPanel implements ActionListener {
         JLabel chips_title2 = titleLabel("CHIPS",Color.WHITE);  
         JLabel left_title2  = titleLabel("LEFT", Color.WHITE);
         JLabel level_title2 = titleLabel("LEVEL",Color.WHITE);
+		/*------------------------------------------------------------------------------*/
         
-        
-        
-        // the JLabels that contains all the value
+               
+		/*----------------Initialising all the boxes to put numbers in------------------*/
         time_left = buttonTitleSetup(String.valueOf(time));	        
         chips_left = buttonTitleSetup(String.valueOf(chipsleft));        		        
-        level = buttonTitleSetup(String.valueOf(current_level));     
+        level = buttonTitleSetup(String.valueOf(current_level)); 
+		/*------------------------------------------------------------------------------*/
         
-        //setting the location of the Jlabels
-        //----------------------------------------
+
+		/*----------------Setting up the locations for each label-----------------------*/
         timer_title.setBounds(75, 30, 96, 35);
         timer_title2.setBounds(76, 28, 96, 35);
         time_left.setBounds(55, 65, 96, 40);
@@ -98,7 +102,7 @@ public class CountdownPanel implements ActionListener {
         level_title2.setBounds(73, 223, 96, 35);
         level.setBounds(55, 260, 96, 40);
         start_pause.setBounds(60, 350, 90, 40);
-        //----------------------------------------
+		/*------------------------------------------------------------------------------*/
         
         countdownPanel.add(timer_title);
         countdownPanel.add(time_left);
@@ -113,6 +117,7 @@ public class CountdownPanel implements ActionListener {
         countdownPanel.add(left_title2);
         countdownPanel.add(level_title2);
         
+        // adding colour to the panel's background
         JPanel backgroundPan = new JPanel();
         backgroundPan.setBackground(Color.LIGHT_GRAY);
         backgroundPan.setBounds(5,5,195,445);
@@ -123,6 +128,11 @@ public class CountdownPanel implements ActionListener {
                            
 	}	
 	
+	 /**
+     * This method returns to countdown panel.
+     *
+     * @return the countdown panel
+     */
 	public JLayeredPane getPanel() {
 		return countdownPanel;
 	}
@@ -135,6 +145,7 @@ public class CountdownPanel implements ActionListener {
      * with roboto fond, bold, size 20 and coloured in red
      *
      * @param title name of the title
+     * @return a new JLabel
      */
 	public JLabel buttonTitleSetup(String title) {	
 		
@@ -149,6 +160,14 @@ public class CountdownPanel implements ActionListener {
 		
 	}
 	
+	/**
+     * This method sets up JLabel for all the time, chips left, level labels on the panel 
+     * with roboto fond, bold, size 20 and coloured in red
+     *
+     * @param title name of the title
+     * @param col of the font
+     * @return a new JLabel
+     */
 	public JLabel titleLabel(String title, Color col) {
 		
 		JLabel label = new JLabel(title);   
@@ -172,6 +191,11 @@ public class CountdownPanel implements ActionListener {
 	}
 	
 	
+	/**
+	 * Method execute when start button is pressed.
+	 * 
+	 * @param e event
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -192,7 +216,6 @@ public class CountdownPanel implements ActionListener {
 	/**
      * This method is called when the game starts or to resume the game
      */
-
 	public void start() {
 		started = true;
 		timer.start();
@@ -201,33 +224,36 @@ public class CountdownPanel implements ActionListener {
 	
 	/**
      * This method is called when the game is lost which will stop the timer and reset the level
-     */
-	
+     */	
 	public void stop() {
 		started = false;
 		timer.stop();	
 		
 		// TODO
 		// pop up a message and reset the level and making a new game
-		// after that reset the game
-
+		// board.reset() ??
 		
 	}
 	
 	/**
      * This method is called when the game is paused which timer will stop counting bu
-     */
-	
+     */	
 	public void pause() {
 		start_pause.setText("START");
 		started = false;
 		timer.stop();
 	}	
 	
+	/**
+	 * Return if the game is started or paused.
+	 * 
+	 * @return started or not
+	 */
 	public boolean getStarted() {
 		return started;
 	}
 	
+	/*----------------Test method----------------------------------*/
 	public static void main(String[] args) {
 		
 		new App(null);
