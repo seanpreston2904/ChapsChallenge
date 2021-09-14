@@ -12,6 +12,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Key;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Treasure;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -76,22 +77,13 @@ public class XMLFileReader {
      * print the board with all tiles
      */
     public void printBoard(){
-        Board board = loadOriginGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
-        //loadSavedGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedGame.xml");
+        //Board board = loadOriginGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
+        Board board =loadSavedGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedGame.xml");
 
         for (int x = 0; x < WIDTH; x++){
             for (int y = 0; y < HEIGHT; y++){
                 Tile tile = board.getTile(new Coordinate(x,y));
-                String col = null;
-                if(tile.getItem() != null) {
-                    if (tile.getItem().getType().toString().equals("KEY")) {
-                        col = ((Item_Key) tile.getItem()).getColor();
-                    }
-                    if (tile.getItem().getType().toString().equals("LOCK_DOOR")){
-                        col = ((Item_Door) tile.getItem()).getColor();
-                    }
-                }
-                System.out.println(tile.getType() +", "+tile.getLocation()+", "+tile.getItem()+" "+col);
+                System.out.println(tile.getType() +", "+tile.getLocation()+", "+tile.getItem());
             }
         }
 
@@ -206,13 +198,18 @@ public class XMLFileReader {
                 message = node.selectSingleNode("message").getText();
             }
 
+            String col = null;
+            if(type.equals("KEY") || type.equals("LOCK_DOOR")) {
+                col = element.attributeValue("col");
+            }
+
             // get the location of the tile
             String x = node.selectSingleNode("x").getText();
             String y = node.selectSingleNode("y").getText();
             Coordinate pos = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
 
             // set each tile at corresponding position
-            setSingleTileOnBoard(type, pos, message,null);
+            setSingleTileOnBoard(type, pos, message,col);
         }
     }
 
@@ -281,7 +278,7 @@ public class XMLFileReader {
         //fill each tile as FREE type
         for (int x = 0; x < WIDTH; x++){
             for (int y = 0; y < HEIGHT; y++){
-                this.board.setTile(new Coordinate(x, y), new Tile(new Coordinate(x, y), Tile.TileType.FREE,null));
+                this.board.setTile(new Coordinate(x, y), new Tile(new Coordinate(x, y), TileType.FREE,null));
             }
         }
     }
@@ -295,7 +292,7 @@ public class XMLFileReader {
     private void setWallOnBoard(Coordinate startPos, Coordinate endPos){
         for (int x = startPos.getX(); x < endPos.getX()+1; x++){
             for (int y = startPos.getY(); y < endPos.getY()+1; y++){
-                this.board.setTile(new Coordinate(x, y), new Tile(new Coordinate(x, y), Tile.TileType.WALL,null));
+                this.board.setTile(new Coordinate(x, y), new Tile(new Coordinate(x, y), TileType.WALL,null));
             }
         }
     }
@@ -315,28 +312,28 @@ public class XMLFileReader {
                 board.setPlayerStartPosition(pos);
                 break;
             case "EXIT":
-                board.setTile(pos, new Tile(pos, Tile.TileType.EXIT,null));
+                board.setTile(pos, new Tile(pos, TileType.EXIT,null));
                 break;
             case "INFO":
-                board.setTile(pos, new Tile(pos, Tile.TileType.FREE, new Item_Info(message)));
+                board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Info(message)));
                 break;
             case "LOCK_EXIT":
-                board.setTile(pos, new Tile(pos, Tile.TileType.FREE, new Item_Exit()));
+                board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Exit()));
                 break;
             case "WALL":
-                board.setTile(pos, new Tile(pos, Tile.TileType.WALL, null));
+                board.setTile(pos, new Tile(pos, TileType.WALL, null));
                 break;
             case "TREASURE":
-                board.setTile(pos, new Tile(pos, Tile.TileType.FREE, new Item_Treasure()));
+                board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Treasure()));
                 break;
             case "KEY":
-                board.setTile(pos, new Tile(pos, Tile.TileType.FREE, new Item_Key(col)));
+                board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Key(col)));
                 break;
             case "LOCK_DOOR":
-                board.setTile(pos, new Tile(pos, Tile.TileType.FREE, new Item_Door(col)));
+                board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Door(col)));
                 break;
             case "FREE":
-                board.setTile(pos, new Tile(pos, Tile.TileType.FREE, null));
+                board.setTile(pos, new Tile(pos, TileType.FREE, null));
                 break;
             case "bug":
                 //TODO set BUG tile at corresponding position
