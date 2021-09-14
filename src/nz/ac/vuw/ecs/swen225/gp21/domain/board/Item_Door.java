@@ -2,30 +2,33 @@ package nz.ac.vuw.ecs.swen225.gp21.domain.board;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
-
-import java.awt.*;
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
 
 public class Item_Door extends Item implements PreMove {
 
     private String color;
 
     /**
-     * Constructor initializes type LOCK_DOOR and impassable = true
+     * Constructor initializes type LOCK_DOOR and impassable = true.
      */
     public Item_Door(String color) {
         super(ItemType.LOCK_DOOR, true);
         this.color = color;
     }
 
-    @Override
-    public void interact(Actor actor) {}
-
+    /**
+     * Get color.
+     */
     public String getColor() {
         return color;
     }
 
+
+    @Override
+    public void interact(Actor actor) {}
+
     /**
-     * PreInteract void fires upon player attempting to enter the cell
+     * PreInteract void fires upon player attempting to enter the cell.
      * @return
      */
     @Override
@@ -45,5 +48,12 @@ public class Item_Door extends Item implements PreMove {
             }
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "type=" + ItemType.LOCK_DOOR + "," + color +
+                '}';
     }
 }

@@ -6,7 +6,7 @@ public class Coordinate {
     private int y;
 
     /**
-     * A coordinate is a simple metric containing and x and y coordinate
+     * A coordinate is a simple metric containing and x and y coordinate.
      * @param x
      * @param y
      */
@@ -16,37 +16,33 @@ public class Coordinate {
     }
 
     /**
-     * Getter for X
+     * Getter for X.
      */
     public int getX() {
         return x;
     }
 
     /**
-     * Setter for X
+     * Setter for X.
      */
     public void setX(int x) {
         this.x = x;
     }
 
     /**
-     * Getter for Y
+     * Getter for Y.
      */
     public int getY() {
         return y;
     }
 
     /**
-     * Setter for Y
+     * Setter for Y.
      */
     public void setY(int y) {
         this.y = y;
     }
 
-
-    /**
-     * to String method including x and y
-     */
     @Override
     public String toString() {
         return "{" + x +
