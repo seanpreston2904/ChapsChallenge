@@ -29,6 +29,15 @@ public class Domain {
         hero = new Player(board.getPlayerStartPosition());
     }
 
+
+    /**
+     * Gett for the Hero character.
+     */
+    public Player getPlayer() {
+        return this.hero;
+    }
+
+
     //  GAME LOGIC //
     // what events can and cannot happen is controlled by the following methods
 
