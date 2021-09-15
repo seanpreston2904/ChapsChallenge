@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 class RenderView extends JPanel {
 
-    private final float FPS_60 = 1000.0f/60.0f;     //Frame interval in milliseconds
+    private static final float FPS_60 = 1000.0f/60.0f;     //Frame interval in milliseconds
 
     private Timer timer;                            //Timer for even frame intervals
 
