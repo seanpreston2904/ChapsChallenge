@@ -1,9 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp21.persistency;
 
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Door;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Key;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.*;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -24,32 +21,61 @@ public class XMLFileWriter {
     private final int HEIGHT = 9;  // the height of the board
     private final int WIDTH = 11;  // the width of the board
 
+    /*----------------The debug function--------------------------------------------------------*/
     public static void main(String[] args) {
         XMLFileWriter p = new XMLFileWriter();
-        p.writeGameToXML();
+        p.saveCurrentMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml");
+        p.saveCurrentActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedAction.xml");
+    }
+    /* ------------------------------------------------------------------------------------------ */
 
+    /**
+     * save the current board of the game.
+     *
+     * @param fName the output file name
+     */
+    public void saveCurrentMap(String fName){
+        String rootName = "savedMap";
+        writeGameToXML(fName, rootName);
     }
 
     /**
-     * convert the game objects to XML file.
-     * all objects are from the board.
+     * save the current action records of the game.
+     *
+     * @param fName output file name
      */
-    public void writeGameToXML(){
+    public void saveCurrentActions(String fName){
+        String rootName = "savedAction";
+        writeGameToXML(fName, rootName);
+    }
+
+    /**
+     * save the game state to XML file.
+     *
+     * @param fName file name to save as
+     * @param rootName map or actions
+     */
+    public void writeGameToXML(String fName, String rootName){
         try {
             Document document = DocumentHelper.createDocument();
-            Element root = document.addElement("savedGame");
+            Element root = document.addElement(rootName);
 
-            //get all objects from the current game state to create the XML file
-            objectsToXML(root);
-            //TODO add movingBugs
+            if(rootName.equals("savedMap")){
+                //get all objects from the current game state to create the XML file
+                objectsToXML(root);
 
+                //TODO add movingBugs
+
+            }else {
+                gameActionsToXML(root);
+            }
 
             /* set the XML output Format with line change and index */
             OutputFormat XMLFormat = OutputFormat.createPrettyPrint();
             XMLFormat.setEncoding("UTF-8");
 
             // write the output XML to the path
-            Writer writer = new FileWriter("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedGame.xml");
+            Writer writer = new FileWriter(fName);
             XMLWriter XMLWriter = new XMLWriter(writer, XMLFormat);
             XMLWriter.write(document);
             XMLWriter.flush();
@@ -63,10 +89,55 @@ public class XMLFileWriter {
 
     }
 
-    public void objectsToXML(Element root){
+    /**
+     * save the game actions to XML.
+     *
+     * @param root the root ele
+     */
+    private void gameActionsToXML(Element root){
+        //TODO  get the saved actions from APP
+
+//        // current player pos
+//        Coordinate pos = new Coordinate(3,3) /*App.getPlayerCurrentPos*/;
+//        Element element1 = root.addElement("currentPos");
+//        element1.addAttribute("x", Integer.toString(pos.getX()));
+//        element1.addAttribute("y", Integer.toString(pos.getY()));
+
+        // time left
+        int timer = 0 /*App.getTimer*/;
+        Element element2 = root.addElement("timer");
+        element2.addAttribute("timeLeft", Integer.toString(timer));
+
+        // current level
+        int level = 0 /*App.getLevel*/;
+        Element element3 = root.addElement("currentLevel");
+        element3.addAttribute("level", Integer.toString(level));
+
+        // keys collected
+        int keys_B = 0 /*App.keysCollected*/;
+        int keys_R = 0;
+        int keys_G = 0;
+        Element element4 = root.addElement("keysCollected");
+        element4.addAttribute("keys_B", Integer.toString(keys_B));
+        element4.addAttribute("keys_R", Integer.toString(keys_R));
+        element4.addAttribute("keys_G", Integer.toString(keys_G));
+
+        // treasures left
+        int treasures = 0 /*App.treasuresLeft*/;
+        Element element5 = root.addElement("treasuresLeft");
+        element5.addAttribute("treasures", Integer.toString(treasures));
+
+    }
+
+    /**
+     * save the objects on the board to xml.
+     *
+     * @param root the root ele
+     */
+    private void objectsToXML(Element root){
         XMLFileReader p = new XMLFileReader();
-        //TODO  get the saved board from APP
-        Board b = p.loadOriginGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
+        //TODO  get the current board from APP
+        Board b = p.loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
 
         for (int x = 0; x < WIDTH; x++){
             for (int y = 0; y < HEIGHT; y++){
@@ -87,8 +158,8 @@ public class XMLFileWriter {
                         System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ col);
                     }
                     if(item.equals("INFO")){
-                        //TODO info = ((Item_Info)tile.getItem()).getInfo;
-                        info = "testing........";
+                        info = ((Item_Info)tile.getItem()).getInfo();
+                        System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ info);
                     }
 
                 }
@@ -98,8 +169,18 @@ public class XMLFileWriter {
         }
     }
 
-
-    public void addNodes(Element root, String type, String x, String y, String item, String col, String info) {
+    /**
+     * add all nodes to the file.
+     *
+     * @param root element root
+     * @param type tile type
+     * @param x x coordinate
+     * @param y y coordinate
+     * @param item item on tile
+     * @param col key/door col
+     * @param info message tile
+     */
+    private void addNodes(Element root, String type, String x, String y, String item, String col, String info) {
         Element element1 = root.addElement("tile");
         Element XElement = element1.addElement("x");
         Element YElement = element1.addElement("y");
@@ -118,6 +199,7 @@ public class XMLFileWriter {
         }else {
             element1.addAttribute("type", type);
         }
+
         //TODO add the image icon attribute
         //element1.addAttribute("image", icon);
 
@@ -126,18 +208,4 @@ public class XMLFileWriter {
         YElement.setText(y);
     }
 
-
-    public void addWalls(Element root){
-        Element element2 = root.addElement("repeatTile");
-        Element xStartElement = element2.addElement("x_start");
-        Element yStartElement = element2.addElement("y_start");
-        Element xEndElement = element2.addElement("x_end");
-        Element yEndElement = element2.addElement("y_end");
-        // add node attribution
-        element2.addAttribute("type", "wallTile");
-        xStartElement.setText("x1");
-        yStartElement.setText("y1");
-        xEndElement.setText("x2");
-        yEndElement.setText("y2");
-    }
 }
