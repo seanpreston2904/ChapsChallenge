@@ -18,7 +18,7 @@ import nz.ac.vuw.ecs.swen225.gp21.persistency.XMLFileWriter;
 public class KeyPresses implements KeyListener {
 	
 //	private Board board;
-//	private Player hero = new Player(null);
+	private Player hero;
 	private Domain domain;
 	private CountdownPanel countdownPanel;
 	private JFrame frame;
@@ -28,7 +28,7 @@ public class KeyPresses implements KeyListener {
 			System.out.println("frame is null");
 		}
 		this.domain = domain;
-//		this.hero = domain.hero;
+		this.hero = domain.getPlayer();
 //		this.board = domain.board;
 	
 		this.frame = frame;
@@ -71,22 +71,22 @@ public class KeyPresses implements KeyListener {
 		//only perform action when the game is not paused
 		if(countdownPanel.getStarted()) {
 			if(key == 37) {
-				domain.moveActor(Direction.EAST);
+				domain.moveActor(this.hero, Direction.EAST);
 				//TODO redraw the board in 2d
 				
 			}
 		
 			if(key == 38) {
 				System.out.println("hello");
-				domain.moveActor(Direction.NORTH);	
+				domain.moveActor(this.hero, Direction.NORTH);	
 			}
 				
 			if(key == 39) {
-				domain.moveActor(Direction.EAST);
+				domain.moveActor(this.hero, Direction.EAST);
 			}
 		
 			if(key == 40) {
-				domain.moveActor(Direction.SOUTH);
+				domain.moveActor(this.hero, Direction.SOUTH);
 			}
 			
 			if(key == 32) {
@@ -95,6 +95,8 @@ public class KeyPresses implements KeyListener {
 		
 			//ecs key pressed to close the "game is paused" dialogue
 			if(key == 27) {
+				//TODO close the game pause panel
+				
 				countdownPanel.start();								
 			}
 			
@@ -106,7 +108,8 @@ public class KeyPresses implements KeyListener {
 			//CTRL-S is pressed to save and exit the game
 			if ((e.getKeyCode() == KeyEvent.VK_S) && ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
 				//TODO save the game
-				XMLFileWriter fileWriter = new XMLFileWriter();				
+				XMLFileWriter fileWriter = new XMLFileWriter();	
+				
 				frame.dispose();
 			}
 		
