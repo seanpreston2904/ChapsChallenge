@@ -5,12 +5,14 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
@@ -50,19 +52,20 @@ public class TitleScreen{
 		gameName2.setBounds(253,51,300,70);
 		frame.add(gameName2);
 		
-
+		// this button is for loading a saved game.
 		loadGameButton.setText("LoadGame");
 		loadGameButton.setFont(new Font("Dialog", Font.PLAIN, 15));
 		loadGameButton.setBounds(100,0,100,50);
 		loadGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	System.out.println("load game button pressed");
+            	System.out.println("resume game button pressed");
+            	
             }
         });
 		frame.add(loadGameButton);
 
-	
+		// this button is for loading a new game
 		newGameButton.setText("NewGame");
 		newGameButton.setFont(new Font("Dialog", Font.PLAIN, 15));
 		newGameButton.setBounds(300,0,100,50);
@@ -70,14 +73,26 @@ public class TitleScreen{
 
 			@Override
             public void actionPerformed(ActionEvent e) {
-            	new App("level2");
-            	frame.dispose();            	
+				ImageIcon icon = new ImageIcon("...");
+            	String[] levels = {"level1", "level2"};
+            	
+            	String level = (String) JOptionPane.showInputDialog(
+            			frame,
+            			"Select a level",
+            			"Level Selection",
+            			JOptionPane.WARNING_MESSAGE,
+            			icon,
+            			levels,
+            			levels[0]
+            			);            	
+            	frame.dispose();       
+            	new App(level);
             }
         });
 		frame.add(newGameButton);
 		
 	
-		
+		// this button is for exiting the title screen.
 		exitGameButton.setText("ExitGame");
 		exitGameButton.setFont(new Font("Dialog", Font.PLAIN, 15));
 		exitGameButton.setBounds(500,0,100,50);
