@@ -64,6 +64,29 @@ public class Tile {
         this.item = item;
     }
 
+    /**
+     * Return a string for the console based version of this board.
+     *
+     * @return
+     */
+    public String consoleString() {
+        if (item != null) {
+            return item.consoleString();
+        }
+        switch (type) {
+
+            case FREE:
+                return "_|";
+
+            case WALL:
+                return "#|";
+
+            case EXIT:
+                return "!|";
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return "Tile{" + location +

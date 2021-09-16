@@ -56,4 +56,13 @@ public class Item_Key extends Item {
                 "type=" + ItemType.KEY + "," + color +
                 '}';
     }
+
+    /**
+     * Return a string for the console based version of this board.
+     *
+     * @return
+     */
+    public String consoleString() {
+        return "♥|";
+    }
 }
