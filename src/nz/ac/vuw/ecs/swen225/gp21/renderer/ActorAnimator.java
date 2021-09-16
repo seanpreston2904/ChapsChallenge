@@ -1,0 +1,31 @@
+package nz.ac.vuw.ecs.swen225.gp21.renderer;
+
+import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
+
+public class ActorAnimator extends ElementAnimator{
+
+    Actor actor;                        //Associated Actor
+    Coordinate animationOffset;         //Animation Offset (used to determine top left position of sprite mid-animation)
+
+    /**
+     * Actor Animator Constructor
+     * @param a actor to associate with animator
+     */
+    ActorAnimator(Actor a){ animationOffset = new Coordinate(0, 0); actor = a; }
+
+    /**
+     * Move the animator in a specified direction
+     * @param d direction to move animator in.
+     */
+    public void move(Direction d){
+
+        //TODO: update the animation offset (maybe on a separate thread? (maybe use timer? (this is gonna be interesting ¯\_(ツ)_/¯)))
+        //Assuming this method is called AFTER moving an actor, we can set the offset position such that the actor
+        //appears in their original position. We can then gradually ease it back to 0 (player input should not be
+        //possible during this time).
+
+    }
+
+}

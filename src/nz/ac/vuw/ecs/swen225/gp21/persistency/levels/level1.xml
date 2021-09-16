@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<level>
+
+    <!-- top wallTile -->
+    <repeatTile type = "WALL" image="wallIcon.png">
+        <x_start>0</x_start><y_start>0</y_start>
+        <x_end>10</x_end><y_end>0</y_end>
+    </repeatTile>
+
+    <!-- bottom wallTile -->
+    <repeatTile type = "WALL" image="wallIcon.png">
+        <x_start>0</x_start><y_start>8</y_start>
+        <x_end>10</x_end><y_end>8</y_end>
+    </repeatTile>
+
+    <!-- left wallTile -->
+    <repeatTile type = "WALL" image="wallIcon.png">
+        <x_start>0</x_start><y_start>0</y_start>
+        <x_end>0</x_end><y_end>8</y_end>
+    </repeatTile>
+
+    <!-- right wallTile -->
+    <repeatTile type = "WALL" image="wallIcon.png">
+        <x_start>10</x_start><y_start>0</y_start>
+        <x_end>10</x_end><y_end>8</y_end>
+    </repeatTile>
+
+    <tile type = "chap" image="chapIcon.png"><x>5</x><y>4</y></tile>
+
+    <tile type = "INFO" image="infoIcon.png">
+        <message>COLLECT CHIPS TO GET PAST THE CHIP SOCKET. USE KEYS TO OPEN DOORS!</message>
+        <x>5</x><y>5</y>
+    </tile>
+
+    <tile type = "LOCK_EXIT" image="ELIcon.png"><x>5</x><y>2</y></tile>
+
+    <tile type = "EXIT" image="EIcon.png"><x>5</x><y>1</y></tile>
+
+    <doorTile type = "LOCK_DOOR" image="blueDoorIcon.png" col = "blue">
+        <pos>
+            <position x = "2" y = "3"/>
+            <position x = "8" y = "7"/>
+        </pos>
+    </doorTile>
+
+    <doorTile type = "LOCK_DOOR" image="redDoorIcon.png" col = "red">
+        <pos>
+            <position x = "8" y = "3"/>
+            <position x = "2" y = "7"/>
+        </pos>
+    </doorTile>
+
+    <doorTile type = "LOCK_DOOR" image="greenDoorIcon.png" col = "green">
+        <pos>
+            <position x = "3" y = "2"/>
+            <position x = "7" y = "2"/>
+        </pos>
+    </doorTile>
+
+    <keyTile type = "KEY" image="blueKeyIcon.png" col = "blue">
+        <pos>
+            <position x = "3" y = "4"/>
+            <position x = "3" y = "6"/>
+        </pos>
+    </keyTile>
+
+    <keyTile type = "KEY" image="redKeyIcon.png" col = "red">
+        <pos>
+            <position x = "7" y = "4"/>
+            <position x = "7" y = "6"/>
+        </pos>
+    </keyTile>
+
+    <keyTile type = "KEY" image="greenKeyIcon.png" col = "green">
+        <pos>
+            <position x = "4" y = "7"/>
+            <position x = "6" y = "7"/>
+        </pos>
+    </keyTile>
+
+    <treasureTile type = "TREASURE" image="chipIcon.png">
+        <pos>
+            <position x = "2" y = "1"/>
+            <position x = "8" y = "1"/>
+            <position x = "1" y = "4"/>
+            <position x = "9" y = "4"/>
+            <position x = "3" y = "5"/>
+            <position x = "7" y = "5"/>
+            <position x = "1" y = "6"/>
+            <position x = "9" y = "6"/>
+            <position x = "5" y = "7"/>
+        </pos>
+    </treasureTile>
+
+    <wallTile type = "WALL" image="wallIcon.png">
+        <pos>
+            <position x = "4" y = "1"/>
+            <position x = "6" y = "1"/>
+
+            <position x = "1" y = "2"/>
+            <position x = "2" y = "2"/>
+            <position x = "4" y = "2"/>
+            <position x = "6" y = "2"/>
+            <position x = "8" y = "2"/>
+            <position x = "9" y = "2"/>
+
+            <position x = "2" y = "4"/>
+            <position x = "8" y = "4"/>
+
+            <position x = "1" y = "5"/>
+            <position x = "2" y = "5"/>
+            <position x = "8" y = "5"/>
+            <position x = "9" y = "5"/>
+
+            <position x = "2" y = "6"/>
+            <position x = "8" y = "6"/>
+        </pos>
+    </wallTile>
+
+</level>
+
+        <!--treasures-->
+        <!--    <tile type = "TREASURE" image="treasureIcon.png"><x>2</x><y>1</y></tile>-->
+        <!--    <tile type = "TREASURE" image="treasureIcon.png"><x>8</x><y>1</y></tile>-->
+        <!--    <tile type = "TREASURE" image="treasureIcon.png"><x>1</x><y>4</y></tile>-->
+        <!--    <tile type = "TREASURE" image="treasureIcon.png"><x>9</x><y>4</y></tile>-->
+        <!--    <tile type = "TREASURE" image="treasureIcon.png"><x>3</x><y>5</y></tile>-->
+        <!--    <tile type = "TREASURE" image="treasureIcon.png"><x>7</x><y>5</y></tile>-->
+        <!--    <tile type = "TREASURE" image="treasureIcon.png"><x>1</x><y>6</y></tile>-->
+        <!--    <tile type = "TREASURE" image="treasureIcon.png"><x>9</x><y>6</y></tile>-->
+        <!--    <tile type = "TREASURE" image="treasureIcon.png"><x>5</x><y>7</y></tile>-->
+
+
+        <!-- random wallTile -->
+        <!--<tile type = "WALL" image="wallIcon.png"><x>4</x><y>1</y></tile>-->
+        <!--<tile type = "WALL" image="wallIcon.png"><x>6</x><y>1</y></tile>-->
+
+        <!--<tile type = "WALL" image="wallIcon.png"><x>1</x><y>2</y></tile>-->
+        <!--<tile type = "WALL" image="wallIcon.png"><x>2</x><y>2</y></tile>-->
+        <!--<tile type = "WALL" image="wallIcon.png"><x>4</x><y>2</y></tile>-->
+        <!--<tile type = "WALL" image="wallIcon.png"><x>6</x><y>2</y></tile>-->
+        <!--<tile type = "WALL" image="wallIcon.png"><x>8</x><y>2</y></tile>-->
+        <!--<tile type = "WALL" image="wallIcon.png"><x>9</x><y>2</y></tile>-->
+
+        <!--<tile type = "WALL" image="wallIcon.png"><x>2</x><y>4</y></tile>-->
+        <!--<tile type = "WALL" image="wallIcon.png"><x>8</x><y>4</y></tile>-->
+
+        <!--<tile type = "WALL" image="wallIcon.png"><x>1</x><y>5</y></tile>-->
+        <!--<tile type = "WALL" image="wallIcon.png"><x>2</x><y>5</y></tile>-->
+        <!--<tile type = "WALL" image="wallIcon.png"><x>8</x><y>5</y></tile>-->
+        <!--<tile type = "WALL" image="wallIcon.png"><x>9</x><y>5</y></tile>-->
+
+        <!--<tile type = "WALL" image="wallIcon.png"><x>2</x><y>6</y></tile>-->
+        <!--<tile type = "WALL" image="wallIcon.png"><x>8</x><y>6</y></tile>-->
+
+        <!-- keys & doors -->
+        <!--    <tile type = "LOCK_DOOR" image="blueDoorIcon.png"><col>blue</col><x>2</x><y>3</y></tile>-->
+        <!--    <tile type = "KEY" image="blueKeyIcon.png"><col>blue</col><x>3</x><y>4</y></tile>-->
+
+        <!--    <tile type = "LOCK_DOOR" image="redDoorIcon.png"><col>red</col><x>8</x><y>3</y></tile>-->
+        <!--    <tile type = "KEY" image="redKeyIcon.png"><col>red</col><x>7</x><y>4</y></tile>-->
+
+        <!--    <tile type = "LOCK_DOOR" image="blueDoorIcon.png"><col>blue</col><x>8</x><y>7</y></tile>-->
+        <!--    <tile type = "KEY" image="blueKeyIcon.png"><col>blue</col><x>3</x><y>6</y></tile>-->
+
+        <!--    <tile type = "LOCK_DOOR" image="redDoorIcon.png"><col>red</col><x>2</x><y>7</y></tile>-->
+        <!--    <tile type = "KEY" image="redKeyIcon.png"><col>red</col><x>7</x><y>6</y></tile>-->
+
+        <!--    <tile type = "LOCK_DOOR" image="greenDoorIcon.png"><col>green</col><x>3</x><y>2</y></tile>-->
+        <!--    <tile type = "KEY" image="greenKeyIcon.png"><col>green</col><x>4</x><y>7</y></tile>-->
+
+        <!--    <tile type = "LOCK_DOOR" image="greenDoorIcon.png"><col>green</col><x>7</x><y>2</y></tile>-->
+        <!--    <tile type = "KEY" image="greenKeyIcon.png"><col>green</col><x>6</x><y>7</y></tile>-->
