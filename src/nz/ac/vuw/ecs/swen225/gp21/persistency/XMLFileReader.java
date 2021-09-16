@@ -35,6 +35,7 @@ public class XMLFileReader {
     private Board board;
     private boolean isAction;
     private List<Coordinate> bugStartPos = new ArrayList<>();
+    private Map<String, Integer> actionRecords = new HashMap<>();
 
 
     /**
@@ -65,11 +66,13 @@ public class XMLFileReader {
     /**
      * load the saved action records file.
      *
-     * @param fName saved action file
+     * @param fName saved file name
+     * @return a map of actions and records
      */
-    public void loadSavedActions(String fName){
+    public Map<String, Integer> loadSavedActions(String fName) {
         this.isAction = true;
         readGameFile(fName,false);
+        return actionRecords;
     }
 
     /**
@@ -105,7 +108,9 @@ public class XMLFileReader {
     public static void main(String[] args) {
         XMLFileReader p = new XMLFileReader();
         //p.printBoard();
-        p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedAction.xml");
+        System.out.println("The display info: " +
+                p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedAction.xml"));
+
     }
     /* ------------------------------------------------------------------------------------------ */
 
@@ -162,37 +167,25 @@ public class XMLFileReader {
             while (iterator.hasNext()) {
                 Element element = iterator.next();
                 switch (element.getName()) {
-//                    case "currentPos":
-//                        String x = element.attributeValue("x");
-//                        String y = element.attributeValue("y");
-//                        Coordinate pos = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
-//                        // TODO set current player pos at current board ?????? we may not need currentPos it in saved action.
-//                        //Board currentBoard = loadSavedMap(String fName);
-//                        this.board.setPlayerStartPosition(pos);
-//                        System.out.println("Player current position: " + pos);
-//                        break;
-
                     case "timer":
                         String time = element.attributeValue("timeLeft");
-                        // TODO set current action to APP
-                        System.out.println("TimeLeft: " + time);
+                        actionRecords.put("timer", Integer.parseInt(time));
                         break;
                     case "currentLevel":
                         String level = element.attributeValue("level");
-                        // TODO set current action to APP
-                        System.out.println("Level: " + level);
+                        actionRecords.put("level", Integer.parseInt(level));
                         break;
                     case "keysCollected":
                         String keys_B = element.attributeValue("keys_B");
                         String keys_R = element.attributeValue("keys_R");
                         String keys_G = element.attributeValue("keys_G");
-                        // TODO set current action to APP
-                        System.out.println("Keys collected: blue " + keys_B + " green "+keys_G + " red "+ keys_R);
+                        actionRecords.put("keys_B", Integer.parseInt(keys_B));
+                        actionRecords.put("keys_R", Integer.parseInt(keys_R));
+                        actionRecords.put("keys_G", Integer.parseInt(keys_G));
                         break;
                     case "treasuresLeft":
                         String treasures = element.attributeValue("treasures");
-                        // TODO set current action to APP
-                        System.out.println("Treasures left: " + treasures);
+                        actionRecords.put("treasuresLeft", Integer.parseInt(treasures));
                         break;
                     default:
                         System.out.println("No match node found.");
