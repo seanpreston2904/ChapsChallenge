@@ -23,7 +23,11 @@ import javax.swing.Timer;
 public class CountdownPanel implements ActionListener {
 	
 //	private Board board;
-	private int seconds_remaining = 5;
+	private int seconds_remaining;
+	private int chips_left_value;
+	private int level_value;
+	private App app;
+
 	private boolean started = false;
 		
 	private JLayeredPane countdownPanel = new JLayeredPane(); 
@@ -40,15 +44,33 @@ public class CountdownPanel implements ActionListener {
 			
 			seconds_remaining = seconds_remaining-1;
 			String seconds_string = String.format(String.valueOf(seconds_remaining));
-			time_left.setText(seconds_string);	  
-			
+			time_left.setText(seconds_string);		
+						
 			// if timer reaches 0, the player looses
 			if(seconds_remaining==0) {
+				
 				timer.stop();
 				int confirm = JOptionPane.showOptionDialog(
-                        null, "You have ran out of time",
+                        app.getMainFrame(), "You have ran out of time, restart this level?",
                         "Exit Confirmation", JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE, null, null, null);
+				
+				//if player wants to replay this level
+				if(confirm == 0) {
+					
+					String restartLevel= "level"+level_value;
+					app.terminateFrame();
+					new App(restartLevel);
+					
+				}
+								
+				//else go to the title screen
+				else {
+					
+					app.terminateFrame();
+					new TitleScreen();
+					
+				}
 			}
 			
 		}});
@@ -62,7 +84,12 @@ public class CountdownPanel implements ActionListener {
      * @param remaining_chips number of chips on board in the level
      */
 	
-	public CountdownPanel(int time, int current_level, int chipsleft) {
+	public CountdownPanel(int time, int current_level, int chipsleft, App app) {
+		
+		this.app = app;
+		this.seconds_remaining = time;
+		this.chips_left_value = chipsleft;
+		this.level_value = current_level;
 		
 		//this.board = board;
 		start_pause.addActionListener(this);
@@ -184,10 +211,8 @@ public class CountdownPanel implements ActionListener {
      * @param remaining_chips the remaining number of chips on board
      */
 
-	public void update(int remaining_chips) {
-
-		chips_left.setText(String.valueOf(remaining_chips));
-    
+	public void updateRemainingChip(int remaining_chips) {		
+		chips_left.setText(String.valueOf(remaining_chips)); 		
 	}
 	
 	
@@ -215,6 +240,7 @@ public class CountdownPanel implements ActionListener {
 	
 	/**
      * This method is called when the game starts or to resume the game
+     * and also change the button label.
      */
 	public void start() {
 		started = true;
@@ -223,26 +249,24 @@ public class CountdownPanel implements ActionListener {
 	}
 	
 	/**
-     * This method is called when the game is lost which will stop the timer and reset the level
-     */	
-	public void stop() {
-		started = false;
-		timer.stop();	
-		
-		// TODO
-		// pop up a message and reset the level and making a new game
-		// board.reset() ??
-		
-	}
-	
-	/**
      * This method is called when the game is paused which timer will stop counting bu
+     * and also change the button label.
      */	
 	public void pause() {
 		start_pause.setText("START");
 		started = false;
 		timer.stop();
 	}	
+	
+	/**
+     * This method is called when the game is lost which will stop the timer and reset the level.
+     */	
+	public void stop() {
+		started = false;
+		timer.stop();		
+	}
+	
+	
 	
 	/**
 	 * Return if the game is started or paused.
@@ -253,10 +277,13 @@ public class CountdownPanel implements ActionListener {
 		return started;
 	}
 	
-	/*----------------Test method----------------------------------*/
-	public static void main(String[] args) {
-		
-		new App(null);
-		
+	//--------------GETTER METHODS----------------------------------
+	
+	public int getTimer() {
+		return seconds_remaining;				
 	}
+	
+	public int getRemainingTreasures() {
+		return chips_left_value;
+	}	
 }
