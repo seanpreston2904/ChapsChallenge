@@ -6,6 +6,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.XMLFileReader;
 
 import java.util.Random;
 
@@ -24,9 +25,43 @@ public class Domain {
     /**
      * The Domain initializes with a board from Persistence, this is the only req. for the Domain to launch.
      */
-    public Domain(Board board) {
-        this.board = board;
+    public Domain(String levelName) {
+        // load the current level's board from XML via Persistency
+        XMLFileReader fileReader = new XMLFileReader();
+        this.board = fileReader.loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/" + levelName + ".xml");
+
         hero = new Player(board.getPlayerStartPosition());
+
+        // TODO remove debugging print board
+        printCurrentBoard();
+    }
+
+    /**
+     * TODO: Debugging method to print the board to the console.
+     */
+    public void printCurrentBoard() {
+
+        StringBuilder sb = new StringBuilder();
+
+        // loop through each tile to construct the board
+        for (int y = 0; y < board.getDimension().height; y++) {
+            for (int x = 0; x < board.getDimension().width; x++) {
+
+                // when we get to the hero we draw it instead of a tile
+                if (hero.getPosition().getX() == x && hero.getPosition().getY() == y) {
+                    sb.append(hero.consoleString());
+                }
+                // otherwise draw a tile
+                else {
+                    Tile t = board.getTile(new Coordinate(x, y));
+                    sb.append(t.consoleString());
+                }
+
+            }
+            sb.append("\n");
+        }
+
+        System.out.println("Board::: \n\n" + sb.toString());
     }
 
 
@@ -57,18 +92,22 @@ public class Domain {
         Coordinate moveToCoordinate = actor.getResultingLocation(direction);
 
         // checks on the move to location
-        if (board.validMove(moveToCoordinate, actor)) {
-            throw new IllegalArgumentException("chap cannot be moved into this position");
-        }
+        if (!board.validMove(moveToCoordinate, actor)) {
+            //throw new IllegalArgumentException("chap cannot be moved into this position");
+        } else {
 
-        // if we get here then we move the actor
-        actor.setPosition(moveToCoordinate);
+            // if we get here then we move the actor
+            actor.setPosition(moveToCoordinate);
 
-        // call the item's interact event
-        try {
-            interactWithItem(actor);
-        } catch (IllegalStateException e) {
-            // This is okay, it just means that no item was in this tile. Any other exception is an issue though.
+            // call the item's interact event
+            try {
+                interactWithItem(actor);
+            } catch (IllegalStateException e) {
+                // This is okay, it just means that no item was in this tile. Any other exception is an issue though.
+            }
+
+            // TODO remove debugging console version of board
+            printCurrentBoard();
         }
     }
 

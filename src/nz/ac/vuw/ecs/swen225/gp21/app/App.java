@@ -17,21 +17,19 @@ public class App {
 	private CountdownPanel countdown_pan;
 	private JFrame main_frame;
 	
-	private int timer = 5;
+	private int timer = 100;
 	private int level = 1;
 	private int remaining_chips = 10;
 
 	/**
 	 * Constructor for an app.
-	 * 
-	 * @param board the board of the game
 	 */	
-	public App(Board board) {
+	public App(String levelName) {
 		// TODO still need to add timer, level, remaining chips
 		
 
 		/*----------------Initialising modules----------------------------------*/
-		this.domain = new Domain(board);
+		this.domain = new Domain(levelName);
 		this.main_frame = new JFrame("Chip Chaps");
 		this.countdown_pan = new CountdownPanel(timer, level, remaining_chips);
 		this.keypress = new KeyPresses(this, main_frame,this.domain);
@@ -69,7 +67,7 @@ public class App {
 	}
 	
 	//--------------test method---------------
-//	public static void main (String[] args) {		
-//		new App(null);					
+//	public static void main (String[] args) {
+//		new App(null);
 //	}
 }
