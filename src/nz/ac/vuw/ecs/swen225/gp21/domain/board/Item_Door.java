@@ -56,4 +56,13 @@ public class Item_Door extends Item implements PreMove {
                 "type=" + ItemType.LOCK_DOOR + "," + color +
                 '}';
     }
+
+    /**
+     * Return a string for the console based version of this board.
+     *
+     * @return
+     */
+    public String consoleString() {
+        return "\uD83D\uDEAA|";
+    }
 }

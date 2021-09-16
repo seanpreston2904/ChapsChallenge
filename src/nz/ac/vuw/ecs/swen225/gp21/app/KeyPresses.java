@@ -16,8 +16,7 @@ import nz.ac.vuw.ecs.swen225.gp21.persistency.XMLFileWriter;
  * Class for the key presses implementation.
  */
 public class KeyPresses implements KeyListener {
-	
-//	private Board board;
+
 	private Player hero;
 	private Domain domain;
 	private CountdownPanel countdownPanel;
@@ -29,10 +28,8 @@ public class KeyPresses implements KeyListener {
 		}
 		this.domain = domain;
 		this.hero = domain.getPlayer();
-//		this.board = domain.board;
 	
 		this.frame = frame;
-//		this.app = app;
 		this.countdownPanel = app.getCoundownPanel();
 		
 		frame.addKeyListener(this);
@@ -48,13 +45,12 @@ public class KeyPresses implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 				
 		int key = e.getKeyCode();
-		
+
+		//CTRL-1 start new game lv1
 		if ((e.getKeyCode() == 49) && ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
 			
 			frame.dispose();
-   	 		XMLFileReader fileReader = new XMLFileReader();
-   	 		Board new_board = fileReader.loadOriginGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
-			new App(new_board);  
+			new App("level1");
 			
 		}
 	
@@ -62,29 +58,24 @@ public class KeyPresses implements KeyListener {
 		if ((e.getKeyCode() == 50) && ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
 			
 			frame.dispose();
-   	 		XMLFileReader fileReader = new XMLFileReader();
-   	 		Board new_board = fileReader.loadOriginGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml");
-			new App(new_board);  
+			new App("level2");
 			
 		}
 		
 		//only perform action when the game is not paused
 		if(countdownPanel.getStarted()) {
 			if(key == 37) {
-				domain.moveActor(this.hero, Direction.EAST);
-				//TODO redraw the board in 2d
-				
+				domain.moveActor(this.hero, Direction.WEST);
 			}
 		
 			if(key == 38) {
-				System.out.println("hello");
 				domain.moveActor(this.hero, Direction.NORTH);	
 			}
 				
 			if(key == 39) {
 				domain.moveActor(this.hero, Direction.EAST);
 			}
-		
+
 			if(key == 40) {
 				domain.moveActor(this.hero, Direction.SOUTH);
 			}
@@ -120,6 +111,7 @@ public class KeyPresses implements KeyListener {
 		
 		}
 		else {
+			// catch exceptions
 			System.out.println("hahahahahahahah");
 		}
 		

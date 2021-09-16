@@ -69,10 +69,8 @@ public class TitleScreen{
 		newGameButton.addActionListener(new ActionListener() {
 
 			@Override
-            public void actionPerformed(ActionEvent e) {            	
-            	XMLFileReader fileReader = new XMLFileReader();
-            	Board board = fileReader.loadOriginGame("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
-            	new App(board);     
+            public void actionPerformed(ActionEvent e) {
+            	new App("level2");
             	frame.dispose();            	
             }
         });

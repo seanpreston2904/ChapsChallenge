@@ -32,4 +32,13 @@ public class Item_Treasure extends Item {
         }
 
     }
+
+    /**
+     * Return a string for the console based version of this board.
+     *
+     * @return
+     */
+    public String consoleString() {
+        return "$|";
+    }
 }

@@ -40,6 +40,15 @@ public class Board {
     }
 
     /**
+     * Get the current dimensions, x,y, or the board.
+     *
+     * @return
+     */
+    public Dimension getDimension() {
+        return new Dimension(board.length, board[0].length);
+    }
+
+    /**
      * Get a tile from the board.
      *
      * @param coordinate - input coordinate.
@@ -65,6 +74,24 @@ public class Board {
 
 
     /**
+     * If the dimension is too large for x or y or less than 0 for either we return false.
+     *
+     * @param coordinate
+     *
+     * @return
+     *
+     */
+    public boolean outsideBoard(Coordinate coordinate) {
+
+        if (coordinate.getY() > board.length || coordinate.getX() < 0
+                || coordinate.getX() > board[0].length || coordinate.getX() < 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Utility method to check for walls, doors and other impassable.
      *
      * @param moveTo - the place to check.
@@ -78,6 +105,11 @@ public class Board {
             throw new NullPointerException("Illegal moveTo location");
         }
 
+        // is it valid index
+        if (outsideBoard(moveTo)) {
+            return false;
+        }
+
         // is it a wall
         if (board[moveTo.getX()][moveTo.getY()].getType().equals(TileType.WALL)) {
             return false;
@@ -86,14 +118,20 @@ public class Board {
         // check for impassible items
         // check for items that interaction will allow us to pass through
         Item item = board[moveTo.getX()][moveTo.getY()].getItem();
-        if (item.isImpassable()) {
 
-            // attempt to interact with
-            if (item instanceof PreMove) {
-                return ((PreMove)item).preInteract(actor);
+        // check for not an empty space
+        if (item != null) {
+
+            // if the item is impassible we can't move through
+            if (item.isImpassable()) {
+
+                // attempt to interact with
+                if (item instanceof PreMove) {
+                    return ((PreMove) item).preInteract(actor);
+                }
+
+                return false;
             }
-
-            return false;
         }
 
         // otherwise return true

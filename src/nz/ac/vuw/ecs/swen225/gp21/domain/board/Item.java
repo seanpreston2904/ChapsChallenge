@@ -62,4 +62,13 @@ public abstract class Item {
                 "type=" + type +
                 '}';
     }
+
+    /**
+     * Return a string for the console based version of this board.
+     *
+     * @return
+     */
+    public String consoleString() {
+        return "";
+    }
 }

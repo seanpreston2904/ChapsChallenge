@@ -41,4 +41,13 @@ public class Item_Exit extends Item implements PreMove {
 
         return false;
     }
+
+    /**
+     * Return a string for the console based version of this board.
+     *
+     * @return
+     */
+    public String consoleString() {
+        return "x|";
+    }
 }

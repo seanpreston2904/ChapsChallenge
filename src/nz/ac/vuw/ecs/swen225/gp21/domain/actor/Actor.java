@@ -56,4 +56,14 @@ public abstract class Actor {
     public Coordinate getPosition() {
         return this.position;
     }
+
+
+    /**
+     * Return a string for the console based version of this board.
+     *
+     * @return
+     */
+    public String consoleString() {
+        return "\uD83D\uDC64";
+    }
 }

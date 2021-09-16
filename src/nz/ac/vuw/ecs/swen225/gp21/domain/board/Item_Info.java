@@ -44,4 +44,13 @@ public class Item_Info extends Item {
         }
 
     }
+
+    /**
+     * Return a string for the console based version of this board.
+     *
+     * @return
+     */
+    public String consoleString() {
+        return "i|";
+    }
 }

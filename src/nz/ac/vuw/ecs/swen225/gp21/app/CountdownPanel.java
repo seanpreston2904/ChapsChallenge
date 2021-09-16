@@ -23,7 +23,7 @@ import javax.swing.Timer;
 public class CountdownPanel implements ActionListener {
 	
 //	private Board board;
-	private int seconds_remaining = 5;
+	private int seconds_remaining = 100;
 	private boolean started = false;
 		
 	private JLayeredPane countdownPanel = new JLayeredPane(); 
