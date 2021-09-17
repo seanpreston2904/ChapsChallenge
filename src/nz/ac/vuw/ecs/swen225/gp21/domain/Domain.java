@@ -64,9 +64,15 @@ public class Domain {
         System.out.println("Board::: \n\n" + sb.toString());
     }
 
-
     /**
-     * Gett for the Hero character.
+     * Getter for the Board.
+     */
+    public Board getBoard() {
+        return this.board;
+    }
+    
+    /**
+     * Getter for the Hero character.
      */
     public Player getPlayer() {
         return this.hero;
