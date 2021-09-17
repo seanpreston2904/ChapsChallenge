@@ -121,7 +121,7 @@ public class App {
 	}
 	
 	public int getRemainingTreasures() {
-		return countdown_pan.getRemainingTreasures();
+		return domain.getRemainingTreasures();
 	}
 	// ------------------------------------------------------------------
 	
