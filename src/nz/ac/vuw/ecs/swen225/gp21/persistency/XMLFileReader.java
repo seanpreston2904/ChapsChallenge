@@ -1,8 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp21.persistency;
 
 import java.io.File;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Door;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Exit;
@@ -25,21 +28,20 @@ import org.dom4j.io.SAXReader;
  * @author Rae 300535154
  */
 public class XMLFileReader {
-    private final int HEIGHT = 9;  // the height of the board
-    private final int WIDTH = 11;  // the width of the board
-
-    // an array of all tilesNodes
+    private static final int HEIGHT = 9;  // the height of the board
+    private static final int WIDTH = 11;  // the width of the board
     private final String[] nodes =
-            {"tile","repeatTile","movingTile","treasureTile", "wallTile", "doorTile", "keyTile"};
+            {"tile", "repeatTile", "movingTile", "treasureTile",
+                    "wallTile", "doorTile", "keyTile"}; // all XML tilesNodes
 
     private Board board;
     private boolean isAction;
     private List<Coordinate> bugStartPos = new ArrayList<>();
     private Map<String, Integer> actionRecords = new HashMap<>();
 
-
     /**
-     * load the board from the original game levels, which contains all essential information of each tile.
+     * load the board from the original game levels,
+     * which contains all essential information of each tile.
      * Tile type & Tile coordinate & (info message | key/door color)
      *
      * @param fileName game levels
@@ -65,13 +67,14 @@ public class XMLFileReader {
 
     /**
      * load the saved action records file.
+     * With timer, treasuresLeft, level and keys collected records.
      *
      * @param fName saved file name
      * @return a map of actions and records
      */
     public Map<String, Integer> loadSavedActions(String fName) {
         this.isAction = true;
-        readGameFile(fName,false);
+        readGameFile(fName, false);
         return actionRecords;
     }
 
@@ -80,16 +83,17 @@ public class XMLFileReader {
      *
      * @return a list of coordinates
      */
-    public List<Coordinate> getBugStartPos() {
+    public List<Coordinate> getBugStartPos(String fileName) {
+        readGameFile(fileName, true);
         return bugStartPos;
     }
 
     /*----------------The debug function--------------------------------------------------------*/
 
     /**
-     * print the board with all tiles
+     * print the board with all tiles.
      */
-    public void printBoard(){
+    public void printBoard() {
         //Board board = loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
         Board board =loadSavedMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml");
 
@@ -100,9 +104,8 @@ public class XMLFileReader {
             }
         }
 
-        if(!getBugStartPos().isEmpty()) {
-            System.out.println("\n--------------------\nBug starts pos: " + this.bugStartPos);
-        }
+        System.out.println("\n--------------------\nBug starts pos: " + this.bugStartPos);
+
     }
 
     public static void main(String[] args) {
@@ -176,12 +179,8 @@ public class XMLFileReader {
                         actionRecords.put("level", Integer.parseInt(level));
                         break;
                     case "keysCollected":
-                        String keys_B = element.attributeValue("keys_B");
-                        String keys_R = element.attributeValue("keys_R");
-                        String keys_G = element.attributeValue("keys_G");
-                        actionRecords.put("keys_B", Integer.parseInt(keys_B));
-                        actionRecords.put("keys_R", Integer.parseInt(keys_R));
-                        actionRecords.put("keys_G", Integer.parseInt(keys_G));
+                        String keys = element.attributeValue("keys");
+                        actionRecords.put("keys", Integer.parseInt(keys));
                         break;
                     case "treasuresLeft":
                         String treasures = element.attributeValue("treasures");

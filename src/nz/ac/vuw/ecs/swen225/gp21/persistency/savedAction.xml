@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <savedAction>
-  <timer timeLeft="0"/>
-  <currentLevel level="0"/>
-  <keysCollected keys_B="0" keys_R="0" keys_G="0"/>
-  <treasuresLeft treasures="0"/>
+  <timer timeLeft="60"/>
+  <currentLevel level="1"/>
+  <keysCollected keys="0"/>
+  <treasuresLeft treasures="9"/>
 </savedAction>

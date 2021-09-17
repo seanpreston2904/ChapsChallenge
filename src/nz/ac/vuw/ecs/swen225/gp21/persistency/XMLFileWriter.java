@@ -1,31 +1,40 @@
 package nz.ac.vuw.ecs.swen225.gp21.persistency;
 
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import nz.ac.vuw.ecs.swen225.gp21.app.App;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Door;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Info;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Key;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Document;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+
+
 
 /**
- * writing the Java objects to XML files to save the current game state in order for the player to resume games.
+ * writing the Java objects to XML files.
+ * to save the current game state in order for the player to resume games.
  *
  * @author Rae 300535154
  */
 public class XMLFileWriter {
-    private final int HEIGHT = 9;  // the height of the board
-    private final int WIDTH = 11;  // the width of the board
+    private static final int HEIGHT = 9;  // the height of the board
+    private static final int WIDTH = 11;  // the width of the board
 
     /*----------------The debug function--------------------------------------------------------*/
     public static void main(String[] args) {
         XMLFileWriter p = new XMLFileWriter();
-        p.saveCurrentMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml");
-        p.saveCurrentActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedAction.xml");
+        p.saveCurrentMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml", new App("level1"));
+        p.saveCurrentActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedAction.xml", new App("level1"));
     }
     /* ------------------------------------------------------------------------------------------ */
 
@@ -33,20 +42,22 @@ public class XMLFileWriter {
      * save the current board of the game.
      *
      * @param fName the output file name
+     * @param app the app
      */
-    public void saveCurrentMap(String fName){
+    public void saveCurrentMap(String fName, App app){
         String rootName = "savedMap";
-        writeGameToXML(fName, rootName);
+        writeGameToXML(fName, rootName, app);
     }
 
     /**
      * save the current action records of the game.
      *
-     * @param fName output file name
+     * @param fName the output file name
+     * @param app the app
      */
-    public void saveCurrentActions(String fName){
+    public void saveCurrentActions(String fName, App app){
         String rootName = "savedAction";
-        writeGameToXML(fName, rootName);
+        writeGameToXML(fName, rootName, app);
     }
 
     /**
@@ -54,20 +65,21 @@ public class XMLFileWriter {
      *
      * @param fName file name to save as
      * @param rootName map or actions
+     * @param app the app
      */
-    public void writeGameToXML(String fName, String rootName){
+    private void writeGameToXML(String fName, String rootName, App app){
         try {
             Document document = DocumentHelper.createDocument();
             Element root = document.addElement(rootName);
 
             if(rootName.equals("savedMap")){
                 //get all objects from the current game state to create the XML file
-                objectsToXML(root);
+                objectsToXML(root, app);
 
                 //TODO add movingBugs
 
             }else {
-                gameActionsToXML(root);
+                gameActionsToXML(root, app);
             }
 
             /* set the XML output Format with line change and index */
@@ -75,7 +87,8 @@ public class XMLFileWriter {
             XMLFormat.setEncoding("UTF-8");
 
             // write the output XML to the path
-            Writer writer = new FileWriter(fName);
+            OutputStreamWriter writer = new OutputStreamWriter(
+                    new FileOutputStream(fName), StandardCharsets.UTF_8);
             XMLWriter XMLWriter = new XMLWriter(writer, XMLFormat);
             XMLWriter.write(document);
             XMLWriter.flush();
@@ -90,55 +103,51 @@ public class XMLFileWriter {
     }
 
     /**
-     * save the game actions to XML.
+     *  save the game actions to XML.
      *
      * @param root the root ele
+     * @param app the app
      */
-    private void gameActionsToXML(Element root){
-        //TODO  get the saved actions from APP
-
-//        // current player pos
-//        Coordinate pos = new Coordinate(3,3) /*App.getPlayerCurrentPos*/;
-//        Element element1 = root.addElement("currentPos");
-//        element1.addAttribute("x", Integer.toString(pos.getX()));
-//        element1.addAttribute("y", Integer.toString(pos.getY()));
+    private void gameActionsToXML(Element root, App app){
 
         // time left
-        int timer = 0 /*App.getTimer*/;
+        int timer = app.getTimer();
         Element element2 = root.addElement("timer");
         element2.addAttribute("timeLeft", Integer.toString(timer));
 
         // current level
-        int level = 0 /*App.getLevel*/;
+        int level = app.getLevel();
         Element element3 = root.addElement("currentLevel");
         element3.addAttribute("level", Integer.toString(level));
 
-        // keys collected
-        int keys_B = 0 /*App.keysCollected*/;
-        int keys_R = 0;
-        int keys_G = 0;
+        // keys collected  //TODO  get the saved actions from APP
+        int keys = 0;/*app.keys_BCollected();*/
         Element element4 = root.addElement("keysCollected");
-        element4.addAttribute("keys_B", Integer.toString(keys_B));
-        element4.addAttribute("keys_R", Integer.toString(keys_R));
-        element4.addAttribute("keys_G", Integer.toString(keys_G));
+        element4.addAttribute("keys", Integer.toString(keys));
 
         // treasures left
-        int treasures = 0 /*App.treasuresLeft*/;
+        int treasures = app.getRemainingTreasures();
         Element element5 = root.addElement("treasuresLeft");
         element5.addAttribute("treasures", Integer.toString(treasures));
 
+        //        // current player pos
+//        Coordinate pos = new Coordinate(3,3) /*App.getPlayerCurrentPos*/;
+//        Element element1 = root.addElement("currentPos");
+//        element1.addAttribute("x", Integer.toString(pos.getX()));
+//        element1.addAttribute("y", Integer.toString(pos.getY()));
     }
 
     /**
      * save the objects on the board to xml.
      *
      * @param root the root ele
+     * @param app the app
      */
-    private void objectsToXML(Element root){
+    private void objectsToXML(Element root, App app){
         XMLFileReader p = new XMLFileReader();
-        //TODO  get the current board from APP
         Board b = p.loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
-
+        //TODO  get the current board from APP
+        //Board b = app.getCurrentBoard();
         for (int x = 0; x < WIDTH; x++){
             for (int y = 0; y < HEIGHT; y++){
                 Tile tile = b.getTile(new Coordinate(x,y));
