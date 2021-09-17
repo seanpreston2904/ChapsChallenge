@@ -72,6 +72,26 @@ public class Board {
         board[coordinate.getX()][coordinate.getY()] = tile;
     }
 
+    /**
+     * Get the total treasures on the board.
+     */
+    public int getTotalTreasures() {
+        int treasure = 0;
+
+        // loop throguh every tile
+        for (Tile[] array : board) {
+            for (Tile t : array) {
+                // see if it has a treasure
+                if (t.getItem() == null) {
+                    if (t.getItem().getType() == ItemType.TREASURE) {
+                        treasure++;
+                    }
+                }
+            }
+        }
+
+        return treasure;
+    }
 
     /**
      * If the dimension is too large for x or y or less than 0 for either we return false.
