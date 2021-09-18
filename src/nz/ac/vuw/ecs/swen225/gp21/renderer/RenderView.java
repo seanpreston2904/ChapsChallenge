@@ -2,18 +2,26 @@ package nz.ac.vuw.ecs.swen225.gp21.renderer;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
+import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
+import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.util.ImagePaths;
 
+import javax.imageio.ImageIO;
 import javax.naming.ldap.Control;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.HashMap;
 
 public class RenderView extends JPanel {
@@ -39,13 +47,14 @@ public class RenderView extends JPanel {
     private HashMap<Item, ItemAnimator> items;
     private HashMap<Tile, TileAnimator> tiles;
 
-    //Top left and bottom right positions on the screen
+    //Top left and bottom right position on the screen
     private Point topLeft;
-    private Point bottomRight;
 
     //Pixel offsets for camera
     private int viewOffsetX;
     private int viewOffsetY;
+
+    Timer movePlayer;
 
     /**
      * RenderView Constructor.
@@ -70,6 +79,9 @@ public class RenderView extends JPanel {
         this.actors = new HashMap<>();
         this.items = new HashMap<>();
         this.tiles = new HashMap<>();
+
+        //Add player to actor map
+        this.actors.put(this.game.getPlayer(), new ActorAnimator(this.game.getPlayer()));
 
         //Set animator maps
         for(int row = 0; row < this.game.getBoard().getDimension().height; row++){
@@ -99,50 +111,63 @@ public class RenderView extends JPanel {
         //Draw Background
         super.paintComponent(g);
 
-        //STEPS FOR RENDERING BOARD
-        //1. Find Viewport Dimensions
-        //2. Render Tiles to Screen
-        //3. Render Items to Screen
-        //4. Render Actors to Screen
+        //Get width and height of board
+        int boardWidth = this.game.getBoard().getDimension().width;
+        int boardHeight = this.game.getBoard().getDimension().height;
 
-        //hmmm, a bit lengthy but okay...
-        for(int row = 0; row < this.game.getBoard().getDimension().height; row++){
-            for(int col = 0; col < this.game.getBoard().getDimension().width; col++){
+        //Get the viewport position
+        getViewportDimensions();
+
+        for(int row = 0; row < boardHeight; row++){
+            for(int col = 0; col < boardWidth; col++){
 
                 //right, this makes sense
-                TileAnimator t = tiles.get(this.game.getBoard().getTile(new Coordinate(col, row)));
+                TileAnimator tile = tiles.get(this.game.getBoard().getTile(new Coordinate(col, row)));
 
-                //wait what?
-                ItemAnimator i =
-                        (items.get(this.game.getBoard().getTile(new Coordinate(col, row)).getItem()) != null) ?
-                                items.get(this.game.getBoard().getTile(new Coordinate(col, row)).getItem()) : null;
+                //Get item on tile
+                ItemAnimator item = items.get(this.game.getBoard().getTile(new Coordinate(col, row)).getItem());
 
-                //okay?
-                int xPos = t.getTile().getLocation().getX()*TILE_SIZE;
-                int yPos = t.getTile().getLocation().getY()*TILE_SIZE;
+                //Calculate the X and Y position of the tile
+                int xPos = (tile.getTile().getLocation().getX() - topLeft.x) * TILE_SIZE ;
+                int yPos = (tile.getTile().getLocation().getY() - topLeft.y) * TILE_SIZE ;
 
-                //phew back to some sanity
-                switch(t.getTile().getType()){
+                //Render appropriate tile graphic
+                switch(tile.getTile().getType()){
 
                     case FREE: g.drawImage(ImagePaths.IMG_FLOOR, xPos, yPos, null); break;
-                    case WALL: g.drawImage(ImagePaths.IMG_WALL, xPos, yPos, null); break;
+                    case WALL: g.drawImage(ImagePaths.IMG_WALL_FULL, xPos, yPos, null); break;
+                    case EXIT: g.drawImage(ImagePaths.IMG_EXIT, xPos, yPos, null); break;
 
                 }
 
-                //yep
-                if(i != null){
+                //If the tile has an item on it, render it.
+                if(item != null){
 
-                    //(╯‵□′)╯︵┻━┻
-                    switch (this.game.getBoard().getTile(new Coordinate(col, row)).getItem().getType()){
+                    //Draw appropriate image
+                    switch (tile.getTile().getItem().getType()){
 
                         case INFO: g.drawImage(ImagePaths.IMG_INFO, xPos, yPos, null); break;
                         case TREASURE: g.drawImage(ImagePaths.IMG_TREASURE, xPos, yPos, null); break;
+                        case KEY: g.drawImage(ImagePaths.IMG_KEY, xPos, yPos, null); break;
+                        case LOCK_DOOR: g.drawImage(ImagePaths.IMG_DOOR, xPos, yPos, null); break;
 
                     }
 
                 }
 
             }
+
+        }
+
+        //For each actor...
+        for(ActorAnimator a: actors.values()){
+
+            //Calculate its X and Y positions
+            int xPos = (a.actor.getPosition().getX() - topLeft.x) * TILE_SIZE;
+            int yPos = (a.actor.getPosition().getY() - topLeft.y) * TILE_SIZE;
+
+            //If the actor is a player, render the player graphic
+            if(a.actor instanceof Player){ g.drawImage(ImagePaths.IMG_PLAYER, xPos, yPos, null); }
 
         }
 
@@ -159,7 +184,14 @@ public class RenderView extends JPanel {
     private void getViewportDimensions(){
 
         //Get the player's position
-        Coordinate playerPosition = new Coordinate(9, 9);
+        Coordinate playerPosition = game.getPlayer().getPosition();
+
+        if(playerPosition.getX() >= 4 && playerPosition.getX() < game.getBoard().getDimension().width - 4
+        && playerPosition.getY() >= 4 && playerPosition.getY() < game.getBoard().getDimension().height - 4){
+
+            this.topLeft = new Point(playerPosition.getX()-4, playerPosition.getY()-4);
+
+        }
 
     }
 
