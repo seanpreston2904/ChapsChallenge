@@ -10,4 +10,5 @@ public class TileAnimator extends ElementAnimator {
     TileAnimator(Tile tile){ this.tile = tile; }
 
     public Tile getTile() {return tile;}
+
 }

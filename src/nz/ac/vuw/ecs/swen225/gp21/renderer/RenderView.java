@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp21.renderer;
 
+import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item;
@@ -10,6 +11,7 @@ import nz.ac.vuw.ecs.swen225.gp21.renderer.util.ImagePaths;
 import javax.naming.ldap.Control;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,8 +31,8 @@ public class RenderView extends JPanel {
     //Event timer (used to render board)
     private Timer timer;
 
-    //Reference to game board
-    private Board board;
+    //Reference to game domain
+    private Domain game;
 
     //Element -> Animator maps
     private HashMap<Actor, ActorAnimator> actors;
@@ -48,9 +50,9 @@ public class RenderView extends JPanel {
     /**
      * RenderView Constructor.
      *
-     * @param board board to construct animator data from.
+     * @param game game to construct animator data from.
      */
-    public RenderView(Board board){
+    public RenderView(Domain game){
 
         //Forces a fixed size for the panel
         this.setSize(VIEWPORT_SIZE);
@@ -62,7 +64,7 @@ public class RenderView extends JPanel {
         timer = new Timer((int)FPS_60, action -> update());
 
         //Set board reference
-        this.board = board;
+        this.game = game;
 
         //Construct animator maps
         this.actors = new HashMap<>();
@@ -70,11 +72,11 @@ public class RenderView extends JPanel {
         this.tiles = new HashMap<>();
 
         //Set animator maps
-        for(int row = 0; row < this.board.getDimension().height; row++){
-            for(int col = 0; col < this.board.getDimension().width; col++){
+        for(int row = 0; row < this.game.getBoard().getDimension().height; row++){
+            for(int col = 0; col < this.game.getBoard().getDimension().width; col++){
 
                 //Get the current tile on the board and construct an animator for it
-                Tile curr = this.board.getTile(new Coordinate(col, row));
+                Tile curr = this.game.getBoard().getTile(new Coordinate(col, row));
                 tiles.put(curr, new TileAnimator(curr));
 
                 //If the tile has an item, construct an animator for it
@@ -103,20 +105,45 @@ public class RenderView extends JPanel {
         //3. Render Items to Screen
         //4. Render Actors to Screen
 
-        for(int row = 0; row < board.getDimension().height; row++){
-            for(int col = 0; col < board.getDimension().width; col++){
+        //hmmm, a bit lengthy but okay...
+        for(int row = 0; row < this.game.getBoard().getDimension().height; row++){
+            for(int col = 0; col < this.game.getBoard().getDimension().width; col++){
 
-                //Get the associated animator for the tile
-                TileAnimator t = tiles.get(board.getTile(new Coordinate(col, row)));
+                //right, this makes sense
+                TileAnimator t = tiles.get(this.game.getBoard().getTile(new Coordinate(col, row)));
 
-                //Calculate it's X and Y positions
+                //wait what?
+                ItemAnimator i =
+                        (items.get(this.game.getBoard().getTile(new Coordinate(col, row)).getItem()) != null) ?
+                                items.get(this.game.getBoard().getTile(new Coordinate(col, row)).getItem()) : null;
+
+                //okay?
                 int xPos = t.getTile().getLocation().getX()*TILE_SIZE;
                 int yPos = t.getTile().getLocation().getY()*TILE_SIZE;
 
-                //Draw tile onto screen
-                g.drawImage(ImagePaths.IMG_FLOOR, xPos, yPos, null);
+                //phew back to some sanity
+                switch(t.getTile().getType()){
+
+                    case FREE: g.drawImage(ImagePaths.IMG_FLOOR, xPos, yPos, null); break;
+                    case WALL: g.drawImage(ImagePaths.IMG_WALL, xPos, yPos, null); break;
+
+                }
+
+                //yep
+                if(i != null){
+
+                    //(╯‵□′)╯︵┻━┻
+                    switch (this.game.getBoard().getTile(new Coordinate(col, row)).getItem().getType()){
+
+                        case INFO: g.drawImage(ImagePaths.IMG_INFO, xPos, yPos, null); break;
+                        case TREASURE: g.drawImage(ImagePaths.IMG_TREASURE, xPos, yPos, null); break;
+
+                    }
+
+                }
 
             }
+
         }
 
     }
@@ -131,7 +158,8 @@ public class RenderView extends JPanel {
      */
     private void getViewportDimensions(){
 
-        return;
+        //Get the player's position
+        Coordinate playerPosition = new Coordinate(9, 9);
 
     }
 
