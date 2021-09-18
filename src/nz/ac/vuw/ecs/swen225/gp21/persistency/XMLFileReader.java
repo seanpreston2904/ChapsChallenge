@@ -34,10 +34,10 @@ public class XMLFileReader {
             {"tile", "repeatTile", "movingTile", "treasureTile",
                     "wallTile", "doorTile", "keyTile"}; // all XML tilesNodes
 
-    private Board board;
-    private boolean isAction;
-    private List<Coordinate> bugStartPos = new ArrayList<>();
-    private Map<String, Integer> actionRecords = new HashMap<>();
+    private Board board;                 // the current board
+    private boolean isAction;            // indicates the saved file is a action records or not
+    private List<Coordinate> bugStartPos = new ArrayList<>();    // a list of bus starting positions
+    private Map<String, Integer> actionRecords = new HashMap<>();// a map of actions with its records
 
     /**
      * load the board from the original game levels,
