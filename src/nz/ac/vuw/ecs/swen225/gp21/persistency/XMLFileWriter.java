@@ -46,15 +46,28 @@ public class XMLFileWriter {
     }
 
     /**
-     * save the action records of the current game.
+     *  add the game actions to XML.
+     *  This is for Recorder to write each action records to a XML file.
      *
-     * @param fName the output file name
-     * @param gameRecord the app
+     * @param root the root ele
+     * @param timer current time left
+     * @param actor current actor
+     * @param dir direction actor moved
      */
-//    public void saveCurrentActions(String fName, Collection<ActionRecords> gameRecord, int level){
-//        String rootName = "savedAction";
-//        //writeGameToXML(fName, rootName, null, gameRecord, level);
-//    }
+    public void addActionNode(Element root, int timer, String actor, String dir){
+        Element element_root = root.addElement("action");
+        // time left
+        Element element2 = element_root.addElement("timer");
+        element2.addAttribute("timeLeft", Integer.toString(timer));
+
+        // current actor
+        Element element3 = element_root.addElement("actor");
+        element3.addAttribute("actor", actor);
+
+        // direction
+        Element element4 = element_root.addElement("direction");
+        element4.addAttribute("direction", dir);
+    }
 
     /**
      * save the game state to XML file.
@@ -75,9 +88,6 @@ public class XMLFileWriter {
                 //TODO add movingBugs
 
             }
-//            else {
-//                gameActionsToXML(root, gameRecord, level);
-//            }
 
             /* set the XML output Format with line change and index */
             OutputFormat XMLFormat = OutputFormat.createPrettyPrint();
@@ -99,32 +109,6 @@ public class XMLFileWriter {
 
     }
 
-    /**
-     *  save the game actions to XML.
-     *
-     * @param root the root ele
-     * @param level current level
-     * @param timer current time left
-     * @param actor current actor
-     * @param dir direction actor moved
-     */
-    public void gameActionsToXML(Element root, int level, int timer, String actor, String dir){
-        // current level
-        Element element1 = root.addElement("currentLevel");
-        element1.addAttribute("level", Integer.toString(level));
-
-        // time left
-        Element element2 = root.addElement("timer");
-        element2.addAttribute("timeLeft", Integer.toString(timer));
-
-        // current actor
-        Element element3 = root.addElement("actor");
-        element3.addAttribute("actor", actor);
-
-        // direction
-        Element element4 = root.addElement("direction");
-        element4.addAttribute("direction", dir);
-    }
 
     /**
      * save the objects on the board to xml.

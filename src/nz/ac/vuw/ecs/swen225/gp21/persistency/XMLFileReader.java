@@ -67,7 +67,7 @@ public class XMLFileReader {
 
     /**
      * load the saved action records file.
-     * With timer, treasuresLeft, level and keys collected records.
+     * With timer, actor, and direction.
      *
      * @param fName saved file name
      * @return a map of actions and records
@@ -94,7 +94,7 @@ public class XMLFileReader {
      * print the board with all tiles.
      */
     public void printBoard() {
-        //Board board = loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
+        //Board board = loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml");
         Board board =loadSavedMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml");
 
         for (int x = 0; x < WIDTH; x++){
@@ -104,15 +104,15 @@ public class XMLFileReader {
             }
         }
 
-        System.out.println("\n--------------------\nBug starts pos: " + this.bugStartPos);
+        System.out.println("\n--------------------\nBug starts pos: " + this.bugStartPos+"\n--------------------\n");
 
     }
 
     public static void main(String[] args) {
         XMLFileReader p = new XMLFileReader();
-        //p.printBoard();
+        p.printBoard();
         System.out.println("Records: " +
-                p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedAction.xml"));
+                p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testAction.xml"));
 
     }
     /* ------------------------------------------------------------------------------------------ */
@@ -163,7 +163,9 @@ public class XMLFileReader {
      * @param document the doc from reader
      */
     private void parseSavedActions(Document document){
-        List<Node> allNodes = document.selectNodes("/savedAction");
+        List<Node> allNodes = document.selectNodes("/"+document.getRootElement().getName()+"/action");
+
+        actionRecords.put("level", document.getRootElement().attribute("level").getValue());
         for (Node node : allNodes) {
             Element element_root = (Element) node;
             Iterator<Element> iterator = element_root.elementIterator();
@@ -172,9 +174,6 @@ public class XMLFileReader {
                 switch (element.getName()) {
                     case "timer":
                         actionRecords.put("timer", element.attributeValue("timeLeft"));
-                        break;
-                    case "currentLevel":
-                        actionRecords.put("level", element.attributeValue("level"));
                         break;
                     case "actor":
                         actionRecords.put("actor", element.attributeValue("actor"));
@@ -198,7 +197,7 @@ public class XMLFileReader {
         Element root = document.getRootElement();
         for (String node:this.nodes) {
             if (root.elements(node) != null) {
-                this.parseSingleNodes(document.selectNodes("/savedMap/tile"));
+                this.parseSingleNodes(document.selectNodes("/"+document.getRootElement().getName()+"/tile"));
             }
         }
     }
