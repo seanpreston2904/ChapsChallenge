@@ -121,7 +121,7 @@ public class App {
 	}
 	
 	public int getRemainingTreasures() {
-		return domain.getRemainingTreasures();
+		return 0;
 	}
 	// ------------------------------------------------------------------
 	

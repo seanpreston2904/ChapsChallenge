@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <savedAction>
-  <timer timeLeft="60"/>
-  <currentLevel level="1"/>
-  <keysCollected keys="0"/>
-  <treasuresLeft treasures="9"/>
+  <currentLevel level="2"/>
+  <timer timeLeft="0"/>
+  <actor actor="hero"/>
+  <direction direction="NORTH"/>
 </savedAction>

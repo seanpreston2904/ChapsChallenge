@@ -4,6 +4,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import nz.ac.vuw.ecs.swen225.gp21.app.App;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Door;
@@ -30,57 +34,50 @@ public class XMLFileWriter {
     private static final int HEIGHT = 9;  // the height of the board
     private static final int WIDTH = 11;  // the width of the board
 
-    /*----------------The debug function--------------------------------------------------------*/
-    public static void main(String[] args) {
-        XMLFileWriter p = new XMLFileWriter();
-        p.saveCurrentMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml", new App("level1"));
-        p.saveCurrentActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedAction.xml", new App("level1"));
-    }
-    /* ------------------------------------------------------------------------------------------ */
-
     /**
-     * save the current board of the game.
+     * save the board of the current game.
      *
      * @param fName the output file name
-     * @param app the app
+     * @param board the current board
      */
-    public void saveCurrentMap(String fName, App app){
+    public void saveCurrentMap(String fName, Board board){
         String rootName = "savedMap";
-        writeGameToXML(fName, rootName, app);
+        writeGameToXML(fName, rootName, board);
     }
 
     /**
-     * save the current action records of the game.
+     * save the action records of the current game.
      *
      * @param fName the output file name
-     * @param app the app
+     * @param gameRecord the app
      */
-    public void saveCurrentActions(String fName, App app){
-        String rootName = "savedAction";
-        writeGameToXML(fName, rootName, app);
-    }
+//    public void saveCurrentActions(String fName, Collection<ActionRecords> gameRecord, int level){
+//        String rootName = "savedAction";
+//        //writeGameToXML(fName, rootName, null, gameRecord, level);
+//    }
 
     /**
      * save the game state to XML file.
      *
      * @param fName file name to save as
      * @param rootName map or actions
-     * @param app the app
+     *
      */
-    private void writeGameToXML(String fName, String rootName, App app){
+    private void writeGameToXML(String fName, String rootName, Board board){
         try {
             Document document = DocumentHelper.createDocument();
             Element root = document.addElement(rootName);
 
             if(rootName.equals("savedMap")){
                 //get all objects from the current game state to create the XML file
-                objectsToXML(root, app);
+                objectsToXML(root, board);
 
                 //TODO add movingBugs
 
-            }else {
-                gameActionsToXML(root, app);
             }
+//            else {
+//                gameActionsToXML(root, gameRecord, level);
+//            }
 
             /* set the XML output Format with line change and index */
             OutputFormat XMLFormat = OutputFormat.createPrettyPrint();
@@ -106,51 +103,39 @@ public class XMLFileWriter {
      *  save the game actions to XML.
      *
      * @param root the root ele
-     * @param app the app
+     * @param level current level
+     * @param timer current time left
+     * @param actor current actor
+     * @param dir direction actor moved
      */
-    private void gameActionsToXML(Element root, App app){
+    public void gameActionsToXML(Element root, int level, int timer, String actor, String dir){
+        // current level
+        Element element1 = root.addElement("currentLevel");
+        element1.addAttribute("level", Integer.toString(level));
 
         // time left
-        int timer = app.getTimer();
         Element element2 = root.addElement("timer");
         element2.addAttribute("timeLeft", Integer.toString(timer));
 
-        // current level
-        int level = app.getLevel();
-        Element element3 = root.addElement("currentLevel");
-        element3.addAttribute("level", Integer.toString(level));
+        // current actor
+        Element element3 = root.addElement("actor");
+        element3.addAttribute("actor", actor);
 
-        // keys collected  //TODO  get the saved actions from APP
-        int keys = 0;/*app.keys_BCollected();*/
-        Element element4 = root.addElement("keysCollected");
-        element4.addAttribute("keys", Integer.toString(keys));
-
-        // treasures left
-        int treasures = app.getRemainingTreasures();
-        Element element5 = root.addElement("treasuresLeft");
-        element5.addAttribute("treasures", Integer.toString(treasures));
-
-        //        // current player pos
-//        Coordinate pos = new Coordinate(3,3) /*App.getPlayerCurrentPos*/;
-//        Element element1 = root.addElement("currentPos");
-//        element1.addAttribute("x", Integer.toString(pos.getX()));
-//        element1.addAttribute("y", Integer.toString(pos.getY()));
+        // direction
+        Element element4 = root.addElement("direction");
+        element4.addAttribute("direction", dir);
     }
 
     /**
      * save the objects on the board to xml.
      *
      * @param root the root ele
-     * @param app the app
+     * @param board the current board
      */
-    private void objectsToXML(Element root, App app){
-        XMLFileReader p = new XMLFileReader();
-        Board b = p.loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
-        //TODO  get the current board from APP
-        //Board b = app.getCurrentBoard();
+    private void objectsToXML(Element root, Board board){
         for (int x = 0; x < WIDTH; x++){
             for (int y = 0; y < HEIGHT; y++){
-                Tile tile = b.getTile(new Coordinate(x,y));
+                Tile tile = board.getTile(new Coordinate(x,y));
                 String type =  tile.getType().toString();
                 Coordinate pos = tile.getLocation();
                 String item = null;
@@ -160,15 +145,15 @@ public class XMLFileWriter {
                     item = tile.getItem().getType().toString();
                     if (item.equals("KEY")){
                         col = ((Item_Key)tile.getItem()).getColor();
-                        System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ col);
+                        //System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ col);
                     }
                     if(item.equals("LOCK_DOOR")){
                         col = ((Item_Door)tile.getItem()).getColor();
-                        System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ col);
+                       // System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ col);
                     }
                     if(item.equals("INFO")){
                         info = ((Item_Info)tile.getItem()).getInfo();
-                        System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ info);
+                       // System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ info);
                     }
 
                 }

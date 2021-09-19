@@ -37,7 +37,7 @@ public class XMLFileReader {
     private Board board;                 // the current board
     private boolean isAction;            // indicates the saved file is a action records or not
     private List<Coordinate> bugStartPos = new ArrayList<>();    // a list of bus starting positions
-    private Map<String, Integer> actionRecords = new HashMap<>();// a map of actions with its records
+    private Map<String, String> actionRecords = new HashMap<>();// a map of actions with its records
 
     /**
      * load the board from the original game levels,
@@ -72,7 +72,7 @@ public class XMLFileReader {
      * @param fName saved file name
      * @return a map of actions and records
      */
-    public Map<String, Integer> loadSavedActions(String fName) {
+    public Map<String, String> loadSavedActions(String fName) {
         this.isAction = true;
         readGameFile(fName, false);
         return actionRecords;
@@ -111,7 +111,7 @@ public class XMLFileReader {
     public static void main(String[] args) {
         XMLFileReader p = new XMLFileReader();
         //p.printBoard();
-        System.out.println("The display info: " +
+        System.out.println("Records: " +
                 p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedAction.xml"));
 
     }
@@ -171,20 +171,16 @@ public class XMLFileReader {
                 Element element = iterator.next();
                 switch (element.getName()) {
                     case "timer":
-                        String time = element.attributeValue("timeLeft");
-                        actionRecords.put("timer", Integer.parseInt(time));
+                        actionRecords.put("timer", element.attributeValue("timeLeft"));
                         break;
                     case "currentLevel":
-                        String level = element.attributeValue("level");
-                        actionRecords.put("level", Integer.parseInt(level));
+                        actionRecords.put("level", element.attributeValue("level"));
                         break;
-                    case "keysCollected":
-                        String keys = element.attributeValue("keys");
-                        actionRecords.put("keys", Integer.parseInt(keys));
+                    case "actor":
+                        actionRecords.put("actor", element.attributeValue("actor"));
                         break;
-                    case "treasuresLeft":
-                        String treasures = element.attributeValue("treasures");
-                        actionRecords.put("treasuresLeft", Integer.parseInt(treasures));
+                    case "direction":
+                        actionRecords.put("direction", element.attributeValue("direction"));
                         break;
                     default:
                         System.out.println("No match node found.");
