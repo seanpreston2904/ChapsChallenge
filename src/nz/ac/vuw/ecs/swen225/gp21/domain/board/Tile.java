@@ -1,21 +1,16 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain.board;
 
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 
-import java.awt.*;
-
 public class Tile {
-
-    public enum TileType {
-        WALL, FREE, EXIT
-    }
 
     private Coordinate location;
     private TileType type;
     private Item item;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public Tile(Coordinate location, TileType type, Item item) {
         this.location = location;
@@ -28,50 +23,70 @@ public class Tile {
     }
 
     /**
-     * getter for location
+     * Getter for location.
      */
     public Coordinate getLocation() {
         return location;
     }
 
     /**
-     * setter for location
+     * Setter for location.
      */
     public void setLocation(Coordinate location) {
         this.location = location;
     }
 
     /**
-     * getter for type
+     * Getter for type.
      */
     public TileType getType() {
         return type;
     }
 
     /**
-     * setter for type
+     * Setter for type.
      */
     public void setType(TileType type) {
         this.type = type;
     }
 
     /**
-     * getter for item
+     * Getter for item.
      */
     public Item getItem() {
         return item;
     }
 
     /**
-     * setter for item
+     * Setter for item.
      */
     public void setItem(Item item) {
         this.item = item;
     }
 
     /**
-     * @return - location and type
+     * Return a string for the console based version of this board.
+     *
+     * @return
      */
+    public String consoleString() {
+        if (item != null) {
+            return item.consoleString();
+        }
+        switch (type) {
+
+            case FREE:
+                return "_|";
+
+            case WALL:
+                return "#|";
+
+            case EXIT:
+                return "!|";
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return "Tile{" + location +

@@ -5,28 +5,44 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 
 import java.util.ArrayList;
 
+/**
+ * Player class is a type of actor which represents the players pawn.
+ */
 public class Player extends Actor {
 
     private ArrayList<Item> inventory;
+    private int treasure;
 
     public Player(Coordinate initial) {
         super(initial);
+        inventory = new ArrayList<>();
     }
 
     /**
-     * Utility method for setting items
+     * Utility method for setting items.
      *
-     * @param item
+     * @param item - the item.
      */
     public void addToInventory(Item item) {
         inventory.add(item);
     }
 
     /**
-     * Utility method for removing items
+     * Getter method items.
      *
-     * @param itemID
-     * @return - returns true ONLY if it was removed
+     * @return all items
+     */
+    public ArrayList<Item> getInventory() {
+        return inventory;
+    }
+
+    /**
+     * Utility method for removing items.
+     *
+     * @param itemID - the item's id to be found.
+     *
+     * @return - true ONLY if it was removed.
+     *
      */
     public boolean removeFromInventory(String itemID) {
 
@@ -38,5 +54,19 @@ public class Player extends Actor {
         }
 
         return false;
+    }
+
+    /**
+     * Getter for treasure count.
+     */
+    public int getTreasure() {
+        return treasure;
+    }
+
+    /**
+     * Setter for treasure count.
+     */
+    public void setTreasure(int treasure) {
+        this.treasure = treasure;
     }
 }

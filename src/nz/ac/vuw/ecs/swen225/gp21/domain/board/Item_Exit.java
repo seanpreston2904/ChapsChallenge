@@ -2,13 +2,12 @@ package nz.ac.vuw.ecs.swen225.gp21.domain.board;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
-
-import java.awt.*;
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
 
 public class Item_Exit extends Item implements PreMove {
 
     /**
-     * Constructor initializes type LOCK_EXIT and impassable = true
+     * Constructor initializes type LOCK_EXIT and impassable = true.
      */
     public Item_Exit() {
         super(ItemType.LOCK_EXIT, true);
@@ -19,7 +18,7 @@ public class Item_Exit extends Item implements PreMove {
     public void interact(Actor actor) {}
 
     /**
-     * PreInteract void fires upon player attempting to enter the cell
+     * PreInteract void fires upon player attempting to enter the cell.
      * @return
      */
     @Override
@@ -41,5 +40,14 @@ public class Item_Exit extends Item implements PreMove {
         }
 
         return false;
+    }
+
+    /**
+     * Return a string for the console based version of this board.
+     *
+     * @return
+     */
+    public String consoleString() {
+        return "x|";
     }
 }

@@ -15,10 +15,12 @@ public abstract class Actor {
     }
 
     /**
-     * Utility method to move the actor a certain direction and return its resulting position
+     * Utility method to move the actor a certain direction and return its resulting position.
      *
      * @param direction the direction to move to
+     *
      * @return
+     *
      */
     public Coordinate getResultingLocation(Direction direction) {
 
@@ -38,7 +40,7 @@ public abstract class Actor {
     }
 
     /**
-     * setter for the object's location
+     * setter for the object's location.
      *
      * @param position
      */
@@ -46,4 +48,22 @@ public abstract class Actor {
         this.position = position;
     }
 
+    /**
+     * getter for the object's location.
+     *
+     * @return position
+     */
+    public Coordinate getPosition() {
+        return this.position;
+    }
+
+
+    /**
+     * Return a string for the console based version of this board.
+     *
+     * @return
+     */
+    public String consoleString() {
+        return "\uD83D\uDC64";
+    }
 }
