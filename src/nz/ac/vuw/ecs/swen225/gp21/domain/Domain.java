@@ -21,6 +21,8 @@ public class Domain {
     Board board;
     // Player object
     Player hero;
+    // Treasure count
+    int treasure;
 
     /**
      * The Domain initializes with a board from Persistence, this is the only req. for the Domain to launch.
@@ -64,12 +66,25 @@ public class Domain {
         System.out.println("Board::: \n\n" + sb.toString());
     }
 
-
     /**
-     * Gett for the Hero character.
+     * Getter for the Board.
+     */
+    public Board getBoard() {
+        return this.board;
+    }
+    
+    /**
+     * Getter for the Hero character.
      */
     public Player getPlayer() {
         return this.hero;
+    }
+
+    /**
+     * Getter for the remaining treasures on the board.
+     */
+    public int getRemainingChips() {
+        return treasure;
     }
 
 
@@ -158,6 +173,8 @@ public class Domain {
 
         // the hero uses the item
         currentTile.getItem().interact(actor);
+
+        this.treasure = board.getBoardTreasureCount();
 
         // if it has no repeat uses
         if (currentTile.getItem().isOneTimeUse()) {
