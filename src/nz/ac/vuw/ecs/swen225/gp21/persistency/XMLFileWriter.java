@@ -58,7 +58,7 @@ public class XMLFileWriter {
         Element element_root = root.addElement("action");
         // time left
         Element element2 = element_root.addElement("timer");
-        element2.addAttribute("timeLeft", Integer.toString(timer));
+        element2.addAttribute("timer", Integer.toString(timer));
 
         // current actor
         Element element3 = element_root.addElement("actor");

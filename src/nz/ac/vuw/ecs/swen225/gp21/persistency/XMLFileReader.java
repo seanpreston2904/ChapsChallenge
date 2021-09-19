@@ -21,6 +21,7 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
+
 /**
  * reading map files and saved game files from XML.
  * representing the current game state in order for the player to resume games.
@@ -37,8 +38,7 @@ public class XMLFileReader {
     private Board board;                 // the current board
     private boolean isAction;            // indicates the saved file is a action records or not
     private List<Coordinate> bugStartPos = new ArrayList<>();    // a list of bus starting positions
-    private Map<String, String> actionRecords = new HashMap<>();// a map of actions with its records
-
+    private List<Map<String, String>> actionRecords = new ArrayList<>();// a map of actions with its records
     /**
      * load the board from the original game levels,
      * which contains all essential information of each tile.
@@ -72,7 +72,7 @@ public class XMLFileReader {
      * @param fName saved file name
      * @return a map of actions and records
      */
-    public Map<String, String> loadSavedActions(String fName) {
+    public List<Map<String, String>> loadSavedActions(String fName) {
         this.isAction = true;
         readGameFile(fName, false);
         return actionRecords;
@@ -152,6 +152,7 @@ public class XMLFileReader {
         }
     }
 
+
     /**
      * parse the saved game state file and setup these records for APP.
      * This contains:
@@ -160,30 +161,20 @@ public class XMLFileReader {
      * keys collected,
      * and the number of treasures that still need to be collected.
      *
-     * @param document the doc from reader
+     * @param document all nodes
      */
     private void parseSavedActions(Document document){
         List<Node> allNodes = document.selectNodes("/"+document.getRootElement().getName()+"/action");
-
-        actionRecords.put("level", document.getRootElement().attribute("level").getValue());
+        String level =  document.getRootElement().attribute("level").getValue();
         for (Node node : allNodes) {
             Element element_root = (Element) node;
             Iterator<Element> iterator = element_root.elementIterator();
+
             while (iterator.hasNext()) {
                 Element element = iterator.next();
-                switch (element.getName()) {
-                    case "timer":
-                        actionRecords.put("timer", element.attributeValue("timeLeft"));
-                        break;
-                    case "actor":
-                        actionRecords.put("actor", element.attributeValue("actor"));
-                        break;
-                    case "direction":
-                        actionRecords.put("direction", element.attributeValue("direction"));
-                        break;
-                    default:
-                        System.out.println("No match node found.");
-                }
+                Map<String, String> tempMap = new HashMap<>();
+                tempMap.put(element.getName(), element.attributeValue(element.getName()));
+                actionRecords.add(tempMap);
             }
         }
     }
