@@ -11,6 +11,7 @@ import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import nz.ac.vuw.ecs.swen225.gp21.persistency.writer.XMLFileWriter;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -47,8 +48,10 @@ public class Recorder {
 
             root.addAttribute("level", "2");
 
+			XMLFileWriter writer = new XMLFileWriter();
+
             for(ActionRecord a: actionQueue) {
-                writer.addActionNode(root, a.getTime(), a.getActor().getName(), a.getDirection());
+                writer.addActionNode(root, a.getTime(), a.getActor().getName(), a.getDirection().toString());
             }
 
             /* set the XML output Format with line change and index */
@@ -56,10 +59,10 @@ public class Recorder {
             XMLFormat.setEncoding("UTF-8");
 
             // write the output XML to the path
-            OutputStreamWriter writer = new OutputStreamWriter(
+            OutputStreamWriter stream = new OutputStreamWriter(
                     new FileOutputStream(filename),
                     StandardCharsets.UTF_8);
-            XMLWriter XMLWriter = new XMLWriter(writer, XMLFormat);
+            XMLWriter XMLWriter = new XMLWriter(stream, XMLFormat);
             XMLWriter.write(document);
             XMLWriter.flush();
             XMLWriter.close();
@@ -90,19 +93,19 @@ public class Recorder {
 		Timer timer= new Timer();
 		Domain finishedBoard=initalBoard;
 		timer.schedule(new TimerTask() { //start of main loop
-        @Override
-        public void run() {
-        time-=1;
-        if(actionQueue.peek().getTime()==time) { //if this action was done at this time apply it to the board using step
-			finishedBoard=step(finishedBoard, time);
-			app.setDomain(finishedBoard);
-		}
-		
-		else {
-			//advance time
-			time -= 1;
-			app.setTimer(time);
-		}
+        	@Override
+			public void run() {
+			time-=1;
+			if(actionQueue.peek().getTime()==time) { //if this action was done at this time apply it to the board using step
+				finishedBoard=step(finishedBoard, time);
+				app.setDomain(finishedBoard);
+			}
+
+			else {
+				//advance time
+				time -= 1;
+				app.setTimer(time);
+			}
         }
 
      }, 0, 1000);
