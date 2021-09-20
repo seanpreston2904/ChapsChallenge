@@ -6,6 +6,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.XMLFileReader;
 
 import java.util.Random;
@@ -24,6 +25,9 @@ public class Domain {
     // Treasure count
     int treasure;
 
+    // game state
+    boolean running;
+
     /**
      * The Domain initializes with a board from Persistence, this is the only req. for the Domain to launch.
      */
@@ -35,7 +39,7 @@ public class Domain {
         this.treasure = this.board.getTotalTreasures();
         this.hero = new Player(board.getPlayerStartPosition());
 
-
+        this.running = true;
 
         // TODO remove debugging print board
         printCurrentBoard();
@@ -90,8 +94,25 @@ public class Domain {
         return treasure;
     }
 
+    /**
+     * Getter for the running state of the game.
+     *
+     * @return
+     */
+    public boolean isRunning() {
+        return running;
+    }
 
-    //  GAME LOGIC //
+    /**
+     * Setter for the running state of the game.
+     *
+     * @param running
+     */
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
+//  GAME LOGIC //
     // what events can and cannot happen is controlled by the following methods
 
     /**
@@ -116,6 +137,15 @@ public class Domain {
 
             // if we get here then we move the actor
             actor.setPosition(moveToCoordinate);
+
+            // check for exit
+            if (board.getTile(moveToCoordinate).getType() == TileType.EXIT) {
+
+                // end the game
+                running = false;
+
+                return;
+            }
 
             // call the item's interact event
             try {
