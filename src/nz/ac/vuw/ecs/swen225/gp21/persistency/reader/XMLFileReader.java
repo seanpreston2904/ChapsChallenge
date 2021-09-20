@@ -15,11 +15,11 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Treasure;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.Node;
+import org.dom4j.*;
 import org.dom4j.io.SAXReader;
+import org.w3c.dom.NodeList;
+
+import javax.xml.xpath.XPathConstants;
 
 
 /**
@@ -116,8 +116,8 @@ public class XMLFileReader implements FileReader {
     public static void main(String[] args) {
         XMLFileReader p = new XMLFileReader();
         p.printBoard();
-//        System.out.println("Records: " +
-//                p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testAction.xml"));
+        System.out.println("Records: " +
+                p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testAction.xml"));
 
     }
     /* ------------------------------------------------------------------------------------------ */
@@ -206,6 +206,7 @@ public class XMLFileReader implements FileReader {
      */
     private void parseOriginalMap(Document document){
         Element root = document.getRootElement();
+
         for (String node:this.nodes){
             if(root.elements(node) != null) {
                 switch (node) {
