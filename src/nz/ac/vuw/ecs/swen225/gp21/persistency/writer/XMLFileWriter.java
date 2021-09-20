@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
+import nz.ac.vuw.ecs.swen225.gp21.app.App;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.*;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.reader.XMLFileReader;
@@ -42,7 +43,10 @@ public class XMLFileWriter implements FileWriter {
         String rootName = "savedMap";
         writeGameToXML(fName, rootName, board);
     }
-
+    public void saveCurrentMap(String fName, App app){
+        String rootName = "savedMap";
+        writeGameToXML(fName, rootName, app);
+    }
     /**
      *  add the game actions to XML.
      *  This is for Recorder to write each action records to a XML file.
@@ -75,14 +79,14 @@ public class XMLFileWriter implements FileWriter {
      * @param rootName map or actions
      *
      */
-    private void writeGameToXML(String fName, String rootName, Board board){
+    private void writeGameToXML(String fName, String rootName, Board board, App app){
         try {
             Document document = DocumentHelper.createDocument();
             Element root = document.addElement(rootName);
 
             if(rootName.equals("savedMap")){
                 //get all objects from the current game state to create the XML file
-                objectsToXML(root, board);
+                objectsToXML(root, board, app);
 
                 //TODO add movingBugs
 
@@ -115,7 +119,8 @@ public class XMLFileWriter implements FileWriter {
      * @param root the root ele
      * @param board the current board
      */
-    private void objectsToXML(Element root, Board board){
+    private void objectsToXML(Element root, Board board, App app){
+        Board board = app.getCurrentBoard();
         for (int x = 0; x < WIDTH; x++){
             for (int y = 0; y < HEIGHT; y++){
                 Tile tile = board.getTile(new Coordinate(x,y));
@@ -145,7 +150,6 @@ public class XMLFileWriter implements FileWriter {
                             System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ chips);
                             break;
                     }
-
                 }
                 // add all nodes to the file
                 addNodes(root, type, Integer.toString(pos.getX()),

@@ -116,8 +116,8 @@ public class XMLFileReader implements FileReader {
     public static void main(String[] args) {
         XMLFileReader p = new XMLFileReader();
         p.printBoard();
-//        System.out.println("Records: " +
-//                p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testAction.xml"));
+        System.out.println("Records: " +
+                p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testAction.xml"));
 
     }
     /* ------------------------------------------------------------------------------------------ */
