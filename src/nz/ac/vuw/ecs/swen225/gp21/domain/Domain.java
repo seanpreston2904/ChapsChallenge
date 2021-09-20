@@ -46,34 +46,6 @@ public class Domain {
     }
 
     /**
-     * TODO: Debugging method to print the board to the console.
-     */
-    public void printCurrentBoard() {
-
-        StringBuilder sb = new StringBuilder();
-
-        // loop through each tile to construct the board
-        for (int y = 0; y < board.getDimension().height; y++) {
-            for (int x = 0; x < board.getDimension().width; x++) {
-
-                // when we get to the hero we draw it instead of a tile
-                if (hero.getPosition().getX() == x && hero.getPosition().getY() == y) {
-                    sb.append(hero.consoleString());
-                }
-                // otherwise draw a tile
-                else {
-                    Tile t = board.getTile(new Coordinate(x, y));
-                    sb.append(t.consoleString());
-                }
-
-            }
-            sb.append("\n");
-        }
-
-        System.out.println("Board::: \n\n" + sb.toString());
-    }
-
-    /**
      * Getter for the Board.
      */
     public Board getBoard() {
@@ -112,7 +84,7 @@ public class Domain {
         this.running = running;
     }
 
-//  GAME LOGIC //
+    //  GAME LOGIC //
     // what events can and cannot happen is controlled by the following methods
 
     /**
@@ -122,6 +94,10 @@ public class Domain {
      * @param direction
      */
     public void moveActor(Actor actor, Direction direction) {
+
+        if (running == false) {
+            throw new IllegalStateException("Illegal State Exception. Not running but attempting moveActor().");
+        }
 
         // precondition checks
         if (direction == null) {
@@ -137,6 +113,8 @@ public class Domain {
 
             // if we get here then we move the actor
             actor.setPosition(moveToCoordinate);
+            // clear previous info states
+            actor.setInfoMessage(null);
 
             // check for exit
             if (board.getTile(moveToCoordinate).getType() == TileType.EXIT) {
@@ -209,12 +187,45 @@ public class Domain {
 
         this.treasure = board.getTotalTreasures();
 
-        // if it has no repeat uses
+        // if it has no repeat uses, remove it
         if (currentTile.getItem().isOneTimeUse()) {
-            // remove item
             currentTile.setItem(null);
         }
     }
 
+
+    // --------- EXTRA METHODS ------------
+
+    /**
+     * TODO: Debugging method to print the board to the console.
+     */
+    public void printCurrentBoard() {
+
+        StringBuilder sb = new StringBuilder();
+
+        // loop through each tile to construct the board
+        for (int y = 0; y < board.getDimension().height; y++) {
+            for (int x = 0; x < board.getDimension().width; x++) {
+
+                // when we get to the hero we draw it instead of a tile
+                if (hero.getPosition().getX() == x && hero.getPosition().getY() == y) {
+                    sb.append(hero.consoleString());
+                }
+                // otherwise draw a tile
+                else {
+                    Tile t = board.getTile(new Coordinate(x, y));
+                    sb.append(t.consoleString());
+                }
+
+            }
+            sb.append("\n");
+        }
+
+        System.out.println("Board::: \n\n" + sb.toString());
+
+        if (hero.listenForMessage() != null) {
+            System.out.println("INFO: " + hero.listenForMessage());
+        }
+    }
 
 }
