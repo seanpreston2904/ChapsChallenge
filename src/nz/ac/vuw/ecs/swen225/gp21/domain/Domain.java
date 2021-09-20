@@ -101,7 +101,7 @@ public class Domain {
 
         // precondition checks
         if (direction == null) {
-            throw new NullPointerException("Move Actor Direction is Null");
+            throw new IllegalArgumentException("Move Actor Direction is Null");
         }
 
         Coordinate moveToCoordinate = actor.getResultingLocation(direction);
@@ -144,13 +144,16 @@ public class Domain {
      *
      * @param actor
      */
-    public void randomlyMoveActor(Actor actor) {
+    public Direction randomlyMoveActor(Actor actor) {
 
-        moveActor(actor,
-                Direction.values()[
-                                    new Random().nextInt(Direction.values().length) // randomly choose a direction
-                                ]);
+        // generate a direction
+        Direction dir = Direction.values()[
+                new Random().nextInt(Direction.values().length) // randomly choose a direction
+                ];
 
+        moveActor(actor, dir);
+
+        return dir;
     }
 
 
@@ -168,14 +171,14 @@ public class Domain {
 
         // boundary checks on Coordinate
         if (current == null) {
-            throw new NullPointerException("Illegal Hero State");
+            throw new IllegalArgumentException("Illegal Hero State");
         }
 
         Tile currentTile = board.getTile(current);
 
         // boundary checks on Tile
         if (currentTile == null) {
-            throw new NullPointerException("Illegal Tile");
+            throw new IllegalArgumentException("Illegal Tile");
         }
         // boundary checks on Item
         if (currentTile.getItem() == null) {
