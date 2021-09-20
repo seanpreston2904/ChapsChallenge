@@ -95,31 +95,31 @@ public class XMLFileReader implements FileReader {
 
     /*----------------The debug function--------------------------------------------------------*/
 
-//    /**
-//     * print the board with all tiles.
-//     */
-//    public void printBoard() {
-//        Board board = loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
-//       // Board board =loadSavedMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml");
-//
-//        for (int x = 0; x < WIDTH; x++){
-//            for (int y = 0; y < HEIGHT; y++){
-//                Tile tile = board.getTile(new Coordinate(x,y));
-//                System.out.println(tile.getType() +", "+tile.getLocation()+", "+tile.getItem());
-//            }
-//        }
-//
-//        System.out.println("\n--------------------\nBug starts pos: " + this.bugStartPos+"\n--------------------\n");
-//
-//    }
-//
-//    public static void main(String[] args) {
-//        XMLFileReader p = new XMLFileReader();
-//        p.printBoard();
+    /**
+     * print the board with all tiles.
+     */
+    public void printBoard() {
+        //Board board = loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml");
+        Board board =loadSavedMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml");
+
+        for (int x = 0; x < WIDTH; x++){
+            for (int y = 0; y < HEIGHT; y++){
+                Tile tile = board.getTile(new Coordinate(x,y));
+                System.out.println(tile.getType() +", "+tile.getLocation()+", "+tile.getItem());
+            }
+        }
+
+        System.out.println("\n--------------------\nBug starts pos: " + this.bugStartPos+"\n--------------------\n");
+
+    }
+
+    public static void main(String[] args) {
+        XMLFileReader p = new XMLFileReader();
+        p.printBoard();
 //        System.out.println("Records: " +
 //                p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testAction.xml"));
-//
-//    }
+
+    }
     /* ------------------------------------------------------------------------------------------ */
 
     /**
@@ -215,21 +215,6 @@ public class XMLFileReader implements FileReader {
                     case "tile":
                         this.parseSingleNodes(document.selectNodes("/level/tile"));
                         break;
-//                    case "movingTile":
-//                        this.parseRandomNodes(document.selectNodes("/level/movingTile"));
-//                        break;
-//                    case "treasureTile":
-//                        this.parseRandomNodes(document.selectNodes("/level/treasureTile"));
-//                        break;
-//                    case "wallTile":
-//                        this.parseRandomNodes(document.selectNodes("/level/wallTile"));
-//                        break;
-//                    case "doorTile":
-//                        this.parseRandomNodes(document.selectNodes("/level/doorTile"));
-//                        break;
-//                    case "keyTile":
-//                        this.parseRandomNodes(document.selectNodes("/level/keyTile"));
-//                        break;
                     default:
                         this.parseRandomNodes(document.selectNodes("/level/"+node+""));
                         break;
@@ -261,13 +246,18 @@ public class XMLFileReader implements FileReader {
                 col = element.attributeValue("col");
             }
 
+            String total_chips = null;
+            if(type.equals("LOCK_EXIT") ) {
+                total_chips = element.attributeValue("chips");
+            }
             // get the location of the tile
             String x = node.selectSingleNode("x").getText();
             String y = node.selectSingleNode("y").getText();
             Coordinate pos = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
 
             // set each tile at corresponding position
-            setSingleTileOnBoard(type, pos, message,col);
+            setSingleTileOnBoard(type, pos, message, col, total_chips);
+
         }
     }
 
@@ -307,11 +297,12 @@ public class XMLFileReader implements FileReader {
             Element element = (Element) node;
             String type = element.attributeValue("type");
             String image = element.attributeValue("image");
+
             String col = null;
+            String total_chips = null;
             if(type.equals("KEY") || type.equals("LOCK_DOOR")) {
                 col = element.attributeValue("col");
             }
-            //System.out.println("Type : " + type + ", image: " + image + ", "+ col);
 
             // get the list of locations
             List<Node> list = node.selectSingleNode("pos").selectNodes("position");
@@ -323,7 +314,8 @@ public class XMLFileReader implements FileReader {
                 Coordinate coordinate = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
 
                 //set list of tiles at corresponding position
-                setSingleTileOnBoard(type, coordinate, null, col);
+                setSingleTileOnBoard(type, coordinate, null, col, null);
+
             }
         }
     }
@@ -363,7 +355,7 @@ public class XMLFileReader implements FileReader {
      * @param message info msg
      * @param col key/door color
      */
-    private void setSingleTileOnBoard(String type, Coordinate pos, String message, String col){
+    private void setSingleTileOnBoard(String type, Coordinate pos, String message, String col, String total_chips){
         // set each tile at corresponding position
         switch (type) {
             case "chap":
@@ -379,7 +371,7 @@ public class XMLFileReader implements FileReader {
                 board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Info(message)));
                 break;
             case "LOCK_EXIT":
-                board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Exit()));
+                board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Exit(Integer.parseInt(total_chips))));
                 break;
             case "TREASURE":
                 board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Treasure()));
@@ -402,6 +394,5 @@ public class XMLFileReader implements FileReader {
         }
 
     }
-
 
 }

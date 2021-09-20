@@ -8,7 +8,7 @@
         <x>9</x><y>3</y>
     </tile>
 
-    <tile type = "LOCK_EXIT" image="ELIcon.png"><x>2</x><y>4</y></tile>
+    <tile type = "LOCK_EXIT" image="ELIcon.png" chips = "6"><x>2</x><y>4</y></tile>
 
     <tile type = "EXIT" image="EIcon.png"><x>1</x><y>4</y></tile>
 

@@ -32,7 +32,7 @@
         <x>5</x><y>5</y>
     </tile>
 
-    <tile type = "LOCK_EXIT" image="ELIcon.png"><x>5</x><y>2</y></tile>
+    <tile type = "LOCK_EXIT" image="ELIcon.png" chips = "9"><x>5</x><y>2</y></tile>
 
     <tile type = "EXIT" image="EIcon.png"><x>5</x><y>1</y></tile>
 
