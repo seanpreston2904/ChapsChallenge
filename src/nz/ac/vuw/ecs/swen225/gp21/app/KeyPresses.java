@@ -29,9 +29,7 @@ public class KeyPresses implements KeyListener {
 	private App app;
 	private JPanel pausedDialoge;
 	private int inventoryCount;
-	
-	//TODO construct a recorder and do recording stuff
-	
+		
 	public KeyPresses(App app, Domain domain) {
 		
 		this.app = app;
@@ -97,13 +95,7 @@ public class KeyPresses implements KeyListener {
 				
 			//SPACE
 			if(key == 32) {
-					
-				countdownPanel.pause();					
-				countdownPanel.getPanel().setVisible(false);
-				app.getRenderView().setVisible(false);
-				pausedDialoge.setVisible(true);	
-				//TODO set the game frame invisible too
-					
+				pause();					
 			}
 			
 			
@@ -126,12 +118,8 @@ public class KeyPresses implements KeyListener {
 				
 			
 			/*----------------CTRL-S is pressed to save and exit the game-------*/
-			if ((e.getKeyCode() == KeyEvent.VK_S) && ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
-				System.out.println("ctrl-s pressed");
-					
-				//TODO save the game (a lot to do here)					
+			if ((e.getKeyCode() == KeyEvent.VK_S) && ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {					
 				saveGame();
-				app.terminateFrame();
 			}
 				
 			
@@ -156,11 +144,7 @@ public class KeyPresses implements KeyListener {
 		else {
 				
 			if(key == 27) {
-
-				countdownPanel.getPanel().setVisible(true);
-				app.getRenderView().setVisible(true);
-				pausedDialoge.setVisible(false);
-				countdownPanel.start();	
+				resume();
 			}
 	
 			System.out.println("game is paused kefe");
@@ -197,7 +181,6 @@ public class KeyPresses implements KeyListener {
 				if(items[i] != null) {
 
 					String id = items[i].getId();
-					System.out.println(id);
 					itemsPanel[i].setIcon(new ImageIcon("res/graphics/key.png"));						
 				}
 				
@@ -250,10 +233,35 @@ public class KeyPresses implements KeyListener {
 	
 	public void saveGame() {
 		
+		XMLFileWriter fileWriter = new XMLFileWriter();
+		String fname = JOptionPane.showInputDialog("Name your file:");
+		
+		if(fname.length() > 0) {
+			String directory = "src/nz/ac/vuw/ecs/swen225/gp21/savedgames"+fname;
+			fileWriter.saveCurrentMap(directory, app.getCurrentBoard());		
+			//fileWriter.saveCurrentMap(directory, this.app);
+		}
+		
+		app.terminateFrame();
+		
 	}
 	
 	public void openSavedGame() {
-		
+		ImageIcon icon = new ImageIcon("...");
+    	String[] levels = {"level1", "level2"};
+    	
+    	String level = (String) JOptionPane.showInputDialog(
+    			app.getMainFrame(),
+    			"Select a game to resume",
+    			"",
+    			JOptionPane.WARNING_MESSAGE,
+    			icon,
+    			levels,
+    			levels[0]
+    			);        
+    	
+    	//TODO finish this!!!
+ 
 	}
 	
 	public void startNewGame(int level) {
@@ -271,5 +279,19 @@ public class KeyPresses implements KeyListener {
         	new App("level"+level);           	
         }
         
+	}
+	
+	public void pause() {
+		countdownPanel.pause();					
+		countdownPanel.getPanel().setVisible(false);
+		app.getRenderView().setVisible(false);
+		pausedDialoge.setVisible(true);	
+	}
+	
+	public void resume() {
+		countdownPanel.getPanel().setVisible(true);
+		app.getRenderView().setVisible(true);
+		pausedDialoge.setVisible(false);
+		countdownPanel.start();	
 	}
 }
