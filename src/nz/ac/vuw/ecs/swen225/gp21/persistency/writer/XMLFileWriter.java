@@ -29,21 +29,17 @@ public class XMLFileWriter implements FileWriter {
         XMLFileReader reader = new XMLFileReader();
         XMLFileWriter writer = new XMLFileWriter();
         writer.saveCurrentMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml",
-                reader.loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"));
+                new App("level1"));
     }
 
     /**
      * save the board of the current game.
      *
      * @param fName the output file name
-     * @param board the current board
+     * @param app the current game
      */
     @Override
-    public void saveCurrentMap(String fName, Board board){
-        String rootName = "savedMap";
-        writeGameToXML(fName, rootName, board);
-    }
-    public void saveCurrentMap(String fName, App app){
+    public void saveCurrentMap (String fName, App app){
         String rootName = "savedMap";
         writeGameToXML(fName, rootName, app);
     }
@@ -79,14 +75,14 @@ public class XMLFileWriter implements FileWriter {
      * @param rootName map or actions
      *
      */
-    private void writeGameToXML(String fName, String rootName, Board board, App app){
+    private void writeGameToXML(String fName, String rootName, App app){
         try {
             Document document = DocumentHelper.createDocument();
             Element root = document.addElement(rootName);
 
             if(rootName.equals("savedMap")){
                 //get all objects from the current game state to create the XML file
-                objectsToXML(root, board, app);
+                objectsToXML(root, app);
 
                 //TODO add movingBugs
 
@@ -117,9 +113,9 @@ public class XMLFileWriter implements FileWriter {
      * save the objects on the board to xml.
      *
      * @param root the root ele
-     * @param board the current board
+     * @param app the current game
      */
-    private void objectsToXML(Element root, Board board, App app){
+    private void objectsToXML(Element root, App app){
         Board board = app.getCurrentBoard();
         for (int x = 0; x < WIDTH; x++){
             for (int y = 0; y < HEIGHT; y++){

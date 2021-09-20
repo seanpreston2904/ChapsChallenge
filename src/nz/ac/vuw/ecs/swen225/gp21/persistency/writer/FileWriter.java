@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp21.persistency.writer;
 
+import nz.ac.vuw.ecs.swen225.gp21.app.App;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import org.dom4j.Element;
 
@@ -16,9 +17,9 @@ public interface FileWriter {
     /**
      * save the board of the current game.
      *  @param fName the output file name
-     * @param board the current board
+     * @param app the current game
      */
-    void saveCurrentMap(String fName, Board board);
+    void saveCurrentMap(String fName, App app);
 
     /**
      *  add the game actions to XML.
