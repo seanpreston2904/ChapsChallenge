@@ -1,14 +1,10 @@
-package nz.ac.vuw.ecs.swen225.gp21.persistency;
+package nz.ac.vuw.ecs.swen225.gp21.persistency.writer;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
-import nz.ac.vuw.ecs.swen225.gp21.app.App;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Door;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Info;
@@ -21,16 +17,13 @@ import org.dom4j.Document;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
-
-
-
 /**
  * writing the Java objects to XML files.
  * to save the current game state in order for the player to resume games.
  *
  * @author Rae 300535154
  */
-public class XMLFileWriter {
+public class XMLFileWriter implements FileWriter {
     private static final int HEIGHT = 9;  // the height of the board
     private static final int WIDTH = 11;  // the width of the board
 
@@ -40,6 +33,7 @@ public class XMLFileWriter {
      * @param fName the output file name
      * @param board the current board
      */
+    @Override
     public void saveCurrentMap(String fName, Board board){
         String rootName = "savedMap";
         writeGameToXML(fName, rootName, board);
@@ -54,6 +48,7 @@ public class XMLFileWriter {
      * @param actor current actor
      * @param dir direction actor moved
      */
+    @Override
     public void addActionNode(Element root, int timer, String actor, String dir){
         Element element_root = root.addElement("action");
         // time left
