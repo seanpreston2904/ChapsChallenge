@@ -82,6 +82,7 @@ public class App {
 		renderView.setBounds(100,100,575,575);
 		
 	    main_frame.add(renderView);
+	    
 	    main_frame.add(countdownPanel);	 
 	    main_frame.add(background);
 		/*----------------------------------------------------------------------*/
