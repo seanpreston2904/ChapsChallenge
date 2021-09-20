@@ -40,7 +40,7 @@ public class Item_Info extends Item {
             Player player = (Player)actor;
 
             // display the info as a popup
-            // TODO
+            player.setInfoMessage(info);
         }
 
     }
