@@ -3,6 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp21.app;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,6 +16,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
+import javax.swing.border.Border;
+
+import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 
 /**
  * The class countdown panel that creates the countdown panel
@@ -27,6 +31,8 @@ public class CountdownPanel implements ActionListener {
 	private int chips_left_value;
 	private int level_value;
 	private App app;
+	
+    //private boolean replay = false;
 
 	private boolean started = false;
 		
@@ -35,6 +41,9 @@ public class CountdownPanel implements ActionListener {
 	private JLabel level = new JLabel();
 	private JLabel chips_left = new JLabel();
     private JButton start_pause = new JButton("START");
+    
+    private JPanel inventory;
+    private JLabel[] item_slots = new JLabel[8];
    
 	
 	Timer timer = new Timer(1000, new ActionListener() {
@@ -90,6 +99,8 @@ public class CountdownPanel implements ActionListener {
 		this.seconds_remaining = time;
 		this.chips_left_value = chipsleft;
 		this.level_value = current_level;
+		this.setUpInventoryPanel();
+		
 		
 		//this.board = board;
 		start_pause.addActionListener(this);
@@ -131,6 +142,7 @@ public class CountdownPanel implements ActionListener {
         start_pause.setBounds(60, 350, 90, 40);
 		/*------------------------------------------------------------------------------*/
         
+        countdownPanel.setLayout(null);
         countdownPanel.add(timer_title);
         countdownPanel.add(time_left);
         countdownPanel.add(level_title);
@@ -143,13 +155,10 @@ public class CountdownPanel implements ActionListener {
         countdownPanel.add(chips_title2);
         countdownPanel.add(left_title2);
         countdownPanel.add(level_title2);
-        
-        // adding colour to the panel's background
-        JPanel backgroundPan = new JPanel();
-        backgroundPan.setBackground(Color.LIGHT_GRAY);
-        backgroundPan.setBounds(5,5,195,445);
-        
-        countdownPanel.add(backgroundPan);
+                
+       
+        countdownPanel.setBackground(Color.LIGHT_GRAY);
+        countdownPanel.setBorder(BorderFactory.createRaisedBevelBorder());
         
         
                            
@@ -217,24 +226,22 @@ public class CountdownPanel implements ActionListener {
 	
 	
 	/**
-	 * Method execute when start button is pressed.
+	 * Execute running field in domain when start button is pressed.
+	 * Start button will disapear.
 	 * 
 	 * @param e event
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		// if clicked on the start/pause button do something
 		  if(e.getSource() == start_pause) {
+			  
+			  app.getDomain().setRunning(true);
+			  start();	
+			  start_pause.setVisible(false);
+			  inventory.setVisible(true);
 			   
-			   if(started==false) {
-				   start();				   
-			   }
-			   else {
-				   pause();
-			   }
-			   
-			  }
+		  }
 		
 	}
 	
@@ -245,7 +252,6 @@ public class CountdownPanel implements ActionListener {
 	public void start() {
 		started = true;
 		timer.start();
-		start_pause.setText("PAUSE");
 	}
 	
 	/**
@@ -253,8 +259,7 @@ public class CountdownPanel implements ActionListener {
      * and also change the button label.
      */	
 	public void pause() {
-		start_pause.setText("START");
-		started = false;
+		started = false;		
 		timer.stop();
 	}	
 	
@@ -266,6 +271,33 @@ public class CountdownPanel implements ActionListener {
 		timer.stop();		
 	}
 	
+	public void setUpInventoryPanel() {
+		
+		inventory = new JPanel();
+		inventory.setBounds(25, 340, 192, 128);
+		inventory.setLayout(new GridLayout(2,3));
+		inventory.setVisible(false);
+		
+		for(int i=0; i<6; i++) {
+			item_slots[i] = new JLabel();
+			// TODO might check this line
+			item_slots[i].setBorder(BorderFactory.createRaisedBevelBorder());
+			item_slots[i].setBackground(Color.LIGHT_GRAY);
+			inventory.add(item_slots[i]);
+		}
+		
+		
+		countdownPanel.add(inventory);
+		
+	}
+	
+	public JLabel[] getItemPanel() {
+		return item_slots;
+	}
+	
+	public JPanel getInventoryPanel() {
+		return inventory;
+	}
 	
 	
 	/**
