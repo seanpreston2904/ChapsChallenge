@@ -91,6 +91,13 @@ public abstract class Actor {
     }
 
     /**
+     * Getter for the actor's name.
+     */
+    public String getName() {
+        return "abstract";
+    }
+
+    /**
      * Return a string for the console based version of this board.
      *
      * @return
