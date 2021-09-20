@@ -32,7 +32,10 @@ public class Domain {
         XMLFileReader fileReader = new XMLFileReader();
         this.board = fileReader.loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/" + levelName + ".xml");
 
-        hero = new Player(board.getPlayerStartPosition());
+        this.treasure = this.board.getTotalTreasures();
+        this.hero = new Player(board.getPlayerStartPosition());
+
+
 
         // TODO remove debugging print board
         printCurrentBoard();
@@ -174,7 +177,7 @@ public class Domain {
         // the hero uses the item
         currentTile.getItem().interact(actor);
 
-        this.treasure = board.getBoardTreasureCount();
+        this.treasure = board.getTotalTreasures();
 
         // if it has no repeat uses
         if (currentTile.getItem().isOneTimeUse()) {
