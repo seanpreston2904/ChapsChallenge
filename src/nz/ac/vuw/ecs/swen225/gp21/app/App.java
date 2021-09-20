@@ -71,6 +71,8 @@ public class App {
 		main_frame.setLayout(null);
 		main_frame.setVisible(true);
 		
+		setUpMenuBar();
+		
 		JLabel background = new JLabel();
 		ImageIcon backgroundIcon = new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp21/app/444500.jpg");
 		background.setIcon(backgroundIcon);
@@ -159,6 +161,43 @@ public class App {
 	
 	// ------------------------------------------------------------------
 	
+	public void setUpMenuBar() {
+        JMenuBar myMenuBar = new JMenuBar();
+        JMenu m = new JMenu("Menu");
+        JMenuItem m1 = new JMenuItem("New Game");
+        m1.addActionListener(e -> {
+            main_frame.dispose();
+            SwingUtilities.invokeLater(()->new TitleScreen());
+        });
+  
+        JMenuItem m2 = new JMenuItem("Pause");
+        m2.addActionListener(e -> {
+            keypress.pause();
+        });
+        
+        JMenuItem m4 = new JMenuItem("Resume");
+        m4.addActionListener(e -> {
+            keypress.resume();
+        });
+        
+        JMenuItem m3 = new JMenuItem("Save Game");
+        m3.addActionListener(e -> {
+            keypress.saveGame();
+        });
+               
+        JMenuItem m5 = new JMenuItem("Exit");
+        m5.addActionListener(e -> {
+            System.exit(0);
+        });
+        
+        m.add(m1);
+        m.add(m2);
+        m.add(m4);
+        m.add(m3);
+        m.add(m5);
+        myMenuBar.add(m);
+        main_frame.setJMenuBar(myMenuBar);
+	}
 	
 	
 	public void terminateFrame() {
