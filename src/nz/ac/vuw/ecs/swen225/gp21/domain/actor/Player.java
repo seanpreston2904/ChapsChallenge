@@ -28,6 +28,15 @@ public class Player extends Actor {
     }
 
     /**
+     * Getter method items.
+     *
+     * @return all items
+     */
+    public ArrayList<Item> getInventory() {
+        return inventory;
+    }
+
+    /**
      * Utility method for removing items.
      *
      * @param itemID - the item's id to be found.

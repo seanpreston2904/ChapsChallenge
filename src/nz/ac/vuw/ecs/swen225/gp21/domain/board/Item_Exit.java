@@ -6,11 +6,15 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
 
 public class Item_Exit extends Item implements PreMove {
 
+    private int treasure;
+
     /**
      * Constructor initializes type LOCK_EXIT and impassable = true.
      */
-    public Item_Exit() {
+    public Item_Exit(int treasure) {
         super(ItemType.LOCK_EXIT, true);
+
+        this.treasure = treasure;
     }
 
 
@@ -30,16 +34,23 @@ public class Item_Exit extends Item implements PreMove {
             Player player = (Player)actor;
 
             // check the treasure count
-            // TODO
-            if (true) {
+            if (player.getTreasure() == treasure) {
 
                 // remove door from board
-                // TODO
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Getter method for treasure.
+     *
+     * @return
+     */
+    public int getTreasure() {
+        return treasure;
     }
 
     /**

@@ -1,8 +1,11 @@
-package nz.ac.vuw.ecs.swen225.gp21.persistency;
+package nz.ac.vuw.ecs.swen225.gp21.persistency.reader;
 
 import java.io.File;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Door;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Exit;
@@ -18,33 +21,34 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
+
 /**
  * reading map files and saved game files from XML.
  * representing the current game state in order for the player to resume games.
  *
  * @author Rae 300535154
  */
-public class XMLFileReader {
-    private final int HEIGHT = 9;  // the height of the board
-    private final int WIDTH = 11;  // the width of the board
-
-    // an array of all tilesNodes
+public class XMLFileReader implements FileReader {
+    private static final int HEIGHT = 9;  // the height of the board
+    private static final int WIDTH = 11;  // the width of the board
     private final String[] nodes =
-            {"tile","repeatTile","movingTile","treasureTile", "wallTile", "doorTile", "keyTile"};
+            {"tile", "repeatTile", "movingTile", "treasureTile",
+                    "wallTile", "doorTile", "keyTile"}; // all XML tilesNodes
 
-    private Board board;
-    private boolean isAction;
-    private List<Coordinate> bugStartPos = new ArrayList<>();
-    private Map<String, Integer> actionRecords = new HashMap<>();
-
+    private Board board;                 // the current board
+    private boolean isAction;            // indicates the saved file is a action records or not
+    private List<Coordinate> bugStartPos = new ArrayList<>();    // a list of bus starting positions
+    private List<Map<String, String>> actionRecords = new ArrayList<>();// a map of actions with its records
 
     /**
-     * load the board from the original game levels, which contains all essential information of each tile.
+     * load the board from the original game levels,
+     * which contains all essential information of each tile.
      * Tile type & Tile coordinate & (info message | key/door color)
      *
      * @param fileName game levels
      * @return the completed board
      */
+    @Override
     public Board loadOriginMap(String fileName) {
         //parse the game level file
         readGameFile(fileName, true);
@@ -57,6 +61,7 @@ public class XMLFileReader {
      * @param fName saved game files
      * @return the saved board
      */
+    @Override
     public Board loadSavedMap(String fName) {
         //parse the saved map file
         readGameFile(fName, false);
@@ -65,13 +70,15 @@ public class XMLFileReader {
 
     /**
      * load the saved action records file.
+     * With timer, actor, and direction.
      *
      * @param fName saved file name
-     * @return a map of actions and records
+     * @return a list of actions and records map
      */
-    public Map<String, Integer> loadSavedActions(String fName) {
+    @Override
+    public List<Map<String, String>> loadSavedActions(String fName) {
         this.isAction = true;
-        readGameFile(fName,false);
+        readGameFile(fName, false);
         return actionRecords;
     }
 
@@ -80,17 +87,19 @@ public class XMLFileReader {
      *
      * @return a list of coordinates
      */
-    public List<Coordinate> getBugStartPos() {
+    @Override
+    public List<Coordinate> getBugStartPos(String fileName) {
+        readGameFile(fileName, true);
         return bugStartPos;
     }
 
     /*----------------The debug function--------------------------------------------------------*/
 
     /**
-     * print the board with all tiles
+     * print the board with all tiles.
      */
-    public void printBoard(){
-        //Board board = loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml");
+    public void printBoard() {
+        //Board board = loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml");
         Board board =loadSavedMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml");
 
         for (int x = 0; x < WIDTH; x++){
@@ -100,16 +109,15 @@ public class XMLFileReader {
             }
         }
 
-        if(!getBugStartPos().isEmpty()) {
-            System.out.println("\n--------------------\nBug starts pos: " + this.bugStartPos);
-        }
+        System.out.println("\n--------------------\nBug starts pos: " + this.bugStartPos+"\n--------------------\n");
+
     }
 
     public static void main(String[] args) {
         XMLFileReader p = new XMLFileReader();
-        //p.printBoard();
-        System.out.println("The display info: " +
-                p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedAction.xml"));
+        p.printBoard();
+//        System.out.println("Records: " +
+//                p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testAction.xml"));
 
     }
     /* ------------------------------------------------------------------------------------------ */
@@ -149,6 +157,7 @@ public class XMLFileReader {
         }
     }
 
+
     /**
      * parse the saved game state file and setup these records for APP.
      * This contains:
@@ -157,39 +166,21 @@ public class XMLFileReader {
      * keys collected,
      * and the number of treasures that still need to be collected.
      *
-     * @param document the doc from reader
+     * @param document all nodes
      */
     private void parseSavedActions(Document document){
-        List<Node> allNodes = document.selectNodes("/savedAction");
+        List<Node> allNodes = document.selectNodes("/"+document.getRootElement().getName()+"/action");
+        String level =  document.getRootElement().attribute("level").getValue();
+
         for (Node node : allNodes) {
             Element element_root = (Element) node;
             Iterator<Element> iterator = element_root.elementIterator();
+
             while (iterator.hasNext()) {
                 Element element = iterator.next();
-                switch (element.getName()) {
-                    case "timer":
-                        String time = element.attributeValue("timeLeft");
-                        actionRecords.put("timer", Integer.parseInt(time));
-                        break;
-                    case "currentLevel":
-                        String level = element.attributeValue("level");
-                        actionRecords.put("level", Integer.parseInt(level));
-                        break;
-                    case "keysCollected":
-                        String keys_B = element.attributeValue("keys_B");
-                        String keys_R = element.attributeValue("keys_R");
-                        String keys_G = element.attributeValue("keys_G");
-                        actionRecords.put("keys_B", Integer.parseInt(keys_B));
-                        actionRecords.put("keys_R", Integer.parseInt(keys_R));
-                        actionRecords.put("keys_G", Integer.parseInt(keys_G));
-                        break;
-                    case "treasuresLeft":
-                        String treasures = element.attributeValue("treasures");
-                        actionRecords.put("treasuresLeft", Integer.parseInt(treasures));
-                        break;
-                    default:
-                        System.out.println("No match node found.");
-                }
+                Map<String, String> tempMap = new HashMap<>();
+                tempMap.put(element.getName(), element.attributeValue(element.getName()));
+                actionRecords.add(tempMap);
             }
         }
     }
@@ -203,7 +194,7 @@ public class XMLFileReader {
         Element root = document.getRootElement();
         for (String node:this.nodes) {
             if (root.elements(node) != null) {
-                this.parseSingleNodes(document.selectNodes("/savedMap/tile"));
+                this.parseSingleNodes(document.selectNodes("/"+document.getRootElement().getName()+"/tile"));
             }
         }
     }
@@ -224,23 +215,9 @@ public class XMLFileReader {
                     case "tile":
                         this.parseSingleNodes(document.selectNodes("/level/tile"));
                         break;
-                    case "movingTile":
-                        this.parseRandomNodes(document.selectNodes("/level/movingTile"));
-                        break;
-                    case "treasureTile":
-                        this.parseRandomNodes(document.selectNodes("/level/treasureTile"));
-                        break;
-                    case "wallTile":
-                        this.parseRandomNodes(document.selectNodes("/level/wallTile"));
-                        break;
-                    case "doorTile":
-                        this.parseRandomNodes(document.selectNodes("/level/doorTile"));
-                        break;
-                    case "keyTile":
-                        this.parseRandomNodes(document.selectNodes("/level/keyTile"));
-                        break;
                     default:
-                        System.out.println("No match node found.");
+                        this.parseRandomNodes(document.selectNodes("/level/"+node+""));
+                        break;
                 }
             }
         }
@@ -269,13 +246,18 @@ public class XMLFileReader {
                 col = element.attributeValue("col");
             }
 
+            String total_chips = null;
+            if(type.equals("LOCK_EXIT") ) {
+                total_chips = element.attributeValue("chips");
+            }
             // get the location of the tile
             String x = node.selectSingleNode("x").getText();
             String y = node.selectSingleNode("y").getText();
             Coordinate pos = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
 
             // set each tile at corresponding position
-            setSingleTileOnBoard(type, pos, message,col);
+            setSingleTileOnBoard(type, pos, message, col, total_chips);
+
         }
     }
 
@@ -315,11 +297,12 @@ public class XMLFileReader {
             Element element = (Element) node;
             String type = element.attributeValue("type");
             String image = element.attributeValue("image");
+
             String col = null;
+            String total_chips = null;
             if(type.equals("KEY") || type.equals("LOCK_DOOR")) {
                 col = element.attributeValue("col");
             }
-            //System.out.println("Type : " + type + ", image: " + image + ", "+ col);
 
             // get the list of locations
             List<Node> list = node.selectSingleNode("pos").selectNodes("position");
@@ -331,7 +314,8 @@ public class XMLFileReader {
                 Coordinate coordinate = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
 
                 //set list of tiles at corresponding position
-                setSingleTileOnBoard(type, coordinate, null, col);
+                setSingleTileOnBoard(type, coordinate, null, col, null);
+
             }
         }
     }
@@ -371,11 +355,14 @@ public class XMLFileReader {
      * @param message info msg
      * @param col key/door color
      */
-    private void setSingleTileOnBoard(String type, Coordinate pos, String message, String col){
+    private void setSingleTileOnBoard(String type, Coordinate pos, String message, String col, String total_chips){
         // set each tile at corresponding position
         switch (type) {
             case "chap":
                 board.setPlayerStartPosition(pos);
+                break;
+            case "WALL":
+                board.setTile(pos, new Tile(pos, TileType.WALL, null));
                 break;
             case "EXIT":
                 board.setTile(pos, new Tile(pos, TileType.EXIT,null));
@@ -384,10 +371,7 @@ public class XMLFileReader {
                 board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Info(message)));
                 break;
             case "LOCK_EXIT":
-                board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Exit()));
-                break;
-            case "WALL":
-                board.setTile(pos, new Tile(pos, TileType.WALL, null));
+                board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Exit(Integer.parseInt(total_chips))));
                 break;
             case "TREASURE":
                 board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Treasure()));
@@ -410,6 +394,5 @@ public class XMLFileReader {
         }
 
     }
-
 
 }

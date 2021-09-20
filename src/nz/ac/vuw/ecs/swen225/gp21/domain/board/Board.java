@@ -4,6 +4,7 @@ package nz.ac.vuw.ecs.swen225.gp21.domain.board;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
 
 import java.awt.*;
@@ -72,6 +73,32 @@ public class Board {
         board[coordinate.getX()][coordinate.getY()] = tile;
     }
 
+    /**
+     * Get the total treasures on the board.
+     */
+    public int getTotalTreasures() {
+        int treasure = 0;
+
+        // loop through every tile
+        for (int y = 0; y < getDimension().height; y++) {
+            for (int x = 0; x < getDimension().width; x++) {
+
+                Tile t = board[x][y];
+
+                // see if it has a treasure
+                if (t.getItem() != null) {
+                    if (t.getItem().getType() == ItemType.TREASURE) {
+
+                        System.out.println("Found Treasure on " + x + "," + y);
+
+                        treasure++;
+                    }
+                }
+            }
+        }
+
+        return treasure;
+    }
 
     /**
      * If the dimension is too large for x or y or less than 0 for either we return false.

@@ -10,6 +10,8 @@ public abstract class Actor {
 
     private Coordinate position;
 
+    private String infoMessage;
+
     public Actor(Coordinate initial) {
         this.position = initial;
     }
@@ -57,6 +59,23 @@ public abstract class Actor {
         return this.position;
     }
 
+    /**
+     * Getter to return the current info message to be shown.
+     *
+     * @return
+     */
+    public String listenForMessage() {
+        return infoMessage;
+    }
+
+    /**
+     * Setter for info message used by the tile.
+     *
+     * @param infoMessage
+     */
+    public void setInfoMessage(String infoMessage) {
+        this.infoMessage = infoMessage;
+    }
 
     /**
      * Return a string for the console based version of this board.
