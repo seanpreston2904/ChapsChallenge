@@ -77,6 +77,26 @@ public abstract class Actor {
         this.infoMessage = infoMessage;
     }
 
+    /*
+     * Parse a string into an actor.
+     *
+     * TODO
+     */
+    public static Actor parseActor(String actor) {
+        if (actor.equals"Hero") {
+            return new Player();
+        } else {
+            return new Actor();
+        }
+    }
+
+    /**
+     * Getter for the actor's name.
+     */
+    public String getName() {
+        return "abstract";
+    }
+
     /**
      * Return a string for the console based version of this board.
      *
