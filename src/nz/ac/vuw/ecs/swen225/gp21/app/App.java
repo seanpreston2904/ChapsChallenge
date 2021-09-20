@@ -1,9 +1,12 @@
 package nz.ac.vuw.ecs.swen225.gp21.app;
 
+import java.awt.Color;
+
 import javax.swing.*;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
+import nz.ac.vuw.ecs.swen225.gp21.renderer.RenderView;
 
 
 /**
@@ -39,21 +42,21 @@ public class App {
 		
 		if(levelName.equals("level1")) {
 			this.timer = 60;
-			this.remaining_chips=9;
 			this.level = 1;
 		}
 		
 		else if(levelName.equals("level2")) {
 			this.timer = 90;
-			this.remaining_chips=6;
 			this.level = 2;
 		}
 
 		/*----------------Initialising modules----------------------------------*/
 		this.domain = new Domain(levelName);
+		this.remaining_chips = this.domain.getRemainingChips();
 		this.main_frame = new JFrame("Chip Chaps");
 		this.countdown_pan = new CountdownPanel(timer, level, remaining_chips, this);
 		this.keypress = new KeyPresses(this, this.domain);
+		
 		/*----------------------------------------------------------------------*/
 		
 		
@@ -71,7 +74,10 @@ public class App {
 		JLayeredPane countdownPanel = countdown_pan.getPanel();
 		countdownPanel.setBounds(600,50,200,450);
 		countdownPanel.setOpaque(true);
+		RenderView renderView = new RenderView(new Domain("level1"));
+		renderView.setBounds(0,0,600,600);
 		
+	    //main_frame.add(renderView);
 	    main_frame.add(countdownPanel);	 
 	    main_frame.add(background);
 		/*----------------------------------------------------------------------*/
@@ -90,10 +96,12 @@ public class App {
 		return main_frame;
 	}
 	
-	public void updateChipsCount() {		
-		//TODO GET THE REMIANING CHIPS FROM THE DOMAIN 
-		int remainingChips = 10;
-		countdown_pan.updateRemainingChip(remainingChips);
+	public void updateChipsCount() {	
+		//update chips
+		this.remaining_chips = this.domain.getRemainingChips();
+		
+		// update Label
+		countdown_pan.updateRemainingChip(this.remaining_chips);
 	}	
 	/*----------------------------------------------------------------------*/
 	
@@ -121,14 +129,20 @@ public class App {
 	}
 	
 	public int getRemainingTreasures() {
-		return countdown_pan.getRemainingTreasures();
+		return domain.getRemainingChips();
 	}
+	
 	// ------------------------------------------------------------------
 	
 	
 	
 	public void terminateFrame() {
+		countdown_pan.stop();
 		main_frame.dispose();
+	}
+	
+	public static void main(String[] args) {
+		
 	}
 	
 	
