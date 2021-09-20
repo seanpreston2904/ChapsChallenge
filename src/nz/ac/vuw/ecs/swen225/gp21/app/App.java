@@ -6,6 +6,7 @@ import javax.swing.*;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
+import nz.ac.vuw.ecs.swen225.gp21.recorder.Recorder;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.RenderView;
 
 
@@ -14,8 +15,9 @@ import nz.ac.vuw.ecs.swen225.gp21.renderer.RenderView;
  */
 public class App {
 	
-	//private Board board; 
 	private Domain domain;
+	private Recorder recorder;
+	private RenderView renderView;
 	public final KeyPresses keypress;
 	private CountdownPanel countdown_pan;
 	private JFrame main_frame;
@@ -40,6 +42,7 @@ public class App {
 	//Constructor when starting a new game
 	public App(String levelName) {
 		
+		
 		if(levelName.equals("level1")) {
 			this.timer = 60;
 			this.level = 1;
@@ -52,6 +55,8 @@ public class App {
 
 		/*----------------Initialising modules----------------------------------*/
 		this.domain = new Domain(levelName);
+		this.recorder = new Recorder(this.domain);
+		this.renderView = new RenderView(this.domain);
 		this.remaining_chips = this.domain.getRemainingChips();
 		this.main_frame = new JFrame("Chip Chaps");
 		this.countdown_pan = new CountdownPanel(timer, level, remaining_chips, this);
@@ -62,29 +67,28 @@ public class App {
 		
 		/*---------------Setting up main board----------------------------------*/
 		main_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		main_frame.setSize(900,600);
+		main_frame.setSize(1200,800);
 		main_frame.setLayout(null);
 		main_frame.setVisible(true);
 		
 		JLabel background = new JLabel();
 		ImageIcon backgroundIcon = new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp21/app/444500.jpg");
 		background.setIcon(backgroundIcon);
-		background.setBounds(0,0,900,600);
+		background.setBounds(0,0,1200,800);
 			        						
 		JLayeredPane countdownPanel = countdown_pan.getPanel();
-		countdownPanel.setBounds(600,50,200,450);
+		countdownPanel.setBounds(800,120,250,500);
 		countdownPanel.setOpaque(true);
-		RenderView renderView = new RenderView(new Domain("level1"));
-		renderView.setBounds(0,0,600,600);
+		renderView.setBounds(100,100,575,575);
 		
-	    //main_frame.add(renderView);
+	    main_frame.add(renderView);
 	    main_frame.add(countdownPanel);	 
 	    main_frame.add(background);
 		/*----------------------------------------------------------------------*/
 	    
 	}
 	
-	/*-------------------SIDE METHODS FOR APP MODULE----------------------------*/
+	/*-------------------FIELD GETERS METHOD -----------------------------------*/
 	/**
 	 * This method returns the countdown panel field.
 	 */
@@ -94,6 +98,22 @@ public class App {
 	
 	public JFrame getMainFrame() {
 		return main_frame;
+	}
+	
+	public Domain getDomain() {
+		return domain;
+	}
+	
+	public Recorder getRecorder() {
+		return recorder;
+	}
+	
+	public RenderView getRenderView() {
+		return renderView;
+	}
+
+	public Board getCurrentBoard() {
+		return domain.getBoard();
 	}
 	
 	public void updateChipsCount() {	
@@ -132,6 +152,10 @@ public class App {
 		return domain.getRemainingChips();
 	}
 	
+	public void setDomain(Domain finishedDomain) {
+		this.domain = finishedDomain;
+	}
+	
 	// ------------------------------------------------------------------
 	
 	
@@ -140,10 +164,5 @@ public class App {
 		countdown_pan.stop();
 		main_frame.dispose();
 	}
-	
-	public static void main(String[] args) {
-		
-	}
-	
-	
+			
 }
