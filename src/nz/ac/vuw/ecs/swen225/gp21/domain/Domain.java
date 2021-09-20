@@ -7,7 +7,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
-import nz.ac.vuw.ecs.swen225.gp21.persistency.XMLFileReader;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.reader.XMLFileReader;
 
 import java.util.Random;
 
