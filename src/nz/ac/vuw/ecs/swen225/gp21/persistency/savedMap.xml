@@ -189,7 +189,7 @@
     <x>5</x>
     <y>1</y>
   </tile>
-  <tile type="LOCK_EXIT">
+  <tile type="LOCK_EXIT" chips="9">
     <x>5</x>
     <y>2</y>
   </tile>

@@ -5,12 +5,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Door;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Info;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Key;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.*;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.reader.XMLFileReader;
 import org.dom4j.Element;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Document;
@@ -26,6 +23,13 @@ import org.dom4j.io.XMLWriter;
 public class XMLFileWriter implements FileWriter {
     private static final int HEIGHT = 9;  // the height of the board
     private static final int WIDTH = 11;  // the width of the board
+
+    public static void main(String[] args) {
+        XMLFileReader reader = new XMLFileReader();
+        XMLFileWriter writer = new XMLFileWriter();
+        writer.saveCurrentMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml",
+                reader.loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"));
+    }
 
     /**
      * save the board of the current game.
@@ -120,24 +124,32 @@ public class XMLFileWriter implements FileWriter {
                 String item = null;
                 String col = null;
                 String info = null;
+                String chips = null;
                 if (tile.getItem() != null){
                     item = tile.getItem().getType().toString();
-                    if (item.equals("KEY")){
-                        col = ((Item_Key)tile.getItem()).getColor();
-                        //System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ col);
-                    }
-                    if(item.equals("LOCK_DOOR")){
-                        col = ((Item_Door)tile.getItem()).getColor();
-                       // System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ col);
-                    }
-                    if(item.equals("INFO")){
-                        info = ((Item_Info)tile.getItem()).getInfo();
-                       // System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ info);
+                    switch (item) {
+                        case "KEY":
+                            col = ((Item_Key) tile.getItem()).getColor();
+                            //System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ col);
+                            break;
+                        case "LOCK_DOOR":
+                            col = ((Item_Door) tile.getItem()).getColor();
+                            // System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ col);
+                            break;
+                        case "INFO":
+                            info = ((Item_Info) tile.getItem()).getInfo();
+                            // System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ info);
+                            break;
+                        case "LOCK_EXIT":
+                            chips = Integer.toString(((Item_Exit) tile.getItem()).getTreasure());
+                            System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ chips);
+                            break;
                     }
 
                 }
-
-                addNodes(root, type, Integer.toString(pos.getX()), Integer.toString(pos.getY()), item, col, info);
+                // add all nodes to the file
+                addNodes(root, type, Integer.toString(pos.getX()),
+                        Integer.toString(pos.getY()), item, col, info, chips);
             }
         }
     }
@@ -153,7 +165,8 @@ public class XMLFileWriter implements FileWriter {
      * @param col key/door col
      * @param info message tile
      */
-    private void addNodes(Element root, String type, String x, String y, String item, String col, String info) {
+    private void addNodes(Element root, String type, String x, String y,
+                          String item, String col, String info, String chips) {
         Element element1 = root.addElement("tile");
         Element XElement = element1.addElement("x");
         Element YElement = element1.addElement("y");
@@ -168,6 +181,9 @@ public class XMLFileWriter implements FileWriter {
             element1.addAttribute("type", item);
             if (col != null){
                 element1.addAttribute("col", col);
+            }
+            if(chips !=null){
+                element1.addAttribute("chips", chips);
             }
         }else {
             element1.addAttribute("type", type);
