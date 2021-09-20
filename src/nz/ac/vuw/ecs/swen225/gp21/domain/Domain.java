@@ -39,7 +39,8 @@ public class Domain {
         this.treasure = this.board.getTotalTreasures();
         this.hero = new Player(board.getPlayerStartPosition());
 
-        this.running = true;
+        // start off not running
+        this.running = false;
 
         // TODO remove debugging print board
         printCurrentBoard();
