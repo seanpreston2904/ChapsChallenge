@@ -129,11 +129,13 @@ public class KeyPresses implements KeyListener {
 			}
 				
 			if(!app.getDomain().isRunning()) {
-				countdownPanel.stop();
-				JOptionPane.showMessageDialog(app.getMainFrame(), "You finished the level!");					
+				app.finishGame();				
+			}
+			else {
+				
 			}
 			
-			//TODO do the popup info message
+//			TODO do the popup info message
 //			if(infoMessage != null) {
 //				JOptionPane.showMessageDialog(app.getMainFrame(), infoMessage);	
 //			}
@@ -235,13 +237,11 @@ public class KeyPresses implements KeyListener {
 		
 		XMLFileWriter fileWriter = new XMLFileWriter();
 		String fname = JOptionPane.showInputDialog("Name your file:");
-		
 		if(fname.length() > 0) {
-			String directory = "src/nz/ac/vuw/ecs/swen225/gp21/savedgames"+fname;
-			fileWriter.saveCurrentMap(directory, app);
-			//fileWriter.saveCurrentMap(directory, this.app);
+			String directory = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testMap1.xml";			
+			fileWriter.saveCurrentMap(directory, this.app);
 		}
-		
+
 		app.terminateFrame();
 		
 	}
@@ -293,5 +293,12 @@ public class KeyPresses implements KeyListener {
 		app.getRenderView().setVisible(true);
 		pausedDialoge.setVisible(false);
 		countdownPanel.start();	
+	}
+	
+	public void record() {
+		
+		String fname = JOptionPane.showInputDialog("Name your record file:");
+		app.getRecorder().saveAll();
+		
 	}
 }
