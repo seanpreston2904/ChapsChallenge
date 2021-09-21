@@ -17,7 +17,7 @@ public class Fuzz {
         Domain domain = new Domain("level1");
         Player player = domain.getPlayer();
 
-        for(int i = 0; i < 2000; i++) {
+        while(domain.isRunning()) {
             domain.randomlyMoveActor(player);
             System.out.println("RemainingChips : "+domain.getRemainingChips());
         }
