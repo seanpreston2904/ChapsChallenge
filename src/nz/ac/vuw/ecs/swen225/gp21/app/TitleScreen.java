@@ -67,30 +67,30 @@ public class TitleScreen{
             public void actionPerformed(ActionEvent e) {
 				
 				// if player has saved more than 1 game.
-				if(Main.getAllSavedFile()[0] != null) {
-					
-					ImageIcon icon = new ImageIcon("...");   
-            	
+				if(Main.getAllSavedFile().size() != 0) {
+
+					ImageIcon icon = new ImageIcon("...");
+
 					String file = (String) JOptionPane.showInputDialog(
 							frame,
 							"Select a game to resume",
 							"Resume Game",
 							JOptionPane.WARNING_MESSAGE,
 							icon,
-							Main.getAllSavedFile(),
-							Main.getAllSavedFile()[0]
-	            			);  
-	            	            	
-	            	frame.dispose(); 
-	            	
+							Main.getAllSavedFile().toArray(),
+							Main.getAllSavedFile().get(0)
+	            			);
+
+	            	frame.dispose();
+
 	            	//TODO generate the resumed game
-	            	new App(file);
-	            	
-	            // if player hasnt saved any game.	
+	            	//new App(level, file);
+
+	            // if player hasnt saved any game.
 				}else {
-					
+
 					JOptionPane.showMessageDialog(frame, "No game is saved yet!");
-					
+
 				}
 			}
         });

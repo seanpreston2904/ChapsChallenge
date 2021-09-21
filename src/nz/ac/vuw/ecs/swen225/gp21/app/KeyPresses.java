@@ -166,8 +166,9 @@ public class KeyPresses implements KeyListener {
 	}
 	
 	public void updateInventoryPanel() {
-		
-		if(hero.getInventory().size() != inventoryCount && hero.getInventory().size()!=0 ) {
+
+		// if hero's inventory is not the same size as the App's inventory
+		if(hero.getInventory().size() != inventoryCount) {
 			
 			ArrayList<Item> item2 = hero.getInventory();
 			JLabel[] itemsPanel = countdownPanel.getItemPanel();
@@ -237,12 +238,13 @@ public class KeyPresses implements KeyListener {
 		
 		XMLFileWriter fileWriter = new XMLFileWriter();
 		String fname = JOptionPane.showInputDialog("Name your file:");
-		if(fname.length() > 0) {
-			String directory = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testMap1.xml";			
-			fileWriter.saveCurrentMap(directory, this.app);
+		if (fname != null) {
+			if (fname.length() > 0) {
+				String directory = "";
+				String extension = ".xmlsave";
+				fileWriter.saveCurrentMap(directory + fname + extension, this.app);
+			}
 		}
-
-		app.terminateFrame();
 		
 	}
 	
@@ -298,7 +300,12 @@ public class KeyPresses implements KeyListener {
 	public void record() {
 		
 		String fname = JOptionPane.showInputDialog("Name your record file:");
-		app.getRecorder().saveAll();
+
+		if (fname != null) {
+			if (fname.length() > 0) {
+				app.getRecorder().saveAll(fname, app.getLevel());
+			}
+		}
 		
 	}
 }
