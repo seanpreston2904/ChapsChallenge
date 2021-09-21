@@ -26,6 +26,8 @@ public class App {
 	private int timer = 5;
 	private int level = 1;
 	private int remaining_chips = 10;
+	
+    JMenuItem m6 = new JMenuItem("Record Game");
 
 	/**
 	 * Constructor for an app.
@@ -69,8 +71,6 @@ public class App {
 		main_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		main_frame.setSize(1200,800);
 		main_frame.setLayout(null);
-		main_frame.setResizable(false);
-		main_frame.setLocationRelativeTo(null);
 		main_frame.setVisible(true);
 		
 		setUpMenuBar();
@@ -192,15 +192,29 @@ public class App {
             System.exit(0);
         });
         
+        m6.addActionListener(e -> {
+            keypress.record();
+        });
+        m6.setEnabled(false);
+        
         m.add(m1);
         m.add(m2);
         m.add(m4);
         m.add(m3);
         m.add(m5);
+        m.add(m6);
+        
         myMenuBar.add(m);
         main_frame.setJMenuBar(myMenuBar);
 	}
 	
+	public void finishGame() {
+		m6.setEnabled(true);
+
+		countdown_pan.stop();
+		
+		JOptionPane.showMessageDialog(getMainFrame(), "You finished the level!");	
+	}
 	
 	public void terminateFrame() {
 		countdown_pan.stop();
