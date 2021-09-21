@@ -100,7 +100,7 @@ public class XMLFileReader implements FileReader {
      */
     public void printBoard() {
         //Board board = loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml");
-        Board board =loadSavedMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml");
+        //Board board =loadSavedMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/savedMap.xml");
 
         for (int x = 0; x < WIDTH; x++){
             for (int y = 0; y < HEIGHT; y++){
@@ -115,7 +115,7 @@ public class XMLFileReader implements FileReader {
 
     public static void main(String[] args) {
         XMLFileReader p = new XMLFileReader();
-        p.printBoard();
+        //p.printBoard();
         System.out.println("Records: " +
                 p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testAction.xml"));
 
