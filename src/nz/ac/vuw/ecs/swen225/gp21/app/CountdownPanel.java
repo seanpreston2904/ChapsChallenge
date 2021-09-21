@@ -221,7 +221,7 @@ public class CountdownPanel implements ActionListener {
      */
 
 	public void updateRemainingChip(int remaining_chips) {		
-		chips_left.setText(String.valueOf(remaining_chips)); 		
+		chips_left.setText(String.valueOf(remaining_chips));
 	}
 	
 	

@@ -83,10 +83,10 @@ public abstract class Actor {
      * TODO
      */
     public static Actor parseActor(String actor) {
-        if (actor.equals"Hero") {
-            return new Player();
+        if (actor.equals("Hero")) {
+            return new Player(new Coordinate(0,0));
         } else {
-            return new Actor();
+            return null;
         }
     }
 

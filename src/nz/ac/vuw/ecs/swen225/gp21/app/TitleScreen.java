@@ -39,7 +39,6 @@ public class TitleScreen{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 		frame.setSize(714,420);
-		frame.setVisible(true);
 		
 		
 		//Drawing the game name CHAP'S CHALLENGE
@@ -164,6 +163,9 @@ public class TitleScreen{
 		label.setIcon(img);
 		label.setBounds(0,0,714,420);
 		frame.add(label);
+		frame.setResizable(false);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
 		       
 	}
 	

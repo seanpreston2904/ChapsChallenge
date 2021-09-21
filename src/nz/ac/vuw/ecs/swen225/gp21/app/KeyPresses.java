@@ -238,7 +238,7 @@ public class KeyPresses implements KeyListener {
 		
 		if(fname.length() > 0) {
 			String directory = "src/nz/ac/vuw/ecs/swen225/gp21/savedgames"+fname;
-			fileWriter.saveCurrentMap(directory, app.getCurrentBoard());		
+			fileWriter.saveCurrentMap(directory, app);
 			//fileWriter.saveCurrentMap(directory, this.app);
 		}
 		

@@ -189,12 +189,12 @@ public class Domain {
         // the hero uses the item
         currentTile.getItem().interact(actor);
 
-        this.treasure = board.getTotalTreasures();
-
         // if it has no repeat uses, remove it
         if (currentTile.getItem().isOneTimeUse()) {
             currentTile.setItem(null);
         }
+
+        this.treasure = board.getTotalTreasures();
     }
 
 
