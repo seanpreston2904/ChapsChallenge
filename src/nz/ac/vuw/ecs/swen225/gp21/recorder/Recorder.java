@@ -41,12 +41,12 @@ public class Recorder {
 		actionQueue.add(new ActionRecord(key,actor,time));
 	}
 	
-	public void saveAll(String filename) {
+	public void saveAll(String filename, int level) {
 		try {
             Document document = DocumentHelper.createDocument();
             Element root = document.addElement("savedAction");
 
-            root.addAttribute("level", "2");
+            root.addAttribute("level", "" + level);
 
 			XMLFileWriter writer = new XMLFileWriter();
 
@@ -89,13 +89,17 @@ public class Recorder {
 	}
 	
 	public void replay(App app) {
-		int time = app.getTimer();
 		Timer timer= new Timer();
-		Domain finishedBoard=initalBoard;
+
 		timer.schedule(new TimerTask() { //start of main loop
+
+			int time = app.getTimer();
+			Domain finishedBoard=initalBoard;
+
         	@Override
 			public void run() {
 			time-=1;
+
 			if(actionQueue.peek().getTime()==time) { //if this action was done at this time apply it to the board using step
 				finishedBoard=step(finishedBoard, time);
 				app.setDomain(finishedBoard);
