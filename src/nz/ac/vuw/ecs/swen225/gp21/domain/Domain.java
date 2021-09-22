@@ -1,6 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
+import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Bug;
+import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
@@ -9,6 +11,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.reader.XMLFileReader;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -22,6 +25,8 @@ public class Domain {
     Board board;
     // Player object
     Player hero;
+    // Other actors
+    ArrayList<Actor> actors;
     // Treasure count
     int treasure;
 
@@ -33,11 +38,19 @@ public class Domain {
      */
     public Domain(String levelName) {
         // load the current level's board from XML via Persistency
+        String fname = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/" + levelName + ".xml";
+
         XMLFileReader fileReader = new XMLFileReader();
-        this.board = fileReader.loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/" + levelName + ".xml");
+        this.board = fileReader.loadOriginMap(fname);
 
         this.treasure = this.board.getTotalTreasures();
         this.hero = new Player(board.getPlayerStartPosition());
+        this.actors = new ArrayList<>();
+
+        // load any and all enemies
+        //for (Enemy e : fileReader.getEnemyClasses(fname)) {
+        //    actors.add(e);
+        //}
 
         // start off not running
         this.running = false;
@@ -145,14 +158,12 @@ public class Domain {
      *
      * @param actor
      */
-    public Direction randomlyMoveActor(Actor actor) {
+    public static Direction randomlyMoveActor(Actor actor) {
 
         // generate a direction
         Direction dir = Direction.values()[
                 new Random().nextInt(Direction.values().length) // randomly choose a direction
                 ];
-
-        moveActor(actor, dir);
 
         return dir;
     }

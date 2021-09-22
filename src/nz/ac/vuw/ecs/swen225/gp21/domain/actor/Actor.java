@@ -77,15 +77,25 @@ public abstract class Actor {
         this.infoMessage = infoMessage;
     }
 
-    /*
+    /**
      * Parse a string into an actor.
      *
-     * TODO
+     * @param actor
+     *
+     * @return
+     *
      */
     public static Actor parseActor(String actor) {
         if (actor.equals("Hero")) {
+
             return new Player(new Coordinate(0,0));
-        } else {
+
+        } else if (actor.equals("Enemy")) {
+
+            return null;
+
+        }
+        else {
             return null;
         }
     }
