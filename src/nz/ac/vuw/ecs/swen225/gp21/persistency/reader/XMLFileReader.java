@@ -23,6 +23,8 @@ import javax.xml.xpath.XPathConstants;
 
 
 /**
+ * "Composite".
+ *
  * reading map files and saved game files from XML.
  * representing the current game state in order for the player to resume games.
  *
@@ -34,11 +36,12 @@ public class XMLFileReader implements FileReader {
     private final String[] nodes =
             {"tile", "repeatTile", "movingTile", "treasureTile",
                     "wallTile", "doorTile", "keyTile"}; // all XML tilesNodes
-
-    private Board board;                 // the current board
+    private LeafReader leafReader = new LeafReader();
     private boolean isAction;            // indicates the saved file is a action records or not
-    private List<Coordinate> bugStartPos = new ArrayList<>();    // a list of bus starting positions
     private List<Map<String, String>> actionRecords = new ArrayList<>();// a map of actions with its records
+    private Board board;
+
+
 
     /**
      * load the board from the original game levels,
@@ -52,6 +55,7 @@ public class XMLFileReader implements FileReader {
     public Board loadOriginMap(String fileName) {
         //parse the game level file
         readGameFile(fileName, true);
+        this.board = leafReader.loadSavedMap(fileName);
         return this.board;
     }
 
@@ -65,6 +69,7 @@ public class XMLFileReader implements FileReader {
     public Board loadSavedMap(String fName) {
         //parse the saved map file
         readGameFile(fName, false);
+        this.board = leafReader.loadSavedMap(fName);
         return this.board;
     }
 
@@ -88,9 +93,9 @@ public class XMLFileReader implements FileReader {
      * @return a list of coordinates
      */
     @Override
-    public List<Coordinate> getBugStartPos(String fileName) {
-        readGameFile(fileName, true);
-        return bugStartPos;
+    public List<Coordinate> getBugStartPos() {
+        assert this.board != null;
+        return leafReader.getBugStartPos();
     }
 
     /*----------------The debug function--------------------------------------------------------*/
@@ -99,7 +104,9 @@ public class XMLFileReader implements FileReader {
      * print the board with all tiles.
      */
     public void printBoard() {
-        //Board board = loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml");
+        String file1 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml";
+        String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml";
+        Board board = loadOriginMap(file1);
         //Board board =loadSavedMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/savedMap.xml");
 
         for (int x = 0; x < WIDTH; x++){
@@ -108,14 +115,17 @@ public class XMLFileReader implements FileReader {
                 System.out.println(tile.getType() +", "+tile.getLocation()+", "+tile.getItem());
             }
         }
-
-        System.out.println("\n--------------------\nBug starts pos: " + this.bugStartPos+"\n--------------------\n");
+        System.out.println("\n--------------------\nBug starts pos: "
+                + getBugStartPos()
+                +"\n--------------------\n");
 
     }
 
     public static void main(String[] args) {
         XMLFileReader p = new XMLFileReader();
-        //p.printBoard();
+        p.printBoard();
+
+
         System.out.println("Records: " +
                 p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testAction.xml"));
 
@@ -136,7 +146,7 @@ public class XMLFileReader implements FileReader {
             Document document = saxReader.read(input);
 
             // initialize the board with free tiles
-            initializeBoard();
+            leafReader.initializeBoard();
 
             //parse the each node in the file
             if (isMap) {
@@ -170,7 +180,7 @@ public class XMLFileReader implements FileReader {
      */
     private void parseSavedActions(Document document){
         List<Node> allNodes = document.selectNodes("/"+document.getRootElement().getName()+"/action");
-        String level =  document.getRootElement().attribute("level").getValue();
+        //String level =  document.getRootElement().attribute("level").getValue();
 
         for (Node node : allNodes) {
             Element element_root = (Element) node;
@@ -194,7 +204,7 @@ public class XMLFileReader implements FileReader {
         Element root = document.getRootElement();
         for (String node:this.nodes) {
             if (root.elements(node) != null) {
-                this.parseSingleNodes(document.selectNodes("/"+document.getRootElement().getName()+"/tile"));
+                leafReader.parseSingleNodes(document.selectNodes("/"+document.getRootElement().getName()+"/tile"));
             }
         }
     }
@@ -211,189 +221,17 @@ public class XMLFileReader implements FileReader {
             if(root.elements(node) != null) {
                 switch (node) {
                     case "repeatTile":
-                        this.parseWalls(document.selectNodes("/level/repeatTile"));
+                        leafReader.parseWalls(document.selectNodes("/level/repeatTile"));
                         break;
                     case "tile":
-                        this.parseSingleNodes(document.selectNodes("/level/tile"));
+                        leafReader.parseSingleNodes(document.selectNodes("/level/tile"));
                         break;
                     default:
-                        this.parseRandomNodes(document.selectNodes("/level/"+node+""));
+                        leafReader.parseRandomNodes(document.selectNodes("/level/"+node+""));
                         break;
                 }
             }
         }
-    }
-
-
-    /**
-     * parse all single nodes from the node list.
-     *
-     * @param allNodes the single nodes
-     */
-    private void parseSingleNodes(List<Node> allNodes)  {
-        for (Node node : allNodes) {
-            Element element = (Element) node;
-            String type = element.attributeValue("type");
-            String image = element.attributeValue("image");
-
-            // check for info tile
-            String message = null;
-            if(type.equals("INFO")){
-                message = node.selectSingleNode("message").getText();
-            }
-
-            String col = null;
-            if(type.equals("KEY") || type.equals("LOCK_DOOR")) {
-                col = element.attributeValue("col");
-            }
-
-            String total_chips = null;
-            if(type.equals("LOCK_EXIT") ) {
-                total_chips = element.attributeValue("chips");
-            }
-            // get the location of the tile
-            String x = node.selectSingleNode("x").getText();
-            String y = node.selectSingleNode("y").getText();
-            Coordinate pos = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
-
-            // set each tile at corresponding position
-            setSingleTileOnBoard(type, pos, message, col, total_chips);
-
-        }
-    }
-
-    /**
-     * parse all repeatedly-formatted wall nodes.
-     *
-     * @param allNodes all boundary wall nodes
-     */
-    private void parseWalls(List<Node> allNodes){
-        for (Node node : allNodes) {
-            Element element = (Element) node;
-            String type = element.attributeValue("type");
-            String image = element.attributeValue("image");
-
-            // get the start location
-            String x_start = node.selectSingleNode("x_start").getText();
-            String y_start = node.selectSingleNode("y_start").getText();
-            Coordinate startPos = new Coordinate(Integer.parseInt(x_start), Integer.parseInt(y_start));
-            // get the end location
-            String x_end = node.selectSingleNode("x_end").getText();
-            String y_end = node.selectSingleNode("y_end").getText();
-            Coordinate endPos = new Coordinate(Integer.parseInt(x_end), Integer.parseInt(y_end));
-
-            //set each wall tile at corresponding position
-            setWallOnBoard(startPos, endPos);
-        }
-    }
-
-    /**
-     * parse all randomly formatted nodes.
-     *
-     * @param nodes all random nodes.
-     */
-    private void parseRandomNodes(List<Node> nodes) {
-        for (Node node : nodes) {
-            //System.out.println("\nCurrent Element :" + node.getName());
-            Element element = (Element) node;
-            String type = element.attributeValue("type");
-            String image = element.attributeValue("image");
-
-            String col = null;
-            String total_chips = null;
-            if(type.equals("KEY") || type.equals("LOCK_DOOR")) {
-                col = element.attributeValue("col");
-            }
-
-            // get the list of locations
-            List<Node> list = node.selectSingleNode("pos").selectNodes("position");
-            for (Node n:list){
-                Element ele = (Element) n;
-                String x = ele.attributeValue("x");
-                String y = ele.attributeValue("y");
-                //System.out.println("x : " + x + ", y : " + y);
-                Coordinate coordinate = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
-
-                //set list of tiles at corresponding position
-                setSingleTileOnBoard(type, coordinate, null, col, null);
-
-            }
-        }
-    }
-
-    /**
-     * initialize the Board with free tiles.
-     */
-    private void initializeBoard(){
-        this.board = new Board(new Tile[WIDTH][HEIGHT]);
-        //fill each tile as FREE type
-        for (int x = 0; x < WIDTH; x++){
-            for (int y = 0; y < HEIGHT; y++){
-                this.board.setTile(new Coordinate(x, y), new Tile(new Coordinate(x, y), TileType.FREE,null));
-            }
-        }
-    }
-
-    /**
-     * set all boundary walls on the board.
-     *
-     * @param startPos start coordinate
-     * @param endPos end coordinate
-     */
-    private void setWallOnBoard(Coordinate startPos, Coordinate endPos){
-        for (int x = startPos.getX(); x < endPos.getX()+1; x++){
-            for (int y = startPos.getY(); y < endPos.getY()+1; y++){
-                this.board.setTile(new Coordinate(x, y), new Tile(new Coordinate(x, y), TileType.WALL,null));
-            }
-        }
-    }
-
-    /**
-     * set the rest of tiles on the board.
-     *
-     * @param type tile type
-     * @param pos coordinate
-     * @param message info msg
-     * @param col key/door color
-     */
-    private void setSingleTileOnBoard(String type, Coordinate pos, String message, String col, String total_chips){
-        // set each tile at corresponding position
-        switch (type) {
-            case "chap":
-                board.setPlayerStartPosition(pos);
-                break;
-            case "WALL":
-                board.setTile(pos, new Tile(pos, TileType.WALL, null));
-                break;
-            case "EXIT":
-                board.setTile(pos, new Tile(pos, TileType.EXIT,null));
-                break;
-            case "INFO":
-                board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Info(message)));
-                break;
-            case "LOCK_EXIT":
-                board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Exit(Integer.parseInt(total_chips))));
-                break;
-            case "TREASURE":
-                board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Treasure()));
-                break;
-            case "KEY":
-                board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Key(col)));
-                break;
-            case "LOCK_DOOR":
-                board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Door(col)));
-                break;
-            case "FREE":
-                board.setTile(pos, new Tile(pos, TileType.FREE, null));
-                break;
-            case "bug":
-                //TODO set BUG tile at corresponding position
-                this.bugStartPos.add(pos);
-                break;
-            default:
-                System.out.println("No match tile found.");
-        }
-
     }
 
 }
