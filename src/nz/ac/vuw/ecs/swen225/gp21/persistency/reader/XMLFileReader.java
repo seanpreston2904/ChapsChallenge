@@ -106,7 +106,7 @@ public class XMLFileReader implements FileReader {
     }
 
     /**
-     * Get a list of Enemies.
+     * Get a list of Enemies from jar file.
      *
      * @param name Enemy name
      * @return - the list
@@ -150,12 +150,12 @@ public class XMLFileReader implements FileReader {
         //p.printBoard();
         p.loadOriginMap(p.file2);
         System.out.println("Loaded Enemy class: " + p.getEnemyClasses("Bug"));
-        System.out.println("\n--------------------\nCurrent Level: "
-                + p.getLevel(p.file2)
-                +"\n--------------------\n");
-
-        System.out.println("Records: " +
-                p.loadSavedActions("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testAction.xml"));
+//        System.out.println("\n--------------------\nCurrent Level: "
+//                + p.getLevel(p.file2)
+//                +"\n--------------------\n");
+//
+//        System.out.println("Records: " +
+//                p.loadSavedActions("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testAction.xml"));
 
     }
     /* ------------------------------------------------------------------------------------------ */
