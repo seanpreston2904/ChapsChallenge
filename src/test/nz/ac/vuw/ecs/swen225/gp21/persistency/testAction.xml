@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<savedAction level="2">
+  <action>
+    <timer timer="90"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="80"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="70"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+</savedAction>
