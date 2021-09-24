@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author Rae 300535154
  */
-public class LoadBugFile {
+public class LoadEnemyFile {
 
     private List<Enemy> enemyClasses = new ArrayList<>(); // store all bugs
 

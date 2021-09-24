@@ -2,31 +2,19 @@ package nz.ac.vuw.ecs.swen225.gp21.persistency.reader;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Door;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Exit;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Info;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Key;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Treasure;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
-import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
-import nz.ac.vuw.ecs.swen225.gp21.persistency.plugin.LoadBugFile;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.plugin.LoadEnemyFile;
 import org.dom4j.*;
 import org.dom4j.io.SAXReader;
-import org.w3c.dom.NodeList;
-
-import javax.xml.xpath.XPathConstants;
 
 
 /**
@@ -129,9 +117,9 @@ public class XMLFileReader implements FileReader {
      */
     public List<Enemy> getEnemyClasses(String name) throws ClassNotFoundException, MalformedURLException,
             InstantiationException, IllegalAccessException {
-        LoadBugFile loadBugFile = new LoadBugFile();
-        loadBugFile.setEnemyClasses(this.getEnemyStartPos(), name);
-        return loadBugFile.getEnemyClasses();
+        LoadEnemyFile loadEnemyFile = new LoadEnemyFile();
+        loadEnemyFile.setEnemyClasses(this.getEnemyStartPos(), name);
+        return loadEnemyFile.getEnemyClasses();
     }
 
 
