@@ -31,6 +31,7 @@ public class LoadEnemyFile {
     /**
      * Load all enemy from the jar file.
      * construct all enemy objects with associated positions.
+     *
      * @param pos list of pos
      * @throws MalformedURLException msg
      * @throws ClassNotFoundException msg
@@ -42,6 +43,8 @@ public class LoadEnemyFile {
         File jarFile = new File("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels");
         File[] files = jarFile.listFiles(file -> file.getPath().toLowerCase().endsWith(".jar"));
 
+        // if there are more than one jar. use for loop
+
         assert files != null;
         URLClassLoader child = new URLClassLoader(
                 new URL[]{files[0].toURI().toURL()},
@@ -50,7 +53,7 @@ public class LoadEnemyFile {
 
         Class classToLoad = Class.forName(name, false, child);
 
-        // set each object corresponding position
+        // set each with object corresponding position
         for (Coordinate po : pos) {
             Object instance = classToLoad.newInstance();
             Enemy act = (Enemy) instance;
