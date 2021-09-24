@@ -49,9 +49,9 @@ public interface FileReader {
     List<Map<String, String>> loadSavedActions(String fName);
 
     /**
-     * get the starting coordinates of all bugs.
+     * get the starting coordinates of all Enemy.
      *
      * @return a list of coordinates
      */
-    List<Coordinate> getBugStartPos();
+    List<Coordinate> getEnemyStartPos();
 }

@@ -185,7 +185,7 @@ public class LeafReader implements FileReader{
             case "FREE":
                 board.setTile(pos, new Tile(pos, TileType.FREE, null));
                 break;
-            case "bug":
+            case "Enemy":
                 //TODO set BUG tile at corresponding position
 
                 this.bugStartPos.add(pos);
@@ -203,9 +203,7 @@ public class LeafReader implements FileReader{
      * @return board
      */
     @Override
-    public Board loadOriginMap(String fileName) {
-        return this.board;
-    }
+    public Board loadOriginMap(String fileName) { return this.board; }
 
     /**
      * Override method. get the initializeBoard.
@@ -235,7 +233,7 @@ public class LeafReader implements FileReader{
      * @return list of pos
      */
     @Override
-    public List<Coordinate> getBugStartPos() {
+    public List<Coordinate> getEnemyStartPos() {
         return this.bugStartPos;
     }
 }

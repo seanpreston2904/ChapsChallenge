@@ -1,11 +1,17 @@
 package nz.ac.vuw.ecs.swen225.gp21.persistency.reader;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
+import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Door;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Exit;
@@ -15,6 +21,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Treasure;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.plugin.LoadBugFile;
 import org.dom4j.*;
 import org.dom4j.io.SAXReader;
 import org.w3c.dom.NodeList;
@@ -33,14 +40,16 @@ import javax.xml.xpath.XPathConstants;
 public class XMLFileReader implements FileReader {
     private static final int HEIGHT = 9;  // the height of the board
     private static final int WIDTH = 11;  // the width of the board
-    private final String[] nodes =
-            {"tile", "repeatTile", "movingTile", "treasureTile",
-                    "wallTile", "doorTile", "keyTile"}; // all XML tilesNodes
+
     private LeafReader leafReader = new LeafReader();
     private boolean isAction;            // indicates the saved file is a action records or not
     private List<Map<String, String>> actionRecords = new ArrayList<>();// a map of actions with its records
     private Board board;
 
+    private final String[] nodes =    // all XML tilesNodes
+            {"tile", "repeatTile", "movingTile", "treasureTile", "wallTile", "doorTile", "keyTile"};
+    private String file1 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"; // game level1 map
+    private String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
 
 
     /**
@@ -55,7 +64,7 @@ public class XMLFileReader implements FileReader {
     public Board loadOriginMap(String fileName) {
         //parse the game level file
         readGameFile(fileName, true);
-        this.board = leafReader.loadSavedMap(fileName);
+        this.board = leafReader.loadOriginMap(fileName);
         return this.board;
     }
 
@@ -88,15 +97,32 @@ public class XMLFileReader implements FileReader {
     }
 
     /**
-     * get the starting coordinates of all bugs.
+     * get the starting coordinates of all Enemies.
      *
      * @return a list of coordinates
      */
     @Override
-    public List<Coordinate> getBugStartPos() {
-        assert this.board != null;
-        return leafReader.getBugStartPos();
+    public List<Coordinate> getEnemyStartPos() {
+        return leafReader.getEnemyStartPos();
     }
+
+    /**
+     * Get a list of Enemies.
+     *
+     * @param name Enemy name
+     * @return - the list
+     * @throws ClassNotFoundException msg
+     * @throws MalformedURLException msg
+     * @throws InstantiationException msg
+     * @throws IllegalAccessException msg
+     */
+    public List<Enemy> getEnemyClasses(String name) throws ClassNotFoundException, MalformedURLException,
+            InstantiationException, IllegalAccessException {
+        LoadBugFile loadBugFile = new LoadBugFile();
+        loadBugFile.setEnemyClasses(this.getEnemyStartPos(), name);
+        return loadBugFile.getEnemyClasses();
+    }
+
 
     /*----------------The debug function--------------------------------------------------------*/
 
@@ -104,8 +130,7 @@ public class XMLFileReader implements FileReader {
      * print the board with all tiles.
      */
     public void printBoard() {
-        String file1 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml";
-        String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml";
+
         Board board = loadOriginMap(file1);
         //Board board =loadSavedMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/savedMap.xml");
 
@@ -116,18 +141,19 @@ public class XMLFileReader implements FileReader {
             }
         }
         System.out.println("\n--------------------\nBug starts pos: "
-                + getBugStartPos()
+                + getEnemyStartPos()
                 +"\n--------------------\n");
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException, MalformedURLException, InstantiationException, IllegalAccessException {
         XMLFileReader p = new XMLFileReader();
-        p.printBoard();
+        //p.printBoard();
+        p.loadOriginMap(p.file2);
+        System.out.println("Loaded Enemy class: " + p.getEnemyClasses("Bug"));
 
-
-        System.out.println("Records: " +
-                p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testAction.xml"));
+//        System.out.println("Records: " +
+//                p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testAction.xml"));
 
     }
     /* ------------------------------------------------------------------------------------------ */

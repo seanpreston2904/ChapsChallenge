@@ -38,7 +38,7 @@
     </repeatTile>
 
     <!--bugs-->
-    <movingTile type = "bug" image="bugIcon.png">
+    <movingTile type = "Enemy" image="bugIcon.png">
         <pos>
             <position x = "4" y = "2"/>
             <position x = "4" y = "4"/>

@@ -74,8 +74,6 @@ public class XMLFileWriter implements FileWriter {
                 //get all objects from the current game state to create the XML file
                 objectsToXML(root, app);
 
-                //TODO add movingBugs
-
             }
 
             /* set the XML output Format with line change and index */
