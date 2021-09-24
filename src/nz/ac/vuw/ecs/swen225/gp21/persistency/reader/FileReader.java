@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ *  "Component" .
+ *
  * An FileReader interface to achieve the following abstraction.
  * 1. load the board from the original game levels.
  * 2. load the board from saved game map.
@@ -47,9 +49,9 @@ public interface FileReader {
     List<Map<String, String>> loadSavedActions(String fName);
 
     /**
-     * get the starting coordinates of all bugs.
+     * get the starting coordinates of all Enemy.
      *
      * @return a list of coordinates
      */
-    List<Coordinate> getBugStartPos(String fileName);
+    List<Coordinate> getEnemyStartPos();
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<level>
+<level level="2">
 
     <tile type = "chap" image="chapIcon.png"><x>9</x><y>4</y></tile>
 
@@ -38,7 +38,7 @@
     </repeatTile>
 
     <!--bugs-->
-    <movingTile type = "bug" image="bugIcon.png">
+    <movingTile type = "Enemy" image="bugIcon.png">
         <pos>
             <position x = "4" y = "2"/>
             <position x = "4" y = "4"/>

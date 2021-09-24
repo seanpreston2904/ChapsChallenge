@@ -24,14 +24,16 @@ import org.dom4j.io.XMLWriter;
 public class XMLFileWriter implements FileWriter {
     private static final int HEIGHT = 9;  // the height of the board
     private static final int WIDTH = 11;  // the width of the board
+    private LeafWriter leafWriter = new LeafWriter();
 
+    /*----------------The debug function--------------------------------------------------------*/
     public static void main(String[] args) {
         XMLFileReader reader = new XMLFileReader();
         XMLFileWriter writer = new XMLFileWriter();
-        writer.saveCurrentMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml",
+        writer.saveCurrentMap("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml",
                 new App("level1"));
     }
-
+    /* ------------------------------------------------------------------------------------------ */
     /**
      * save the board of the current game.
      *
@@ -54,18 +56,7 @@ public class XMLFileWriter implements FileWriter {
      */
     @Override
     public void addActionNode(Element root, int timer, String actor, String dir){
-        Element element_root = root.addElement("action");
-        // time left
-        Element element2 = element_root.addElement("timer");
-        element2.addAttribute("timer", Integer.toString(timer));
-
-        // current actor
-        Element element3 = element_root.addElement("actor");
-        element3.addAttribute("actor", actor);
-
-        // direction
-        Element element4 = element_root.addElement("direction");
-        element4.addAttribute("direction", dir);
+        leafWriter.addActionNode(root, timer, actor, dir);
     }
 
     /**
@@ -83,8 +74,7 @@ public class XMLFileWriter implements FileWriter {
             if(rootName.equals("savedMap")){
                 //get all objects from the current game state to create the XML file
                 objectsToXML(root, app);
-
-                //TODO add movingBugs
+                root.addAttribute("level", Integer.toString(app.getLevel()));
 
             }
 
@@ -148,53 +138,13 @@ public class XMLFileWriter implements FileWriter {
                     }
                 }
                 // add all nodes to the file
-                addNodes(root, type, Integer.toString(pos.getX()),
+                leafWriter.addNodes(root, type, Integer.toString(pos.getX()),
                         Integer.toString(pos.getY()), item, col, info, chips);
             }
         }
     }
 
-    /**
-     * add all nodes to the file.
-     *
-     * @param root element root
-     * @param type tile type
-     * @param x x coordinate
-     * @param y y coordinate
-     * @param item item on tile
-     * @param col key/door col
-     * @param info message tile
-     */
-    private void addNodes(Element root, String type, String x, String y,
-                          String item, String col, String info, String chips) {
-        Element element1 = root.addElement("tile");
-        Element XElement = element1.addElement("x");
-        Element YElement = element1.addElement("y");
 
-        if(info != null){
-            Element infoElement = element1.addElement("message");
-            infoElement.setText(info);
-        }
 
-        //add the attributes
-        if (item != null) {
-            element1.addAttribute("type", item);
-            if (col != null){
-                element1.addAttribute("col", col);
-            }
-            if(chips !=null){
-                element1.addAttribute("chips", chips);
-            }
-        }else {
-            element1.addAttribute("type", type);
-        }
-
-        //TODO add the image icon attribute
-        //element1.addAttribute("image", icon);
-
-        //set the value
-        XElement.setText(x);
-        YElement.setText(y);
-    }
 
 }
