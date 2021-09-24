@@ -11,12 +11,18 @@ import java.util.Random;
 public abstract class Enemy extends Actor {
 
     /**
-     * Default constructor with spawn location.
+     * Constructor with spawn location.
      *
      * @param initial
      */
     public Enemy(Coordinate initial) {
         super(initial);
+    }
+
+    /**
+     * Default constructor no parameters.
+     */
+    public Enemy() {
     }
 
     /**
