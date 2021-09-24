@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp21.persistency.tests;
+package test.nz.ac.vuw.ecs.swen225.gp21.persistency;
 
 import nz.ac.vuw.ecs.swen225.gp21.app.App;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
@@ -16,7 +16,6 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.junit.Test;
 
-import javax.swing.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -34,13 +33,13 @@ import static org.junit.Assert.assertTrue;
 public class PersistenceTests {
     private String file1 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"; // game level1 map
     private String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
-
+    private String outAction = "src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testAction.xml";
     /*---------  Tests for XMLFileReader ----------- */
     private  XMLFileReader reader = new XMLFileReader();
     private Board originalBoard =
             reader.loadOriginMap(file1);
     private Board savedBoard =
-            reader.loadSavedMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/savedMap.xml");
+            reader.loadSavedMap("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml");
 
     /**
      * test tiles position on map file.
@@ -144,7 +143,7 @@ public class PersistenceTests {
     @Test
     public void test_6() {
         writer.saveCurrentMap(
-                "src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testMap.xml", new App("level1"));
+                "src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testMap.xml", new App("level1"));
     }
 
     /**
@@ -168,8 +167,7 @@ public class PersistenceTests {
 
             // write the output XML to the path
             OutputStreamWriter writer = new OutputStreamWriter(
-                    new FileOutputStream(
-                            "src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testAction.xml"),
+                    new FileOutputStream(outAction),
                     StandardCharsets.UTF_8);
             XMLWriter XMLWriter = new XMLWriter(writer, XMLFormat);
             XMLWriter.write(document);
@@ -190,8 +188,7 @@ public class PersistenceTests {
      */
     @Test
     public void test_8() {
-        List<Map<String, String>> savedRecords =
-                reader.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testAction.xml");
+        List<Map<String, String>> savedRecords = reader.loadSavedActions(outAction);
 
         Map<String, String> timer = savedRecords.get(0);
         Map<String, String> actor = savedRecords.get(1);

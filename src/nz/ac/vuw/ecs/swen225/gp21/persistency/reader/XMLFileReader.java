@@ -143,7 +143,7 @@ public class XMLFileReader implements FileReader {
     public void printBoard() {
 
         Board board = loadOriginMap(file2);
-        //Board board =loadSavedMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/savedMap.xml");
+        //Board board =loadSavedMap("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml");
 
         for (int x = 0; x < WIDTH; x++){
             for (int y = 0; y < HEIGHT; y++){
@@ -160,14 +160,14 @@ public class XMLFileReader implements FileReader {
     public static void main(String[] args) throws ClassNotFoundException, MalformedURLException, InstantiationException, IllegalAccessException {
         XMLFileReader p = new XMLFileReader();
         //p.printBoard();
-//        p.loadOriginMap(p.file2);
-//        System.out.println("Loaded Enemy class: " + p.getEnemyClasses("Bug"));
+        p.loadOriginMap(p.file2);
+        System.out.println("Loaded Enemy class: " + p.getEnemyClasses("Bug"));
         System.out.println("\n--------------------\nCurrent Level: "
                 + p.getLevel(p.file2)
                 +"\n--------------------\n");
 
         System.out.println("Records: " +
-                p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testAction.xml"));
+                p.loadSavedActions("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testAction.xml"));
 
     }
     /* ------------------------------------------------------------------------------------------ */
