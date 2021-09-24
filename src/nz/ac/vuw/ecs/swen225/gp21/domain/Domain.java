@@ -34,8 +34,14 @@ public class Domain {
     public Domain(String levelName) {
         // load the current level's board from XML via Persistency
         XMLFileReader fileReader = new XMLFileReader();
-        this.board = fileReader.loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/" + levelName + ".xml");
 
+        if (levelName.contains("xmlsave")) {
+            this.board = fileReader.loadSaveMap(saveFileName);
+        } else {
+            this.board = fileReader.loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/" + levelName + ".xml");
+        }
+
+        // Initialize the board and starting game features.
         this.treasure = this.board.getTotalTreasures();
         this.hero = new Player(board.getPlayerStartPosition());
 
