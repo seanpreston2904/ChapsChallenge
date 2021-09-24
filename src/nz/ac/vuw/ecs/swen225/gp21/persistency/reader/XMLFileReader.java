@@ -45,6 +45,7 @@ public class XMLFileReader implements FileReader {
     private boolean isAction;            // indicates the saved file is a action records or not
     private List<Map<String, String>> actionRecords = new ArrayList<>();// a map of actions with its records
     private Board board;
+    private int level;
 
     private final String[] nodes =    // all XML tilesNodes
             {"tile", "repeatTile", "movingTile", "treasureTile", "wallTile", "doorTile", "keyTile"};
@@ -97,6 +98,16 @@ public class XMLFileReader implements FileReader {
     }
 
     /**
+     * get the level of the map.
+     * @param fileName file
+     * @return level
+     */
+    public int getLevel(String fileName){
+        readGameFile(fileName, false);
+        return this.level;
+    }
+
+    /**
      * get the starting coordinates of all Enemies.
      *
      * @return a list of coordinates
@@ -131,7 +142,7 @@ public class XMLFileReader implements FileReader {
      */
     public void printBoard() {
 
-        Board board = loadOriginMap(file1);
+        Board board = loadOriginMap(file2);
         //Board board =loadSavedMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/savedMap.xml");
 
         for (int x = 0; x < WIDTH; x++){
@@ -149,11 +160,14 @@ public class XMLFileReader implements FileReader {
     public static void main(String[] args) throws ClassNotFoundException, MalformedURLException, InstantiationException, IllegalAccessException {
         XMLFileReader p = new XMLFileReader();
         //p.printBoard();
-        p.loadOriginMap(p.file2);
-        System.out.println("Loaded Enemy class: " + p.getEnemyClasses("Bug"));
+//        p.loadOriginMap(p.file2);
+//        System.out.println("Loaded Enemy class: " + p.getEnemyClasses("Bug"));
+        System.out.println("\n--------------------\nCurrent Level: "
+                + p.getLevel(p.file2)
+                +"\n--------------------\n");
 
-//        System.out.println("Records: " +
-//                p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testAction.xml"));
+        System.out.println("Records: " +
+                p.loadSavedActions("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/testAction.xml"));
 
     }
     /* ------------------------------------------------------------------------------------------ */
@@ -170,14 +184,15 @@ public class XMLFileReader implements FileReader {
             //InputStream inputStream = this.getClass().getResourceAsStream("/level"+level+".xml");
             SAXReader saxReader = new SAXReader();
             Document document = saxReader.read(input);
-
+            String level =  document.getRootElement().attribute("level").getValue();
+            this.level = Integer.parseInt(level);
             // initialize the board with free tiles
             leafReader.initializeBoard();
 
             //parse the each node in the file
             if (isMap) {
                 parseOriginalMap(document);
-                System.out.println("Game level loaded.");
+                System.out.println("Game level "+ level +" loaded.");
             }else {
                 if(this.isAction) {
                     System.out.println("NB: This is a copy of the saved actions.");

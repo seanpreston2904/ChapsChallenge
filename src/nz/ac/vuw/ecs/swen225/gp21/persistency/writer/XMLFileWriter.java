@@ -26,13 +26,14 @@ public class XMLFileWriter implements FileWriter {
     private static final int WIDTH = 11;  // the width of the board
     private LeafWriter leafWriter = new LeafWriter();
 
+    /*----------------The debug function--------------------------------------------------------*/
     public static void main(String[] args) {
         XMLFileReader reader = new XMLFileReader();
         XMLFileWriter writer = new XMLFileWriter();
-        writer.saveCurrentMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml",
+        writer.saveCurrentMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/tests/savedMap.xml",
                 new App("level1"));
     }
-
+    /* ------------------------------------------------------------------------------------------ */
     /**
      * save the board of the current game.
      *
@@ -73,6 +74,7 @@ public class XMLFileWriter implements FileWriter {
             if(rootName.equals("savedMap")){
                 //get all objects from the current game state to create the XML file
                 objectsToXML(root, app);
+                root.addAttribute("level", Integer.toString(app.getLevel()));
 
             }
 

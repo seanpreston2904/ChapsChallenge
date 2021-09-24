@@ -31,6 +31,8 @@ public class LeafWriter implements FileWriter{
         Element XElement = element1.addElement("x");
         Element YElement = element1.addElement("y");
 
+
+
         if(info != null){
             Element infoElement = element1.addElement("message");
             infoElement.setText(info);
