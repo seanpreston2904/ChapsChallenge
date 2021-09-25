@@ -3,6 +3,11 @@ package nz.ac.vuw.ecs.swen225.gp21.domain.actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 /**
  * Actor is the interface that movable actors in the levels will inherit
  */
@@ -10,10 +15,27 @@ public abstract class Actor {
 
     private Coordinate position;
 
+    private Direction facingDirection;
+
     private String infoMessage;
 
+    private String pathName;
+
+    /**
+     * Default constructor with coordinates.
+     *
+     * @param initial
+     *
+     */
     public Actor(Coordinate initial) {
         this.position = initial;
+    }
+
+    /**
+     * Default constructor no parameters.
+     */
+    public Actor() {
+
     }
 
     /**
@@ -47,6 +69,11 @@ public abstract class Actor {
      * @param position
      */
     public void setPosition(Coordinate position) {
+        // change the actor's facing
+        if (Direction.facingFromPositionChange(getPosition(), position) != null) {
+            this.facingDirection = Direction.facingFromPositionChange(getPosition(), position);
+        }
+
         this.position = position;
     }
 
@@ -57,6 +84,15 @@ public abstract class Actor {
      */
     public Coordinate getPosition() {
         return this.position;
+    }
+
+    /**
+     * getter for the object's facing direction.
+     *
+     * @return facing direction
+     */
+    public Direction getFacing() {
+        return this.facingDirection;
     }
 
     /**
@@ -105,6 +141,23 @@ public abstract class Actor {
      */
     public String getName() {
         return "abstract";
+    }
+
+
+    /**
+     * Get the image of this Enemy.
+     *
+     * @return image
+     *
+     */
+    public BufferedImage getImage() {
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(new File(pathName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
     }
 
     /**
