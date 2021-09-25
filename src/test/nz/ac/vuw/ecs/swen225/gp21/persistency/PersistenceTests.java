@@ -134,6 +134,15 @@ public class PersistenceTests {
         }
     }
 
+    /**
+     * test level.
+     */
+    @Test
+    public void test_6()  {
+        assertEquals(reader.getLevel(file2), 2);
+        assertEquals(reader.getLevel(file1), 1);
+    }
+
     /*---------  Tests for XMLFileWriter ----------- */
     private XMLFileWriter writer = new XMLFileWriter();
 
@@ -141,7 +150,7 @@ public class PersistenceTests {
      * test for map Output file.
      */
     @Test
-    public void test_6() {
+    public void test_7() {
         writer.saveCurrentMap(
                 "src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testMap.xml", new App("level1"));
     }
@@ -150,7 +159,7 @@ public class PersistenceTests {
      * test for action Output file.
      */
     @Test
-    public void test_7() {
+    public void test_8() {
         try {
             Document document = DocumentHelper.createDocument();
             Element root = document.addElement("savedAction");
@@ -187,7 +196,7 @@ public class PersistenceTests {
      * test saved action file.
      */
     @Test
-    public void test_8() {
+    public void test_9() {
         List<Map<String, String>> savedRecords = reader.loadSavedActions(outAction);
 
         Map<String, String> timer = savedRecords.get(0);
