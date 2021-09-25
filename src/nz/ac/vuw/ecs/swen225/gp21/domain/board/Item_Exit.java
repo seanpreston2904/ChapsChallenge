@@ -26,7 +26,7 @@ public class Item_Exit extends Item implements PreMove {
      * @return
      */
     @Override
-    public boolean preInteract(Actor actor) {
+    public boolean preInteract(Board board, Actor actor) {
 
         // check if it is a player
         if (actor instanceof Player) {
