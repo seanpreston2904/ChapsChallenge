@@ -26,15 +26,15 @@ public class LoadEnemyFile {
     private List<Enemy> enemyClasses = new ArrayList<>(); // store all bugs
 
 
-//    public static void main(String[] args) {
-//        XMLFileReader p = new XMLFileReader();
-//        LoadEnemyFile l = new LoadEnemyFile();
-//        String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
-//        p.loadOriginMap(file2);
-//        for(Enemy e: l.loadEnemyClasses(p, "Bug")) {
-//            System.out.println(e.getName() + e.getPosition()+e.getImage());
-//        }
-//    }
+    public static void main(String[] args) {
+        XMLFileReader p = new XMLFileReader();
+        LoadEnemyFile l = new LoadEnemyFile();
+        String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
+        p.loadOriginMap(file2);
+        for(Enemy e: l.loadEnemyClasses(p, "Bug")) {
+            System.out.println(e.getName() + e.getPosition()+e.getImage());
+        }
+    }
 
 
     /**
@@ -50,15 +50,6 @@ public class LoadEnemyFile {
                 | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
-        return this.getEnemyClasses();
-    }
-
-    /**
-     * get all the Enemy classes from jar.
-     *
-     * @return a list of classes
-     */
-    public List<Enemy> getEnemyClasses(){
         return this.enemyClasses;
     }
 

@@ -151,7 +151,8 @@ public class PersistenceTests {
     @Test
     public void test_7() {
         writer.saveCurrentMap(
-                "src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testMap.xml", new App("level1"));
+                "src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testMap.xml",
+                new App("level1"));
     }
 
     /**
