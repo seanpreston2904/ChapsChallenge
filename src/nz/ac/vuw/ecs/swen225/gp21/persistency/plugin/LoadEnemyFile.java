@@ -7,6 +7,8 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class LoadEnemyFile {
     /**
      * Load all enemy from the jar file.
      * construct all enemy objects with associated positions.
+     * store them in enemyClasses list.
      *
      * @param pos list of pos
      * @throws MalformedURLException msg
@@ -43,15 +46,9 @@ public class LoadEnemyFile {
         File jarFile = new File("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels");
         File[] files = jarFile.listFiles(file -> file.getPath().toLowerCase().endsWith(".jar"));
 
-        // if there are more than one jar. use for loop
-
         assert files != null;
-        URLClassLoader child = new URLClassLoader(
-                new URL[]{files[0].toURI().toURL()},
-                Enemy.class.getClassLoader()
-        );
 
-        Class classToLoad = Class.forName(name, false, child);
+        Class classToLoad = Class.forName(name, false, getClassLoader(files[0]));
 
         // set each with object corresponding position
         for (Coordinate po : pos) {
@@ -60,5 +57,31 @@ public class LoadEnemyFile {
             act.setPosition(new Coordinate(po.getX(), po.getY()));
             this.enemyClasses.add(act);
         }
+
     }
+
+    /**
+     * get the classloader with Privileged Blocks.
+     * @param file input
+     * @return classloader
+     */
+    public URLClassLoader getClassLoader(File file)  {
+        URLClassLoader child = (URLClassLoader) AccessController.doPrivileged(
+                new PrivilegedAction() {
+                    public Object run() {
+                        try {
+                            return new URLClassLoader(
+                                    new URL[]{file.toURI().toURL()},
+                                    Enemy.class.getClassLoader()
+                            );
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+                });
+
+        return child;
+    }
+
 }

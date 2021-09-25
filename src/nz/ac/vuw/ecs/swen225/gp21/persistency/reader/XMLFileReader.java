@@ -37,8 +37,6 @@ public class XMLFileReader implements FileReader {
 
     private final String[] nodes =    // all XML tilesNodes
             {"tile", "repeatTile", "movingTile", "treasureTile", "wallTile", "doorTile", "keyTile"};
-    private String file1 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"; // game level1 map
-    private String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
 
 
     /**
@@ -129,7 +127,8 @@ public class XMLFileReader implements FileReader {
      * print the board with all tiles.
      */
     public void printBoard() {
-
+        String file1 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"; // game level1 map
+        String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
         Board board = loadOriginMap(file2);
         //Board board =loadSavedMap("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml");
 
@@ -148,7 +147,9 @@ public class XMLFileReader implements FileReader {
     public static void main(String[] args) throws ClassNotFoundException, MalformedURLException, InstantiationException, IllegalAccessException {
         XMLFileReader p = new XMLFileReader();
         //p.printBoard();
-        p.loadOriginMap(p.file2);
+        String file1 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"; // game level1 map
+        String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
+        p.loadOriginMap(file2);
         System.out.println("Loaded Enemy class: " + p.getEnemyClasses("Bug"));
 //        System.out.println("\n--------------------\nCurrent Level: "
 //                + p.getLevel(p.file2)

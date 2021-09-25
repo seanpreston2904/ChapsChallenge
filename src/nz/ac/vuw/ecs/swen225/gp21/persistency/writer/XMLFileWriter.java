@@ -28,7 +28,6 @@ public class XMLFileWriter implements FileWriter {
 
     /*----------------The debug function--------------------------------------------------------*/
     public static void main(String[] args) {
-        XMLFileReader reader = new XMLFileReader();
         XMLFileWriter writer = new XMLFileWriter();
         writer.saveCurrentMap("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml",
                 new App("level1"));
@@ -135,6 +134,8 @@ public class XMLFileWriter implements FileWriter {
                             chips = Integer.toString(((Item_Exit) tile.getItem()).getTreasure());
                             System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ chips);
                             break;
+                        default:
+                            System.out.println("No match tile found.");
                     }
                 }
                 // add all nodes to the file
