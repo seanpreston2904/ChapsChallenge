@@ -1,6 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain.actor;
 
-import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
@@ -22,8 +21,7 @@ public abstract class Enemy extends Actor {
     /**
      * Default constructor no parameters.
      */
-    public Enemy() {
-    }
+    public Enemy() {}
 
     /**
      * Alternative constructor which randomly generates.
