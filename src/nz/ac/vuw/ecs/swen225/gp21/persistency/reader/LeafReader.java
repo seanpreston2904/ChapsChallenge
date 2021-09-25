@@ -186,8 +186,6 @@ public class LeafReader implements FileReader{
                 board.setTile(pos, new Tile(pos, TileType.FREE, null));
                 break;
             case "Enemy":
-                //TODO set BUG tile at corresponding position
-
                 this.bugStartPos.add(pos);
                 break;
             default:

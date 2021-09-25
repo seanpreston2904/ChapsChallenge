@@ -7,6 +7,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Door;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Key;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.plugin.LoadEnemyFile;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.reader.XMLFileReader;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.writer.XMLFileWriter;
 import org.dom4j.Document;
@@ -120,18 +121,25 @@ public class PersistenceTests {
      * test bug position.
      */
     @Test
-    public void test_5() throws ClassNotFoundException, MalformedURLException,
-            InstantiationException, IllegalAccessException {
+    public void test_5() {
 
         reader.loadOriginMap(file2);
-
+        LoadEnemyFile file = new LoadEnemyFile();
         List<Coordinate> pos = reader.getEnemyStartPos();
-        List<Enemy> lis = reader.getEnemyClasses("Bug");
+        List<Enemy> lis = file.loadEnemyClasses(reader, "Bug");
 
         for(int i = 0; i<pos.size(); i++){
             assertEquals(lis.get(i).getPosition().getY(), pos.get(i).getY());
-
         }
+    }
+
+    /**
+     * test level.
+     */
+    @Test
+    public void test_6()  {
+        assertEquals(reader.getLevel(file2), 2);
+        assertEquals(reader.getLevel(file1), 1);
     }
 
     /*---------  Tests for XMLFileWriter ----------- */
@@ -141,16 +149,17 @@ public class PersistenceTests {
      * test for map Output file.
      */
     @Test
-    public void test_6() {
+    public void test_7() {
         writer.saveCurrentMap(
-                "src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testMap.xml", new App("level1"));
+                "src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testMap.xml",
+                new App("level1"));
     }
 
     /**
      * test for action Output file.
      */
     @Test
-    public void test_7() {
+    public void test_8() {
         try {
             Document document = DocumentHelper.createDocument();
             Element root = document.addElement("savedAction");
@@ -187,7 +196,7 @@ public class PersistenceTests {
      * test saved action file.
      */
     @Test
-    public void test_8() {
+    public void test_9() {
         List<Map<String, String>> savedRecords = reader.loadSavedActions(outAction);
 
         Map<String, String> timer = savedRecords.get(0);
