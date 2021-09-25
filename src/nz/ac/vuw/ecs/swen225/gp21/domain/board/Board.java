@@ -153,7 +153,7 @@ public class Board {
 
                 // attempt to interact with
                 if (item instanceof PreMove) {
-                    return ((PreMove) item).preInteract(actor);
+                    return ((PreMove) item).preInteract(this, actor);
                 }
 
                 return false;
