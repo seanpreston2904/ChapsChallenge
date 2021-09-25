@@ -26,8 +26,6 @@ import org.dom4j.io.SAXReader;
  * @author Rae 300535154
  */
 public class XMLFileReader implements FileReader {
-    private static final int HEIGHT = 9;  // the height of the board
-    private static final int WIDTH = 11;  // the width of the board
 
     private LeafReader leafReader = new LeafReader();
     private boolean isAction;            // indicates the saved file is a action records or not
