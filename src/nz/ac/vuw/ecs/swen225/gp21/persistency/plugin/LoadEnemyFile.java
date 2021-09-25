@@ -24,18 +24,17 @@ import java.util.List;
 public class LoadEnemyFile {
 
     private List<Enemy> enemyClasses = new ArrayList<>(); // store all bugs
-
+    private String name = "Bug";
 
     public static void main(String[] args) {
         XMLFileReader p = new XMLFileReader();
         LoadEnemyFile l = new LoadEnemyFile();
         String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
         p.loadOriginMap(file2);
-        for(Enemy e: l.loadEnemyClasses(p, "Bug")) {
+        for(Enemy e: l.loadEnemyClasses(p, p.getEnemyName())) {
             System.out.println(e.getName() + e.getPosition()+e.getImage());
         }
     }
-
 
     /**
      * load Enemies from jar file.
@@ -78,7 +77,6 @@ public class LoadEnemyFile {
             Object instance = classToLoad.newInstance();
             Enemy act = (Enemy) instance;
             act.setPosition(new Coordinate(po.getX(), po.getY()));
-
             this.enemyClasses.add(act);
         }
 
