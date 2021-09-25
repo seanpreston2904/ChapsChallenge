@@ -1,7 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
-import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Bug;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
@@ -9,9 +8,11 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.plugin.LoadEnemyFile;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.reader.XMLFileReader;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -41,11 +42,12 @@ public class Domain {
         String fname = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/" + levelName + ".xml";
 
         XMLFileReader fileReader = new XMLFileReader();
+        LoadEnemyFile loadEnemyFile = new LoadEnemyFile();
 
         if (levelName.contains("xmlsave")) {
-            this.board = fileReader.loadSaveMap(saveFileName);
+            this.board = fileReader.loadSavedMap(levelName);
         } else {
-            this.board = fileReader.loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/" + levelName + ".xml");
+            this.board = fileReader.loadOriginMap(fname);
         }
 
         // Initialize the board and starting game features.
@@ -54,9 +56,9 @@ public class Domain {
         this.actors = new ArrayList<>();
 
         // load any and all enemies
-        //for (Enemy e : fileReader.getEnemyClasses(fname)) {
-        //    actors.add(e);
-        //}
+        for (Enemy e : loadEnemyFile.loadEnemyClasses(fileReader, fileReader.getEnemyName())) {
+            actors.add(e);
+        }
 
         // start off not running
         this.running = false;
@@ -162,9 +164,8 @@ public class Domain {
      *
      * This is called by a tick event in app for other actors/enemies.
      *
-     * @param actor
      */
-    public static Direction randomlyMoveActor(Actor actor) {
+    public static Direction randomlyMoveActor() {
 
         // generate a direction
         Direction dir = Direction.values()[
