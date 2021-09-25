@@ -38,14 +38,14 @@
     </repeatTile>
 
     <!--bugs-->
-    <movingTile type = "Enemy" image="bugIcon.png">
+    <enemyTile type = "Bug" image="bugIcon.png">
         <pos>
             <position x = "4" y = "2"/>
             <position x = "4" y = "4"/>
             <position x = "4" y = "6"/>
         </pos>
 
-    </movingTile>
+    </enemyTile>
 
     <treasureTile type = "TREASURE" image="chipIcon.png">
         <pos>

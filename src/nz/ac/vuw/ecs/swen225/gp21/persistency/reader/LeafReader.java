@@ -21,6 +21,7 @@ public class LeafReader implements FileReader{
     private static final int HEIGHT = 9;  // the height of the board
     private static final int WIDTH = 11;  // the width of the board
     private Board board;                 // the current board
+    private String enemyName;                 // enemy name
 
     private List<Coordinate> bugStartPos = new ArrayList<>();
 
@@ -185,13 +186,22 @@ public class LeafReader implements FileReader{
             case "FREE":
                 board.setTile(pos, new Tile(pos, TileType.FREE, null));
                 break;
-            case "Enemy":
+            case "Bug":
                 this.bugStartPos.add(pos);
+                this.enemyName = type;
                 break;
             default:
                 System.out.println("No match tile found.");
         }
 
+    }
+
+    /**
+     * get the enemyName
+     * @return name
+     */
+    public String getEnemyName() {
+        return enemyName;
     }
 
     /**

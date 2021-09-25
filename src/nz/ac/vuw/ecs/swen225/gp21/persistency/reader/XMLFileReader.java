@@ -34,7 +34,7 @@ public class XMLFileReader implements FileReader {
     private int level;
 
     private final String[] nodes =    // all XML tilesNodes
-            {"tile", "repeatTile", "movingTile", "treasureTile", "wallTile", "doorTile", "keyTile"};
+            {"tile", "repeatTile", "enemyTile", "treasureTile", "wallTile", "doorTile", "keyTile"};
 
 
     /**
@@ -101,6 +101,15 @@ public class XMLFileReader implements FileReader {
         return leafReader.getEnemyStartPos();
     }
 
+    /**
+     * get the EnemyName.
+     *
+     * @return name
+     */
+    public String getEnemyName(){
+        return leafReader.getEnemyName();
+    }
+
 
     /*----------------The debug function--------------------------------------------------------*/
 
@@ -125,20 +134,20 @@ public class XMLFileReader implements FileReader {
 //
 //    }
 //
-//    public static void main(String[] args) throws ClassNotFoundException, MalformedURLException, InstantiationException, IllegalAccessException {
-//        XMLFileReader p = new XMLFileReader();
-//        //p.printBoard();
-//        String file1 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"; // game level1 map
-//        String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
-//        p.loadOriginMap(file2);
-////        System.out.println("\n--------------------\nCurrent Level: "
-////                + p.getLevel(p.file2)
-////                +"\n--------------------\n");
-////
-////        System.out.println("Records: " +
-////                p.loadSavedActions("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testAction.xml"));
+    public static void main(String[] args) throws ClassNotFoundException, MalformedURLException, InstantiationException, IllegalAccessException {
+        XMLFileReader p = new XMLFileReader();
+        //p.printBoard();
+        String file1 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"; // game level1 map
+        String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
+        p.loadOriginMap(file2);
+//        System.out.println("\n--------------------\nCurrent Level: "
+//                + p.getLevel(p.file2)
+//                +"\n--------------------\n");
 //
-//    }
+//        System.out.println("Records: " +
+//                p.loadSavedActions("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testAction.xml"));
+
+    }
     /* ------------------------------------------------------------------------------------------ */
 
     /**
