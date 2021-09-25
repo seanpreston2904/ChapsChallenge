@@ -2,8 +2,12 @@ package nz.ac.vuw.ecs.swen225.gp21.persistency.plugin;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.reader.XMLFileReader;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -20,6 +24,34 @@ import java.util.List;
 public class LoadEnemyFile {
 
     private List<Enemy> enemyClasses = new ArrayList<>(); // store all bugs
+
+
+//    public static void main(String[] args) {
+//        XMLFileReader p = new XMLFileReader();
+//        LoadEnemyFile l = new LoadEnemyFile();
+//        String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
+//        p.loadOriginMap(file2);
+//        for(Enemy e: l.loadEnemyClasses(p, "Bug")) {
+//            System.out.println(e.getName() + e.getPosition()+e.getImage());
+//        }
+//    }
+
+
+    /**
+     * load Enemies from jar file.
+     *
+     * @param name Enemy name
+     * @return - the list
+     */
+    public List<Enemy> loadEnemyClasses(XMLFileReader reader, String name) {
+        try {
+            this.setEnemyClasses(reader.getEnemyStartPos(), name);
+        } catch (MalformedURLException | ClassNotFoundException
+                | IllegalAccessException | InstantiationException e) {
+            e.printStackTrace();
+        }
+        return this.getEnemyClasses();
+    }
 
     /**
      * get all the Enemy classes from jar.
@@ -55,6 +87,7 @@ public class LoadEnemyFile {
             Object instance = classToLoad.newInstance();
             Enemy act = (Enemy) instance;
             act.setPosition(new Coordinate(po.getX(), po.getY()));
+
             this.enemyClasses.add(act);
         }
 
@@ -65,7 +98,7 @@ public class LoadEnemyFile {
      * @param file input
      * @return classloader
      */
-    public URLClassLoader getClassLoader(File file)  {
+    private URLClassLoader getClassLoader(File file)  {
         URLClassLoader child = (URLClassLoader) AccessController.doPrivileged(
                 new PrivilegedAction() {
                     public Object run() {
@@ -83,5 +116,4 @@ public class LoadEnemyFile {
 
         return child;
     }
-
 }

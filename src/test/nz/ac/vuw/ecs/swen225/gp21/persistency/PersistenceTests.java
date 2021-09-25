@@ -7,6 +7,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Door;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Key;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.plugin.LoadEnemyFile;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.reader.XMLFileReader;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.writer.XMLFileWriter;
 import org.dom4j.Document;
@@ -120,17 +121,15 @@ public class PersistenceTests {
      * test bug position.
      */
     @Test
-    public void test_5() throws ClassNotFoundException, MalformedURLException,
-            InstantiationException, IllegalAccessException {
+    public void test_5() {
 
         reader.loadOriginMap(file2);
-
+        LoadEnemyFile file = new LoadEnemyFile();
         List<Coordinate> pos = reader.getEnemyStartPos();
-        List<Enemy> lis = reader.getEnemyClasses("Bug");
+        List<Enemy> lis = file.loadEnemyClasses(reader, "Bug");
 
         for(int i = 0; i<pos.size(); i++){
             assertEquals(lis.get(i).getPosition().getY(), pos.get(i).getY());
-
         }
     }
 
