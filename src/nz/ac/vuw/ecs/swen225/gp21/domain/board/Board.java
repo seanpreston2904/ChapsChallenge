@@ -2,7 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp21.domain.board;
 
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
-import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
@@ -89,7 +88,7 @@ public class Board {
                 if (t.getItem() != null) {
                     if (t.getItem().getType() == ItemType.TREASURE) {
 
-                        System.out.println("Found Treasure on " + x + "," + y);
+                        //System.out.println("Found Treasure on " + x + "," + y);
 
                         treasure++;
                     }
@@ -154,6 +153,7 @@ public class Board {
 
                 // attempt to interact with
                 if (item instanceof PreMove) {
+                    System.out.println("Pre Moving " + actor.getPosition());
                     return ((PreMove) item).preInteract(this, actor);
                 }
 
