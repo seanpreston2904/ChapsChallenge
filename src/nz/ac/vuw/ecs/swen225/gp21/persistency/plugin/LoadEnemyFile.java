@@ -24,16 +24,16 @@ import java.util.List;
 public class LoadEnemyFile {
 
     private List<Enemy> enemyClasses = new ArrayList<>(); // store all bugs
-    private String name = "Bug";
 
     public static void main(String[] args) {
         XMLFileReader p = new XMLFileReader();
         LoadEnemyFile l = new LoadEnemyFile();
         String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
         p.loadOriginMap(file2);
-        for(Enemy e: l.loadEnemyClasses(p, p.getEnemyName())) {
+        for(Enemy e: l.loadEnemyClasses(p.getEnemyStartPos(), p.getEnemyName())) {
             System.out.println(e.getName() + e.getPosition()+e.getImage());
         }
+
     }
 
     /**
@@ -42,15 +42,18 @@ public class LoadEnemyFile {
      * @param name Enemy name
      * @return - the list
      */
-    public List<Enemy> loadEnemyClasses(XMLFileReader reader, String name) {
+    public List<Enemy> loadEnemyClasses(List<Coordinate> pos, List<String> name) {
         try {
-            this.setEnemyClasses(reader.getEnemyStartPos(), name);
-        } catch (MalformedURLException | ClassNotFoundException
-                | IllegalAccessException | InstantiationException e) {
+            for(int i=0; i< pos.size();i++) {
+                this.setEnemyClasses(pos.get(i), name.get(i));
+            }
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
         return this.enemyClasses;
     }
+
+
 
     /**
      * Load all enemy from the jar file.
@@ -63,23 +66,21 @@ public class LoadEnemyFile {
      * @throws IllegalAccessException msg
      * @throws InstantiationException msg
      */
-    public void setEnemyClasses(List<Coordinate> pos, String name) throws MalformedURLException,
-            ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public void setEnemyClasses(Coordinate pos, String name) throws ClassNotFoundException,
+            IllegalAccessException, InstantiationException {
         File jarFile = new File("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels");
         File[] files = jarFile.listFiles(file -> file.getPath().toLowerCase().endsWith(".jar"));
 
-        assert files != null;
+        if (files.length > 0) {
+            Class classToLoad = Class.forName(name, false, getClassLoader(files[0]));
 
-        Class classToLoad = Class.forName(name, false, getClassLoader(files[0]));
-
-        // set each with object corresponding position
-        for (Coordinate po : pos) {
+            // set each with object corresponding position
             Object instance = classToLoad.newInstance();
             Enemy act = (Enemy) instance;
-            act.setPosition(new Coordinate(po.getX(), po.getY()));
+            act.setPosition(new Coordinate(pos.getX(), pos.getY()));
+
             this.enemyClasses.add(act);
         }
-
     }
 
     /**

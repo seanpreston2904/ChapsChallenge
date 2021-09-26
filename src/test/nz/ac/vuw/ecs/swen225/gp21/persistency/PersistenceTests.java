@@ -121,15 +121,14 @@ public class PersistenceTests {
      * test bug position.
      */
     @Test
-    public void test_5() {
-
+    public void test_5()  {
         reader.loadOriginMap(file2);
-        LoadEnemyFile file = new LoadEnemyFile();
         List<Coordinate> pos = reader.getEnemyStartPos();
-        List<Enemy> lis = file.loadEnemyClasses(reader, "Bug");
-
+        LoadEnemyFile loadEnemyFile = new LoadEnemyFile();
+        List<Enemy> lis = loadEnemyFile.loadEnemyClasses(pos, reader.getEnemyName());
         for(int i = 0; i<pos.size(); i++){
             assertEquals(lis.get(i).getPosition().getY(), pos.get(i).getY());
+
         }
     }
 
@@ -142,6 +141,7 @@ public class PersistenceTests {
         assertEquals(reader.getLevel(file1), 1);
     }
 
+
     /*---------  Tests for XMLFileWriter ----------- */
     private XMLFileWriter writer = new XMLFileWriter();
 
@@ -151,8 +151,7 @@ public class PersistenceTests {
     @Test
     public void test_7() {
         writer.saveCurrentMap(
-                "src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testMap.xml",
-                new App("level1"));
+                "src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testMap.xml", new App("level1"));
     }
 
     /**

@@ -21,10 +21,9 @@ public class LeafReader implements FileReader{
     private static final int HEIGHT = 9;  // the height of the board
     private static final int WIDTH = 11;  // the width of the board
     private Board board;                 // the current board
-    private String enemyName;                 // enemy name
+    private List<String> enemyName = new ArrayList<>();       // enemy name
 
     private List<Coordinate> bugStartPos = new ArrayList<>();
-    private List<Coordinate> blockStartPos = new ArrayList<>();
 
     /**
      * parse all single nodes from the node list.
@@ -169,6 +168,9 @@ public class LeafReader implements FileReader{
             case "EXIT":
                 board.setTile(pos, new Tile(pos, TileType.EXIT,null));
                 break;
+            case "FREE":
+                board.setTile(pos, new Tile(pos, TileType.FREE, null));
+                break;
             case "INFO":
                 board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Info(message)));
                 break;
@@ -184,15 +186,13 @@ public class LeafReader implements FileReader{
             case "LOCK_DOOR":
                 board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Door(col)));
                 break;
-            case "FREE":
-                board.setTile(pos, new Tile(pos, TileType.FREE, null));
-                break;
+
             case "Bug":
+            case "Wasp":
                 this.bugStartPos.add(pos);
-                this.enemyName = type;
+                this.enemyName.add(type);
                 break;
             case "BLOCK":
-                this.blockStartPos.add(pos);
                 board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Push_Block()));
                 break;
             default:
@@ -201,20 +201,12 @@ public class LeafReader implements FileReader{
 
     }
 
-    /**
-     * get all BlockStartPos.
-     *
-     * @return list
-     */
-    public List<Coordinate> getBlockStartPos() {
-        return blockStartPos;
-    }
 
     /**
      * get the enemyName
      * @return name
      */
-    public String getEnemyName() {
+    public List<String> getEnemyName() {
         return enemyName;
     }
 
