@@ -56,8 +56,12 @@ public class Domain {
         this.actors = new ArrayList<>();
 
         // load any and all enemies
-        for (Enemy e : loadEnemyFile.loadEnemyClasses(fileReader, fileReader.getEnemyName())) {
-            actors.add(e);
+        try {
+            for (Enemy e : loadEnemyFile.loadEnemyClasses(fileReader, fileReader.getEnemyName())) {
+                actors.add(e);
+            }
+        } catch (Exception e) {
+            // ... no plugins to load, that's fine
         }
 
         // start off not running
