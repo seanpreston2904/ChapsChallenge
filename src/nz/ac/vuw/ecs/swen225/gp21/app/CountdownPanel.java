@@ -19,10 +19,10 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 
-import nz.ac.vuw.ecs.swen225.gp21.app.TitleScreen;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 
 /**
  * The class countdown panel that creates the countdown panel
@@ -30,11 +30,12 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
  */
 public class CountdownPanel implements ActionListener {
 	
+//	private Board board;
 	private int seconds_remaining;
 	private int chips_left_value;
 	private int level_value;
 	private App app;
-	private ArrayList<Actor> bugs = new ArrayList<>();
+	private ArrayList<Actor> bugs;
 	
     //private boolean replay = false;
 
@@ -50,7 +51,6 @@ public class CountdownPanel implements ActionListener {
     private JLabel[] item_slots = new JLabel[8];
    
 	
-    // timer of the game
 	Timer timer = new Timer(1000, new ActionListener() {
 		
 		@Override
@@ -89,23 +89,24 @@ public class CountdownPanel implements ActionListener {
 			
 		}});
 	
-	// a timer for all the enemies
-	Timer bugsTimer = new Timer(300, new ActionListener() {
+	Timer bugTimer = new Timer(2000, new ActionListener() {
 		
 		@Override
-		public void actionPerformed(ActionEvent e) {		
-			// every 300ms move all the enemies
-			for(Actor actor: app.getDomain().getActors()) {
-				
+		public void actionPerformed(ActionEvent e) {
+
+			for (Actor actor: bugs) {
 				if(actor instanceof Enemy) {
-					System.out.println(actor.getPosition());
+	
 					Enemy enemy = (Enemy) actor;
-					app.getDomain().moveActor(enemy,
-											  enemy.movementModeAIDirection(app.getDomain().getBoard(), app.getDomain().getPlayer()));
+					Direction dir = enemy.movementModeAIDirection(app.getDomain().getBoard(),app.getDomain().getPlayer());
+					app.getDomain().moveActor(actor, dir);
+					
 				}
-				
-			}			
-		}});
+	
+			}
+		}
+			
+	});
 	
 	
 	 /**
@@ -117,7 +118,7 @@ public class CountdownPanel implements ActionListener {
      */
 	
 	public CountdownPanel(int time, int current_level, int chipsleft, App app) {
-		
+
 		this.app = app;
 		this.bugs = app.getDomain().getActors();
 		this.seconds_remaining = time;
@@ -189,7 +190,7 @@ public class CountdownPanel implements ActionListener {
 	}	
 	
 	 /**
-     * This method returns the countdown panel.
+     * This method returns to countdown panel.
      *
      * @return the countdown panel
      */
@@ -198,6 +199,8 @@ public class CountdownPanel implements ActionListener {
 	}
 	
 
+	
+	
 	/**
      * This method sets up JLabel for all the time, chips left, level labels on the panel 
      * with roboto fond, bold, size 20 and coloured in red
@@ -257,16 +260,11 @@ public class CountdownPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		  if(e.getSource() == start_pause) {
-			  
 			  app.getRenderView().startRender();
 			  app.getDomain().setRunning(true);
-			  
 			  start();	
-			  
 			  start_pause.setVisible(false);
 			  inventory.setVisible(true);
-			  
-			  app.m2.setEnabled(true);
 			   
 		  }
 		
@@ -279,11 +277,7 @@ public class CountdownPanel implements ActionListener {
 	public void start() {
 		started = true;
 		timer.start();
-		bugsTimer.start();
-		
-		app.m2.setEnabled(true);
-		app.m4.setEnabled(false);
-		
+		bugTimer.start();
 	}
 	
 	/**
@@ -293,29 +287,18 @@ public class CountdownPanel implements ActionListener {
 	public void pause() {
 		started = false;		
 		timer.stop();
-		bugsTimer.stop();
-		
-		app.m2.setEnabled(false);
-		app.m4.setEnabled(true);
+		bugTimer.stop();
 	}	
 	
 	/**
      * This method is called when the game is lost which will stop the timer and reset the level.
      */	
 	public void stop() {
-		
 		started = false;
 		timer.stop();	
-		bugsTimer.stop();
-		
-		app.m2.setEnabled(false);
-		app.m4.setEnabled(false);
-		
+		bugTimer.stop();
 	}
 	
-	/**
-	 * This method is called to draw the inventory panel (no item inside this panel yet)
-	 */
 	public void setUpInventoryPanel() {
 		
 		inventory = new JPanel();
