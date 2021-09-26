@@ -106,17 +106,8 @@ public class XMLFileReader implements FileReader {
      *
      * @return name
      */
-    public String getEnemyName(){
+    public List<String> getEnemyName(){
         return leafReader.getEnemyName();
-    }
-
-    /**
-     * get the BlockStartPos.
-     *
-     * @return list
-     */
-    public List<Coordinate> getBlockStartPos(){
-        return leafReader.getBlockStartPos();
     }
 
 
@@ -145,13 +136,13 @@ public class XMLFileReader implements FileReader {
 
     public static void main(String[] args) throws ClassNotFoundException, MalformedURLException, InstantiationException, IllegalAccessException {
         XMLFileReader p = new XMLFileReader();
-        p.printBoard();
-//        String file1 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"; // game level1 map
-//        String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
-//        p.loadOriginMap(file2);
-//        System.out.println("\n--------------------\nBlock start pos: "
-//                + p.getBlockStartPos()
-//                +"\n--------------------\n");
+//        p.printBoard();
+        String file1 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"; // game level1 map
+        String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
+        p.loadOriginMap(file2);
+        System.out.println("\n--------------------\nenemy: "
+                + p.getEnemyStartPos()+ p.getEnemyName()
+                +"\n--------------------\n");
 
 //        System.out.println("Records: " +
 //                p.loadSavedActions("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testAction.xml"));

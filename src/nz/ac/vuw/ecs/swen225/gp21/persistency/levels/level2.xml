@@ -40,9 +40,15 @@
     <!--bugs-->
     <enemyTile type = "Bug" image="bugIcon.png">
         <pos>
-            <position x = "4" y = "2"/>
             <position x = "4" y = "4"/>
             <position x = "4" y = "6"/>
+        </pos>
+
+    </enemyTile>
+
+    <enemyTile type = "Wasp" image="waspIcon.png">
+        <pos>
+            <position x = "4" y = "2"/>
         </pos>
 
     </enemyTile>
@@ -66,12 +72,6 @@
 
             <position x = "1" y = "5"/>
             <position x = "2" y = "5"/>
-
-<!--            <position x = "6" y = "3"/>-->
-<!--            <position x = "6" y = "4"/>-->
-<!--            <position x = "6" y = "5"/>-->
-
-<!--            <position x = "7" y = "4"/>-->
         </pos>
     </wallTile>
 
