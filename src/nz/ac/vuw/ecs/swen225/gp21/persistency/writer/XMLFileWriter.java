@@ -30,7 +30,7 @@ public class XMLFileWriter implements FileWriter {
     public static void main(String[] args) {
         XMLFileWriter writer = new XMLFileWriter();
         writer.saveCurrentMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml",
-                new App("level1"));
+                new App("level2"));
 
     }
     /* ------------------------------------------------------------------------------------------ */
