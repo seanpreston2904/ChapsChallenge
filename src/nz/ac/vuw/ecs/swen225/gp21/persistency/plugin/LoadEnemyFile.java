@@ -71,7 +71,7 @@ public class LoadEnemyFile {
         File jarFile = new File("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels");
         File[] files = jarFile.listFiles(file -> file.getPath().toLowerCase().endsWith(".jar"));
 
-        if (files.length > 0) {
+        if (files != null && files.length > 0) {
             Class classToLoad = Class.forName(name, false, getClassLoader(files[0]));
 
             // set each with object corresponding position
