@@ -47,20 +47,7 @@ public abstract class Actor {
      *
      */
     public Coordinate getResultingLocation(Direction direction) {
-
-        // in favor of the traditional and confusing Swing system (south is +1)
-        switch (direction) {
-            case EAST:
-                return new Coordinate(position.getX() + 1, position.getY());
-            case SOUTH:
-                return new Coordinate(position.getX(), position.getY() + 1);
-            case WEST:
-                return new Coordinate(position.getX() - 1, position.getY());
-            case NORTH:
-                return new Coordinate(position.getX(), position.getY() - 1);
-        }
-
-        return null;
+        return new Coordinate(position.getX(), position.getY()).getResultingLocation(direction);
     }
 
     /**
@@ -93,6 +80,16 @@ public abstract class Actor {
      */
     public Direction getFacing() {
         return this.facingDirection;
+    }
+
+    /**
+     * setter for the object's facing direction.
+     *
+     * @param facing
+     *
+     */
+    public void setFacing(Direction facing) {
+        this.facingDirection = facing;
     }
 
     /**

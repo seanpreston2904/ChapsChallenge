@@ -72,6 +72,16 @@ public class Domain {
     }
 
     /**
+     * Getter for the enemy actor list.
+     *
+     * @return
+     *
+     */
+    public ArrayList<Actor> getActors() {
+        return actors;
+    }
+
+    /**
      * Getter for the Board.
      */
     public Board getBoard() {
@@ -137,6 +147,13 @@ public class Domain {
             //throw new IllegalArgumentException("chap cannot be moved into this position");
         } else {
 
+            // PRE MOVE CHECKS is an enemy trying to stand on another enemy
+            if (!(actor instanceof Player)) {
+                if (anotherEnemyInThisSpace(moveToCoordinate) != null) {
+                    return;
+                }
+            }
+
             // if we get here then we move the actor
             actor.setPosition(moveToCoordinate);
             // clear previous info states
@@ -151,6 +168,28 @@ public class Domain {
                 return;
             }
 
+            // POST MOVE CHECKS for the player stepping on an enemy of the enemy stepping on a player
+            if (actor instanceof Player) {
+                if (anotherEnemyInThisSpace(moveToCoordinate) != null) {
+
+                    // end the game
+                    running = false;
+
+                    return;
+                }
+            }
+            // B) if an enemy attempts to move
+            else {
+                // check if its a player it just stepped on
+                if (anotherPlayerInThisSpace(moveToCoordinate) != null) {
+
+                    // end the game
+                    running = false;
+
+                    return;
+                }
+            }
+
             // call the item's interact event
             try {
                 interactWithItem(actor);
@@ -161,6 +200,41 @@ public class Domain {
             // TODO remove debugging console version of board
             printCurrentBoard();
         }
+    }
+
+    /**
+     * Simple utility method to check a location for enemy actors.
+     *
+     * @param moveToCoordinate
+     *
+     * @return - returns null for no enemies, otherwise returns the enemy.
+     *
+     */
+    private Actor anotherEnemyInThisSpace(Coordinate moveToCoordinate) {
+        // loop through all the enemies
+        for (Actor enemy : actors) {
+            if (enemy.getPosition().getX() == moveToCoordinate.getX() && enemy.getPosition().getY() == moveToCoordinate.getY()) {
+                // note that this dude is standing here:
+                return enemy;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Simple utility method to check a location for player being there.
+     *
+     * @param moveToCoordinate
+     *
+     * @return - returns null for no hero, otherwise returns the hero.
+     *
+     */
+    private Actor anotherPlayerInThisSpace(Coordinate moveToCoordinate) {
+        if (hero.getPosition().getX() == moveToCoordinate.getX() && hero.getPosition().getY() == moveToCoordinate.getY()) {
+            // note that this dude is standing here:
+            return hero;
+        }
+        return null;
     }
 
     /**
@@ -234,14 +308,24 @@ public class Domain {
             for (int x = 0; x < board.getDimension().width; x++) {
 
                 // when we get to the hero we draw it instead of a tile
-                if (hero.getPosition().getX() == x && hero.getPosition().getY() == y) {
-                    sb.append(hero.consoleString());
+                List<Actor> tempActors = (List<Actor>)actors.clone();
+                tempActors.add(hero);
+
+                boolean actorInThisSpace = false;
+
+                // check for actors to draw instead
+                for (Actor a : tempActors) {
+                    if (a.getPosition().getX() == x && a.getPosition().getY() == y) {
+                        sb.append(a.consoleString());
+                        actorInThisSpace = true;
+                    }
                 }
                 // otherwise draw a tile
-                else {
+                if (!actorInThisSpace) {
                     Tile t = board.getTile(new Coordinate(x, y));
                     sb.append(t.consoleString());
                 }
+
 
             }
             sb.append("\n");

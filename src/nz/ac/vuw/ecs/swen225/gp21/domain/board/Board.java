@@ -88,7 +88,7 @@ public class Board {
                 if (t.getItem() != null) {
                     if (t.getItem().getType() == ItemType.TREASURE) {
 
-                        System.out.println("Found Treasure on " + x + "," + y);
+                        //System.out.println("Found Treasure on " + x + "," + y);
 
                         treasure++;
                     }
@@ -153,6 +153,7 @@ public class Board {
 
                 // attempt to interact with
                 if (item instanceof PreMove) {
+                    System.out.println("Pre Moving " + actor.getPosition());
                     return ((PreMove) item).preInteract(this, actor);
                 }
 

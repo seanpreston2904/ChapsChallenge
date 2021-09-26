@@ -48,4 +48,29 @@ public class Coordinate {
         return "{" + x +
                 ", " + y + '}';
     }
+
+    /**
+     * Utility method to move the actor a certain direction and return its resulting position.
+     *
+     * @param direction the direction to move to
+     *
+     * @return
+     *
+     */
+    public Coordinate getResultingLocation(Direction direction) {
+
+        // in favor of the traditional and confusing Swing system (south is +1)
+        switch (direction) {
+            case EAST:
+                return new Coordinate(getX() + 1, getY());
+            case SOUTH:
+                return new Coordinate(getX(), getY() + 1);
+            case WEST:
+                return new Coordinate(getX() - 1, getY());
+            case NORTH:
+                return new Coordinate(getX(), getY() - 1);
+        }
+
+        return null;
+    }
 }

@@ -52,4 +52,12 @@ public abstract class Enemy extends Actor {
         return "abstract_enemy";
     }
 
+    /**
+     * Return a string for the console based version of this board.
+     *
+     * @return
+     */
+    public String consoleString() {
+        return "\uD83D\uDC1B";
+    }
 }

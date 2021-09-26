@@ -38,49 +38,49 @@ public enum Direction {
     /**
      * Determine a direction from the difference of two coordinates.
      *
-     * @param a - origin
+     * @param origin - origin
      *
-     * @param b - final
+     * @param ending - final
      *
      * @return
      *
      */
-    public static Direction facingFromPositionChange(Coordinate a, Coordinate b) {
+    public static Direction facingFromPositionChange(Coordinate origin, Coordinate ending) {
 
-        if (a == b) return null;
+        if (origin == ending) return null;
 
         // handle no change
-        if (a.getY() == b.getY() && a.getX() == b.getX()) {
+        if (origin.getY() == ending.getY() && origin.getX() == ending.getX()) {
             return null;
         }
-        // handle Y axis motion left
-        else if (a.getY() == b.getY() && a.getX() > b.getX()) {
+        // handle X axis motion left
+        else if (origin.getY() == ending.getY() && origin.getX() > ending.getX()) {
             return WEST;
         }
-        // handle Y axis motion right
-        else if (a.getY() == b.getY() && a.getX() < b.getX()) {
+        // handle X axis motion right
+        else if (origin.getY() == ending.getY() && origin.getX() < ending.getX()) {
             return EAST;
         }
-        // handle X axis motion down
-        else if (a.getY() > b.getY() && a.getX() == b.getX()) {
-            return SOUTH;
-        }
-        // handle X axis motion up
-        else if (a.getY() < b.getY() && a.getX() == b.getX()) {
+        // handle Y axis motion down
+        else if (origin.getY() > ending.getY() && origin.getX() == ending.getX()) {
             return NORTH;
         }
+        // handle Y axis motion up
+        else if (origin.getY() < ending.getY() && origin.getX() == ending.getX()) {
+            return SOUTH;
+        }
         // handle two axis motion
-        else if (a.getX() != b.getX() && a.getY() != b.getY()) {
+        else if (origin.getX() != ending.getX() && origin.getY() != ending.getY()) {
 
             // calculate the greater difference to determine the facing
-            if (Math.abs(a.getX() - b.getX()) > Math.abs(a.getY() - b.getY())) {
+            if (Math.abs(origin.getX() - ending.getX()) > Math.abs(origin.getY() - ending.getY())) {
                 // X axis facing
-                a.setY(b.getY());
+                origin.setY(ending.getY());
             } else {
                 // Y axis facing
-                a.setX(b.getX());
+                origin.setX(ending.getX());
             }
-            return facingFromPositionChange(a , b);
+            return facingFromPositionChange(origin , ending);
         }
 
         return null;
