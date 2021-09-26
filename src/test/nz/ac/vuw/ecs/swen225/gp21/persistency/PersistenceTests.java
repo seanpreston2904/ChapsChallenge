@@ -125,7 +125,7 @@ public class PersistenceTests {
         reader.loadOriginMap(file2);
         List<Coordinate> pos = reader.getEnemyStartPos();
         LoadEnemyFile loadEnemyFile = new LoadEnemyFile();
-        List<Enemy> lis = loadEnemyFile.loadEnemyClasses(pos, reader.getEnemyName());
+        List<Enemy> lis = loadEnemyFile.loadEnemyClasses(reader, reader.getEnemyName());
         for(int i = 0; i<pos.size(); i++){
             assertEquals(lis.get(i).getPosition().getY(), pos.get(i).getY());
 

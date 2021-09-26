@@ -30,7 +30,7 @@ public class LoadEnemyFile {
         LoadEnemyFile l = new LoadEnemyFile();
         String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
         p.loadOriginMap(file2);
-        for(Enemy e: l.loadEnemyClasses(p.getEnemyStartPos(), p.getEnemyName())) {
+        for(Enemy e: l.loadEnemyClasses(p, p.getEnemyName())) {
             System.out.println(e.getName() + e.getPosition()+e.getImage());
         }
 
@@ -42,10 +42,10 @@ public class LoadEnemyFile {
      * @param name Enemy name
      * @return - the list
      */
-    public List<Enemy> loadEnemyClasses(List<Coordinate> pos, List<String> name) {
+    public List<Enemy> loadEnemyClasses(XMLFileReader reader, List<String> name) {
         try {
-            for(int i=0; i< pos.size();i++) {
-                this.setEnemyClasses(pos.get(i), name.get(i));
+            for(int i=0; i< reader.getEnemyStartPos().size();i++) {
+                this.setEnemyClasses(reader.getEnemyStartPos().get(i), name.get(i));
             }
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
