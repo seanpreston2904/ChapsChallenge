@@ -27,11 +27,11 @@ public class XMLFileWriter implements FileWriter {
     private LeafWriter leafWriter = new LeafWriter();
 
     /*----------------The debug function--------------------------------------------------------*/
-//    public static void main(String[] args) {
-//        XMLFileWriter writer = new XMLFileWriter();
-//        writer.saveCurrentMap("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml",
-//                new App("level1"));
-//    }
+    public static void main(String[] args) {
+        XMLFileWriter writer = new XMLFileWriter();
+        writer.saveCurrentMap("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml",
+                new App("level2"));
+    }
     /* ------------------------------------------------------------------------------------------ */
     /**
      * save the board of the current game.

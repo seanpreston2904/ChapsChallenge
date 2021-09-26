@@ -34,7 +34,7 @@ public class XMLFileReader implements FileReader {
     private int level;
 
     private final String[] nodes =    // all XML tilesNodes
-            {"tile", "repeatTile", "enemyTile", "treasureTile", "wallTile", "doorTile", "keyTile"};
+            {"tile", "repeatTile", "enemyTile", "treasureTile", "wallTile", "doorTile", "keyTile", "boxTile"};
 
 
     /**
@@ -110,40 +110,49 @@ public class XMLFileReader implements FileReader {
         return leafReader.getEnemyName();
     }
 
+    /**
+     * get the BlockStartPos.
+     *
+     * @return list
+     */
+    public List<Coordinate> getBlockStartPos(){
+        return leafReader.getBlockStartPos();
+    }
+
 
     /*----------------The debug function--------------------------------------------------------*/
 
-//    /**
-//     * print the board with all tiles.
-//     */
-//    public void printBoard() {
-//        String file1 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"; // game level1 map
-//        String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
-//        Board board = loadOriginMap(file2);
-//        //Board board =loadSavedMap("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml");
-//
-//        for (int x = 0; x < WIDTH; x++){
-//            for (int y = 0; y < HEIGHT; y++){
-//                Tile tile = board.getTile(new Coordinate(x,y));
-//                System.out.println(tile.getType() +", "+tile.getLocation()+", "+tile.getItem());
-//            }
-//        }
-//        System.out.println("\n--------------------\nBug starts pos: "
-//                + getEnemyStartPos()
-//                +"\n--------------------\n");
-//
-//    }
-//
-    public static void main(String[] args) throws ClassNotFoundException, MalformedURLException, InstantiationException, IllegalAccessException {
-        XMLFileReader p = new XMLFileReader();
-        //p.printBoard();
+    /**
+     * print the board with all tiles.
+     */
+    public void printBoard() {
         String file1 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"; // game level1 map
         String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
-        p.loadOriginMap(file2);
-//        System.out.println("\n--------------------\nCurrent Level: "
-//                + p.getLevel(p.file2)
+        Board board = loadOriginMap(file2);
+        //Board board =loadSavedMap("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml");
+
+        for (int x = 0; x < 11; x++){
+            for (int y = 0; y < 9; y++){
+                Tile tile = board.getTile(new Coordinate(x,y));
+                System.out.println(tile.getType() +", "+tile.getLocation()+", "+tile.getItem());
+            }
+        }
+        System.out.println("\n--------------------\nBug starts pos: "
+                + getEnemyStartPos()
+                +"\n--------------------\n");
+
+    }
+
+    public static void main(String[] args) throws ClassNotFoundException, MalformedURLException, InstantiationException, IllegalAccessException {
+        XMLFileReader p = new XMLFileReader();
+        p.printBoard();
+//        String file1 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"; // game level1 map
+//        String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
+//        p.loadOriginMap(file2);
+//        System.out.println("\n--------------------\nBlock start pos: "
+//                + p.getBlockStartPos()
 //                +"\n--------------------\n");
-//
+
 //        System.out.println("Records: " +
 //                p.loadSavedActions("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testAction.xml"));
 

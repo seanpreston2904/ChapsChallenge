@@ -24,6 +24,7 @@ public class LeafReader implements FileReader{
     private String enemyName;                 // enemy name
 
     private List<Coordinate> bugStartPos = new ArrayList<>();
+    private List<Coordinate> blockStartPos = new ArrayList<>();
 
     /**
      * parse all single nodes from the node list.
@@ -190,10 +191,23 @@ public class LeafReader implements FileReader{
                 this.bugStartPos.add(pos);
                 this.enemyName = type;
                 break;
+            case "BLOCK":
+                this.blockStartPos.add(pos);
+                board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Push_Block()));
+                break;
             default:
                 System.out.println("No match tile found.");
         }
 
+    }
+
+    /**
+     * get all BlockStartPos.
+     *
+     * @return list
+     */
+    public List<Coordinate> getBlockStartPos() {
+        return blockStartPos;
     }
 
     /**

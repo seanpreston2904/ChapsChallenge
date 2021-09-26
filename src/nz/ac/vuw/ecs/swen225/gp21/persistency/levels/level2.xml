@@ -67,12 +67,23 @@
             <position x = "1" y = "5"/>
             <position x = "2" y = "5"/>
 
+<!--            <position x = "6" y = "3"/>-->
+<!--            <position x = "6" y = "4"/>-->
+<!--            <position x = "6" y = "5"/>-->
+
+<!--            <position x = "7" y = "4"/>-->
+        </pos>
+    </wallTile>
+
+    <boxTile type = "BLOCK" image="boxIcon.png">
+        <pos>
             <position x = "6" y = "3"/>
             <position x = "6" y = "4"/>
             <position x = "6" y = "5"/>
 
             <position x = "7" y = "4"/>
         </pos>
-    </wallTile>
+
+    </boxTile>
 
 </level>
