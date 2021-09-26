@@ -72,6 +72,16 @@ public class Domain {
     }
 
     /**
+     * Getter for the enemy actor list.
+     *
+     * @return
+     *
+     */
+    public ArrayList<Actor> getActors() {
+        return actors;
+    }
+
+    /**
      * Getter for the Board.
      */
     public Board getBoard() {
