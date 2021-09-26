@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -18,7 +19,10 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 
+import nz.ac.vuw.ecs.swen225.gp21.app.TitleScreen;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
+import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
+import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
 
 /**
  * The class countdown panel that creates the countdown panel
@@ -26,11 +30,11 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
  */
 public class CountdownPanel implements ActionListener {
 	
-//	private Board board;
 	private int seconds_remaining;
 	private int chips_left_value;
 	private int level_value;
 	private App app;
+	private ArrayList<Actor> bugs = new ArrayList<>();
 	
     //private boolean replay = false;
 
@@ -46,6 +50,7 @@ public class CountdownPanel implements ActionListener {
     private JLabel[] item_slots = new JLabel[8];
    
 	
+    // timer of the game
 	Timer timer = new Timer(1000, new ActionListener() {
 		
 		@Override
@@ -84,6 +89,24 @@ public class CountdownPanel implements ActionListener {
 			
 		}});
 	
+	// a timer for all the enemies
+	Timer bugsTimer = new Timer(300, new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {		
+			// every 300ms move all the enemies
+			for(Actor actor: app.getDomain().getActors()) {
+				
+				if(actor instanceof Enemy) {
+					System.out.println(actor.getPosition());
+					Enemy enemy = (Enemy) actor;
+					app.getDomain().moveActor(enemy,
+											  enemy.movementModeAIDirection(app.getDomain().getBoard(), app.getDomain().getPlayer()));
+				}
+				
+			}			
+		}});
+	
 	
 	 /**
      * Constructor for the coundown panel.
@@ -96,6 +119,7 @@ public class CountdownPanel implements ActionListener {
 	public CountdownPanel(int time, int current_level, int chipsleft, App app) {
 		
 		this.app = app;
+		this.bugs = app.getDomain().getActors();
 		this.seconds_remaining = time;
 		this.chips_left_value = chipsleft;
 		this.level_value = current_level;
@@ -165,7 +189,7 @@ public class CountdownPanel implements ActionListener {
 	}	
 	
 	 /**
-     * This method returns to countdown panel.
+     * This method returns the countdown panel.
      *
      * @return the countdown panel
      */
@@ -174,8 +198,6 @@ public class CountdownPanel implements ActionListener {
 	}
 	
 
-	
-	
 	/**
      * This method sets up JLabel for all the time, chips left, level labels on the panel 
      * with roboto fond, bold, size 20 and coloured in red
@@ -221,7 +243,7 @@ public class CountdownPanel implements ActionListener {
      */
 
 	public void updateRemainingChip(int remaining_chips) {		
-		chips_left.setText(String.valueOf(remaining_chips)); 		
+		chips_left.setText(String.valueOf(remaining_chips));
 	}
 	
 	
@@ -235,11 +257,16 @@ public class CountdownPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		  if(e.getSource() == start_pause) {
+			  
 			  app.getRenderView().startRender();
 			  app.getDomain().setRunning(true);
+			  
 			  start();	
+			  
 			  start_pause.setVisible(false);
 			  inventory.setVisible(true);
+			  
+			  app.m2.setEnabled(true);
 			   
 		  }
 		
@@ -252,6 +279,11 @@ public class CountdownPanel implements ActionListener {
 	public void start() {
 		started = true;
 		timer.start();
+		bugsTimer.start();
+		
+		app.m2.setEnabled(true);
+		app.m4.setEnabled(false);
+		
 	}
 	
 	/**
@@ -261,16 +293,29 @@ public class CountdownPanel implements ActionListener {
 	public void pause() {
 		started = false;		
 		timer.stop();
+		bugsTimer.stop();
+		
+		app.m2.setEnabled(false);
+		app.m4.setEnabled(true);
 	}	
 	
 	/**
      * This method is called when the game is lost which will stop the timer and reset the level.
      */	
 	public void stop() {
+		
 		started = false;
-		timer.stop();		
+		timer.stop();	
+		bugsTimer.stop();
+		
+		app.m2.setEnabled(false);
+		app.m4.setEnabled(false);
+		
 	}
 	
+	/**
+	 * This method is called to draw the inventory panel (no item inside this panel yet)
+	 */
 	public void setUpInventoryPanel() {
 		
 		inventory = new JPanel();
@@ -280,7 +325,6 @@ public class CountdownPanel implements ActionListener {
 		
 		for(int i=0; i<6; i++) {
 			item_slots[i] = new JLabel();
-			// TODO might check this line
 			item_slots[i].setBorder(BorderFactory.createRaisedBevelBorder());
 			item_slots[i].setBackground(Color.LIGHT_GRAY);
 			inventory.add(item_slots[i]);
