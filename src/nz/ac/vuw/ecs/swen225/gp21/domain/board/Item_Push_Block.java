@@ -34,9 +34,10 @@ public class Item_Push_Block extends Item implements PreMove {
 
             Player player = new Player(actor.getPosition());
 
-            Direction currentPath = actor.getFacing(); // the way the block is being pushed
+            // NOTE: there is an expectation that actor.getFacing actually points towards this item. If this is not true it will err.
+            Direction currentPath = actor.getFacing();
 
-            // load the coordinates
+            // load the coordinates for the item, the actor and the final tile
             Coordinate startingCoordinate = actor.getPosition();
             Coordinate itemCoordinate = startingCoordinate.getResultingLocation(currentPath);
             Coordinate finalCoordinate = itemCoordinate.getResultingLocation(currentPath);
@@ -44,7 +45,6 @@ public class Item_Push_Block extends Item implements PreMove {
             player.setPosition(player.getResultingLocation(currentPath)); // simulate moving into the square
 
             Tile finalTile = board.getTile(finalCoordinate);
-
 
             // now check if the place the block ends up is free
             if (board.validMove(enemies, finalCoordinate, new Actor(itemCoordinate) {}))
