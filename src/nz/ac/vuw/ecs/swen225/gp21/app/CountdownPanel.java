@@ -89,19 +89,28 @@ public class CountdownPanel implements ActionListener {
 			
 		}});
 	
-	Timer bugTimer = new Timer(3000, new ActionListener() {
+	Timer bugTimer = new Timer(5000, new ActionListener() {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			for (Actor actor: bugs) {
+				
 				if(actor instanceof Enemy) {
-	
-					Enemy enemy = (Enemy) actor;
-					System.out.println("enemy class: " + enemy.getClass());					
-					Direction dir = enemy.movementModeAIDirection(app.getDomain().getBoard(),app.getDomain().getPlayer());
-					System.out.println("direction: " + dir);
-					app.getDomain().moveActor(actor, dir);
+					
+					if(app.getDomain().isRunning()) {
+						
+						Enemy enemy = (Enemy) actor;				
+						Direction dir = enemy.movementModeAIDirection(app.getDomain().getBoard(),app.getDomain().getPlayer());
+						app.getDomain().moveActor(actor, dir);
+						
+						if(!app.getDomain().isRunning()) {
+							bugTimer.stop();
+							timer.stop();
+							JOptionPane.showMessageDialog(app.getMainFrame(), "You got killed by a " + actor.getName());							
+						}
+						
+					}
 					
 				}
 	

@@ -135,7 +135,6 @@ public class KeyPresses implements KeyListener {
 				
 			}
 			
-//			TODO do the popup info message
 //			if(infoMessage != null) {
 //				JOptionPane.showMessageDialog(app.getMainFrame(), infoMessage);	
 //			}
@@ -216,7 +215,7 @@ public class KeyPresses implements KeyListener {
 		pausedText.setBounds(82,80,200,40);
 		pausedDialoge.add(pausedText);
 		
-		JLabel pausedText2 = new JLabel("Paused");
+		JLabel pausedText2 = new JLabel("Paused"); 
 		pausedText2.setFont(new Font("Monospaced", Font.BOLD, 35));
 		pausedText2.setForeground(Color.BLACK);
 		pausedText2.setBounds(82,82,200,40);
@@ -227,11 +226,17 @@ public class KeyPresses implements KeyListener {
 	
 	
 	
-	public void moveHero(Direction dir) {		
+	public void moveHero(Direction dir) {	
+		this.hero.setFacing(dir);
 		domain.moveActor(this.hero, dir);
 		app.updateChipsCount();
 		app.getRecorder().saveAction(dir, hero, countdownPanel.getTimer());
 		updateInventoryPanel();		
+		
+		if(hero.listenForMessage() != null) {
+			JOptionPane.showMessageDialog(app.getMainFrame(), hero.listenForMessage());	
+		}
+
 	}
 	
 	public void saveGame() {
