@@ -16,10 +16,9 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * The effective game class.
+ * The game class that handles the backend.
  */
 public class Domain {
-
 
     //   BOARD   //
     // Board object
@@ -36,6 +35,9 @@ public class Domain {
 
     /**
      * The Domain initializes with a board from Persistence, this is the only req. for the Domain to launch.
+     *
+     * @param - the name of the pathway to a level or save file to load.
+     *
      */
     public Domain(String levelName) {
         // load the current level's board from XML via Persistency
@@ -71,55 +73,6 @@ public class Domain {
         printCurrentBoard();
     }
 
-    /**
-     * Getter for the enemy actor list.
-     *
-     * @return
-     *
-     */
-    public ArrayList<Actor> getActors() {
-        return actors;
-    }
-
-    /**
-     * Getter for the Board.
-     */
-    public Board getBoard() {
-        return this.board;
-    }
-    
-    /**
-     * Getter for the Hero character.
-     */
-    public Player getPlayer() {
-        return this.hero;
-    }
-
-    /**
-     * Getter for the remaining treasures on the board.
-     */
-    public int getRemainingChips() {
-        return treasure;
-    }
-
-    /**
-     * Getter for the running state of the game.
-     *
-     * @return
-     */
-    public boolean isRunning() {
-        return running;
-    }
-
-    /**
-     * Setter for the running state of the game.
-     *
-     * @param running
-     */
-    public void setRunning(boolean running) {
-        this.running = running;
-    }
-
     //  GAME LOGIC //
     // what events can and cannot happen is controlled by the following methods
 
@@ -143,16 +96,9 @@ public class Domain {
         Coordinate moveToCoordinate = actor.getResultingLocation(direction);
 
         // checks on the move to location
-        if (!board.validMove(moveToCoordinate, actor)) {
+        if (!board.validMove(actors, moveToCoordinate, actor)) {
             //throw new IllegalArgumentException("chap cannot be moved into this position");
         } else {
-
-            // PRE MOVE CHECKS is an enemy trying to stand on another enemy
-            if (!(actor instanceof Player)) {
-                if (anotherEnemyInThisSpace(moveToCoordinate) != null) {
-                    return;
-                }
-            }
 
             // if we get here then we move the actor
             actor.setPosition(moveToCoordinate);
@@ -170,7 +116,7 @@ public class Domain {
 
             // POST MOVE CHECKS for the player stepping on an enemy of the enemy stepping on a player
             if (actor instanceof Player) {
-                if (anotherEnemyInThisSpace(moveToCoordinate) != null) {
+                if (anotherEnemyInThisSpace(actors, moveToCoordinate) != null) {
 
                     // end the game
                     running = false;
@@ -181,7 +127,9 @@ public class Domain {
             // B) if an enemy attempts to move
             else {
                 // check if its a player it just stepped on
-                if (anotherPlayerInThisSpace(moveToCoordinate) != null) {
+                ArrayList<Actor> heroList = new ArrayList<>(); heroList.add(hero);
+
+                if (anotherEnemyInThisSpace(heroList, moveToCoordinate) != null) {
 
                     // end the game
                     running = false;
@@ -210,29 +158,18 @@ public class Domain {
      * @return - returns null for no enemies, otherwise returns the enemy.
      *
      */
-    private Actor anotherEnemyInThisSpace(Coordinate moveToCoordinate) {
+    public static Actor anotherEnemyInThisSpace(List<Actor> actors, Coordinate moveToCoordinate) {
+
+        if (moveToCoordinate == null) {
+            throw new IllegalArgumentException("Move to location is Null");
+        }
+
         // loop through all the enemies
         for (Actor enemy : actors) {
             if (enemy.getPosition().getX() == moveToCoordinate.getX() && enemy.getPosition().getY() == moveToCoordinate.getY()) {
                 // note that this dude is standing here:
                 return enemy;
             }
-        }
-        return null;
-    }
-
-    /**
-     * Simple utility method to check a location for player being there.
-     *
-     * @param moveToCoordinate
-     *
-     * @return - returns null for no hero, otherwise returns the hero.
-     *
-     */
-    private Actor anotherPlayerInThisSpace(Coordinate moveToCoordinate) {
-        if (hero.getPosition().getX() == moveToCoordinate.getX() && hero.getPosition().getY() == moveToCoordinate.getY()) {
-            // note that this dude is standing here:
-            return hero;
         }
         return null;
     }
@@ -293,6 +230,55 @@ public class Domain {
         this.treasure = board.getTotalTreasures();
     }
 
+    /**
+     * Getter for the enemy actor list.
+     *
+     * @return
+     *
+     */
+    public ArrayList<Actor> getActors() {
+        return actors;
+    }
+
+    /**
+     * Getter for the Board.
+     */
+    public Board getBoard() {
+        return this.board;
+    }
+
+    /**
+     * Getter for the Hero character.
+     */
+    public Player getPlayer() {
+        return this.hero;
+    }
+
+    /**
+     * Getter for the remaining treasures on the board.
+     */
+    public int getRemainingChips() {
+        return treasure;
+    }
+
+    /**
+     * Getter for the running state of the game.
+     *
+     * @return
+     */
+    public boolean isRunning() {
+        return running;
+    }
+
+    /**
+     * Setter for the running state of the game.
+     *
+     * @param running
+     */
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
 
     // --------- EXTRA METHODS ------------
 
@@ -337,5 +323,4 @@ public class Domain {
             System.out.println("INFO: " + hero.listenForMessage());
         }
     }
-
 }
