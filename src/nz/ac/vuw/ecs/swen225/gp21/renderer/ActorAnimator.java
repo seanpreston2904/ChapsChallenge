@@ -4,16 +4,22 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 
+import java.awt.image.BufferedImage;
+
 public class ActorAnimator extends ElementAnimator{
 
-    Actor actor;                        //Associated Actor
     Coordinate animationOffset;         //Animation Offset (used to determine top left position of sprite mid-animation)
 
     /**
      * Actor Animator Constructor
      * @param a actor to associate with animator
      */
-    ActorAnimator(Actor a){ animationOffset = new Coordinate(0, 0); actor = a; }
+    ActorAnimator(BufferedImage i){
+
+        super(i);
+
+        animationOffset = new Coordinate(0, 0);
+    }
 
     /**
      * Move the animator in a specified direction
