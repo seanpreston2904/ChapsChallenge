@@ -89,7 +89,7 @@ public class CountdownPanel implements ActionListener {
 			
 		}});
 	
-	Timer bugTimer = new Timer(2000, new ActionListener() {
+	Timer bugTimer = new Timer(3000, new ActionListener() {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -98,7 +98,9 @@ public class CountdownPanel implements ActionListener {
 				if(actor instanceof Enemy) {
 	
 					Enemy enemy = (Enemy) actor;
+					System.out.println("enemy class: " + enemy.getClass());					
 					Direction dir = enemy.movementModeAIDirection(app.getDomain().getBoard(),app.getDomain().getPlayer());
+					System.out.println("direction: " + dir);
 					app.getDomain().moveActor(actor, dir);
 					
 				}
