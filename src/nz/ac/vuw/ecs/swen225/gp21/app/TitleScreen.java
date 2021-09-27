@@ -116,7 +116,7 @@ public class TitleScreen{
             			JOptionPane.WARNING_MESSAGE,
             			icon,
             			levels,
-            			levels[0]
+            			levels[1]
             			);            	 
             	
             	if(level != null) { 
