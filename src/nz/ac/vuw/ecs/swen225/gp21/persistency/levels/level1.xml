@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<level>
+<level level="1">
 
     <!-- top wallTile -->
     <repeatTile type = "WALL" image="wallIcon.png">

@@ -271,6 +271,13 @@ public class App {
         
 	}
 	
+	public void finishGame() {
+		m6.setEnabled(true);
+
+		countdown_pan.stop();
+		
+		JOptionPane.showMessageDialog(getMainFrame(), "You finished the level!");	
+	}
 	
 	/**
 	 * This method set up the replay a game menu on the menu bar.

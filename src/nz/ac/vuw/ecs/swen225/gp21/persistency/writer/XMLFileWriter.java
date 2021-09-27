@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
+import nz.ac.vuw.ecs.swen225.gp21.app.App;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.*;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.reader.XMLFileReader;
@@ -23,26 +24,27 @@ import org.dom4j.io.XMLWriter;
 public class XMLFileWriter implements FileWriter {
     private static final int HEIGHT = 9;  // the height of the board
     private static final int WIDTH = 11;  // the width of the board
+    private LeafWriter leafWriter = new LeafWriter();
 
+    /*----------------The debug function--------------------------------------------------------*/
     public static void main(String[] args) {
-        XMLFileReader reader = new XMLFileReader();
         XMLFileWriter writer = new XMLFileWriter();
         writer.saveCurrentMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml",
-                reader.loadOriginMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"));
-    }
+                new App("level2"));
 
+    }
+    /* ------------------------------------------------------------------------------------------ */
     /**
      * save the board of the current game.
      *
      * @param fName the output file name
-     * @param board the current board
+     * @param app the current game
      */
     @Override
-    public void saveCurrentMap(String fName, Board board){
+    public void saveCurrentMap (String fName, App app){
         String rootName = "savedMap";
-        writeGameToXML(fName, rootName, board);
+        writeGameToXML(fName, rootName, app);
     }
-
     /**
      *  add the game actions to XML.
      *  This is for Recorder to write each action records to a XML file.
@@ -54,18 +56,7 @@ public class XMLFileWriter implements FileWriter {
      */
     @Override
     public void addActionNode(Element root, int timer, String actor, String dir){
-        Element element_root = root.addElement("action");
-        // time left
-        Element element2 = element_root.addElement("timer");
-        element2.addAttribute("timer", Integer.toString(timer));
-
-        // current actor
-        Element element3 = element_root.addElement("actor");
-        element3.addAttribute("actor", actor);
-
-        // direction
-        Element element4 = element_root.addElement("direction");
-        element4.addAttribute("direction", dir);
+        leafWriter.addActionNode(root, timer, actor, dir);
     }
 
     /**
@@ -75,16 +66,15 @@ public class XMLFileWriter implements FileWriter {
      * @param rootName map or actions
      *
      */
-    private void writeGameToXML(String fName, String rootName, Board board){
+    private void writeGameToXML(String fName, String rootName, App app){
         try {
             Document document = DocumentHelper.createDocument();
             Element root = document.addElement(rootName);
 
             if(rootName.equals("savedMap")){
                 //get all objects from the current game state to create the XML file
-                objectsToXML(root, board);
-
-                //TODO add movingBugs
+                objectsToXML(root, app);
+                root.addAttribute("level", Integer.toString(app.getLevel()));
 
             }
 
@@ -113,9 +103,10 @@ public class XMLFileWriter implements FileWriter {
      * save the objects on the board to xml.
      *
      * @param root the root ele
-     * @param board the current board
+     * @param app the current game
      */
-    private void objectsToXML(Element root, Board board){
+    private void objectsToXML(Element root, App app){
+        Board board = app.getCurrentBoard();
         for (int x = 0; x < WIDTH; x++){
             for (int y = 0; y < HEIGHT; y++){
                 Tile tile = board.getTile(new Coordinate(x,y));
@@ -144,57 +135,18 @@ public class XMLFileWriter implements FileWriter {
                             chips = Integer.toString(((Item_Exit) tile.getItem()).getTreasure());
                             System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ chips);
                             break;
+                        default:
+                            System.out.println("No match tile found.");
                     }
-
                 }
                 // add all nodes to the file
-                addNodes(root, type, Integer.toString(pos.getX()),
+                leafWriter.addNodes(root, type, Integer.toString(pos.getX()),
                         Integer.toString(pos.getY()), item, col, info, chips);
             }
         }
     }
 
-    /**
-     * add all nodes to the file.
-     *
-     * @param root element root
-     * @param type tile type
-     * @param x x coordinate
-     * @param y y coordinate
-     * @param item item on tile
-     * @param col key/door col
-     * @param info message tile
-     */
-    private void addNodes(Element root, String type, String x, String y,
-                          String item, String col, String info, String chips) {
-        Element element1 = root.addElement("tile");
-        Element XElement = element1.addElement("x");
-        Element YElement = element1.addElement("y");
 
-        if(info != null){
-            Element infoElement = element1.addElement("message");
-            infoElement.setText(info);
-        }
 
-        //add the attributes
-        if (item != null) {
-            element1.addAttribute("type", item);
-            if (col != null){
-                element1.addAttribute("col", col);
-            }
-            if(chips !=null){
-                element1.addAttribute("chips", chips);
-            }
-        }else {
-            element1.addAttribute("type", type);
-        }
-
-        //TODO add the image icon attribute
-        //element1.addAttribute("image", icon);
-
-        //set the value
-        XElement.setText(x);
-        YElement.setText(y);
-    }
 
 }

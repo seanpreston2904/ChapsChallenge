@@ -8,5 +8,5 @@ public interface PreMove {
      *
      * @return - true means continue to space, false means do not.
      */
-    boolean preInteract(Actor actor);
+    boolean preInteract(Board board, Actor actor);
 }

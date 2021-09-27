@@ -32,7 +32,7 @@ public class Item_Door extends Item implements PreMove {
      * @return
      */
     @Override
-    public boolean preInteract(Actor actor) {
+    public boolean preInteract(Board board, Actor actor) {
 
         // try to cast Actor to Player
         if (actor instanceof Player) {
@@ -43,7 +43,6 @@ public class Item_Door extends Item implements PreMove {
             if (player.removeFromInventory(new Item_Key(color).getId())) {
 
                 // remove door from board
-                // TODO
                 return true;
             }
         }

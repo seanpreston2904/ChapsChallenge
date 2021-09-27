@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<savedMap level="1">
+  <tile type="WALL">
+    <x>0</x>
+    <y>0</y>
+  </tile>
+  <tile type="WALL">
+    <x>0</x>
+    <y>1</y>
+  </tile>
+  <tile type="WALL">
+    <x>0</x>
+    <y>2</y>
+  </tile>
+  <tile type="WALL">
+    <x>0</x>
+    <y>3</y>
+  </tile>
+  <tile type="WALL">
+    <x>0</x>
+    <y>4</y>
+  </tile>
+  <tile type="WALL">
+    <x>0</x>
+    <y>5</y>
+  </tile>
+  <tile type="WALL">
+    <x>0</x>
+    <y>6</y>
+  </tile>
+  <tile type="WALL">
+    <x>0</x>
+    <y>7</y>
+  </tile>
+  <tile type="WALL">
+    <x>0</x>
+    <y>8</y>
+  </tile>
+  <tile type="WALL">
+    <x>1</x>
+    <y>0</y>
+  </tile>
+  <tile type="FREE">
+    <x>1</x>
+    <y>1</y>
+  </tile>
+  <tile type="WALL">
+    <x>1</x>
+    <y>2</y>
+  </tile>
+  <tile type="FREE">
+    <x>1</x>
+    <y>3</y>
+  </tile>
+  <tile type="TREASURE">
+    <x>1</x>
+    <y>4</y>
+  </tile>
+  <tile type="WALL">
+    <x>1</x>
+    <y>5</y>
+  </tile>
+  <tile type="TREASURE">
+    <x>1</x>
+    <y>6</y>
+  </tile>
+  <tile type="FREE">
+    <x>1</x>
+    <y>7</y>
+  </tile>
+  <tile type="WALL">
+    <x>1</x>
+    <y>8</y>
+  </tile>
+  <tile type="WALL">
+    <x>2</x>
+    <y>0</y>
+  </tile>
+  <tile type="TREASURE">
+    <x>2</x>
+    <y>1</y>
+  </tile>
+  <tile type="WALL">
+    <x>2</x>
+    <y>2</y>
+  </tile>
+  <tile type="LOCK_DOOR" col="blue">
+    <x>2</x>
+    <y>3</y>
+  </tile>
+  <tile type="WALL">
+    <x>2</x>
+    <y>4</y>
+  </tile>
+  <tile type="WALL">
+    <x>2</x>
+    <y>5</y>
+  </tile>
+  <tile type="WALL">
+    <x>2</x>
+    <y>6</y>
+  </tile>
+  <tile type="LOCK_DOOR" col="red">
+    <x>2</x>
+    <y>7</y>
+  </tile>
+  <tile type="WALL">
+    <x>2</x>
+    <y>8</y>
+  </tile>
+  <tile type="WALL">
+    <x>3</x>
+    <y>0</y>
+  </tile>
+  <tile type="FREE">
+    <x>3</x>
+    <y>1</y>
+  </tile>
+  <tile type="LOCK_DOOR" col="green">
+    <x>3</x>
+    <y>2</y>
+  </tile>
+  <tile type="FREE">
+    <x>3</x>
+    <y>3</y>
+  </tile>
+  <tile type="KEY" col="blue">
+    <x>3</x>
+    <y>4</y>
+  </tile>
+  <tile type="TREASURE">
+    <x>3</x>
+    <y>5</y>
+  </tile>
+  <tile type="KEY" col="blue">
+    <x>3</x>
+    <y>6</y>
+  </tile>
+  <tile type="FREE">
+    <x>3</x>
+    <y>7</y>
+  </tile>
+  <tile type="WALL">
+    <x>3</x>
+    <y>8</y>
+  </tile>
+  <tile type="WALL">
+    <x>4</x>
+    <y>0</y>
+  </tile>
+  <tile type="WALL">
+    <x>4</x>
+    <y>1</y>
+  </tile>
+  <tile type="WALL">
+    <x>4</x>
+    <y>2</y>
+  </tile>
+  <tile type="FREE">
+    <x>4</x>
+    <y>3</y>
+  </tile>
+  <tile type="FREE">
+    <x>4</x>
+    <y>4</y>
+  </tile>
+  <tile type="FREE">
+    <x>4</x>
+    <y>5</y>
+  </tile>
+  <tile type="FREE">
+    <x>4</x>
+    <y>6</y>
+  </tile>
+  <tile type="KEY" col="green">
+    <x>4</x>
+    <y>7</y>
+  </tile>
+  <tile type="WALL">
+    <x>4</x>
+    <y>8</y>
+  </tile>
+  <tile type="WALL">
+    <x>5</x>
+    <y>0</y>
+  </tile>
+  <tile type="EXIT">
+    <x>5</x>
+    <y>1</y>
+  </tile>
+  <tile type="LOCK_EXIT" chips="9">
+    <x>5</x>
+    <y>2</y>
+  </tile>
+  <tile type="FREE">
+    <x>5</x>
+    <y>3</y>
+  </tile>
+  <tile type="FREE">
+    <x>5</x>
+    <y>4</y>
+  </tile>
+  <tile type="INFO">
+    <x>5</x>
+    <y>5</y>
+    <message>COLLECT CHIPS TO GET PAST THE CHIP SOCKET. USE KEYS TO OPEN DOORS!</message>
+  </tile>
+  <tile type="FREE">
+    <x>5</x>
+    <y>6</y>
+  </tile>
+  <tile type="TREASURE">
+    <x>5</x>
+    <y>7</y>
+  </tile>
+  <tile type="WALL">
+    <x>5</x>
+    <y>8</y>
+  </tile>
+  <tile type="WALL">
+    <x>6</x>
+    <y>0</y>
+  </tile>
+  <tile type="WALL">
+    <x>6</x>
+    <y>1</y>
+  </tile>
+  <tile type="WALL">
+    <x>6</x>
+    <y>2</y>
+  </tile>
+  <tile type="FREE">
+    <x>6</x>
+    <y>3</y>
+  </tile>
+  <tile type="FREE">
+    <x>6</x>
+    <y>4</y>
+  </tile>
+  <tile type="FREE">
+    <x>6</x>
+    <y>5</y>
+  </tile>
+  <tile type="FREE">
+    <x>6</x>
+    <y>6</y>
+  </tile>
+  <tile type="KEY" col="green">
+    <x>6</x>
+    <y>7</y>
+  </tile>
+  <tile type="WALL">
+    <x>6</x>
+    <y>8</y>
+  </tile>
+  <tile type="WALL">
+    <x>7</x>
+    <y>0</y>
+  </tile>
+  <tile type="FREE">
+    <x>7</x>
+    <y>1</y>
+  </tile>
+  <tile type="LOCK_DOOR" col="green">
+    <x>7</x>
+    <y>2</y>
+  </tile>
+  <tile type="FREE">
+    <x>7</x>
+    <y>3</y>
+  </tile>
+  <tile type="KEY" col="red">
+    <x>7</x>
+    <y>4</y>
+  </tile>
+  <tile type="TREASURE">
+    <x>7</x>
+    <y>5</y>
+  </tile>
+  <tile type="KEY" col="red">
+    <x>7</x>
+    <y>6</y>
+  </tile>
+  <tile type="FREE">
+    <x>7</x>
+    <y>7</y>
+  </tile>
+  <tile type="WALL">
+    <x>7</x>
+    <y>8</y>
+  </tile>
+  <tile type="WALL">
+    <x>8</x>
+    <y>0</y>
+  </tile>
+  <tile type="TREASURE">
+    <x>8</x>
+    <y>1</y>
+  </tile>
+  <tile type="WALL">
+    <x>8</x>
+    <y>2</y>
+  </tile>
+  <tile type="LOCK_DOOR" col="red">
+    <x>8</x>
+    <y>3</y>
+  </tile>
+  <tile type="WALL">
+    <x>8</x>
+    <y>4</y>
+  </tile>
+  <tile type="WALL">
+    <x>8</x>
+    <y>5</y>
+  </tile>
+  <tile type="WALL">
+    <x>8</x>
+    <y>6</y>
+  </tile>
+  <tile type="LOCK_DOOR" col="blue">
+    <x>8</x>
+    <y>7</y>
+  </tile>
+  <tile type="WALL">
+    <x>8</x>
+    <y>8</y>
+  </tile>
+  <tile type="WALL">
+    <x>9</x>
+    <y>0</y>
+  </tile>
+  <tile type="FREE">
+    <x>9</x>
+    <y>1</y>
+  </tile>
+  <tile type="WALL">
+    <x>9</x>
+    <y>2</y>
+  </tile>
+  <tile type="FREE">
+    <x>9</x>
+    <y>3</y>
+  </tile>
+  <tile type="TREASURE">
+    <x>9</x>
+    <y>4</y>
+  </tile>
+  <tile type="WALL">
+    <x>9</x>
+    <y>5</y>
+  </tile>
+  <tile type="TREASURE">
+    <x>9</x>
+    <y>6</y>
+  </tile>
+  <tile type="FREE">
+    <x>9</x>
+    <y>7</y>
+  </tile>
+  <tile type="WALL">
+    <x>9</x>
+    <y>8</y>
+  </tile>
+  <tile type="WALL">
+    <x>10</x>
+    <y>0</y>
+  </tile>
+  <tile type="WALL">
+    <x>10</x>
+    <y>1</y>
+  </tile>
+  <tile type="WALL">
+    <x>10</x>
+    <y>2</y>
+  </tile>
+  <tile type="WALL">
+    <x>10</x>
+    <y>3</y>
+  </tile>
+  <tile type="WALL">
+    <x>10</x>
+    <y>4</y>
+  </tile>
+  <tile type="WALL">
+    <x>10</x>
+    <y>5</y>
+  </tile>
+  <tile type="WALL">
+    <x>10</x>
+    <y>6</y>
+  </tile>
+  <tile type="WALL">
+    <x>10</x>
+    <y>7</y>
+  </tile>
+  <tile type="WALL">
+    <x>10</x>
+    <y>8</y>
+  </tile>
+</savedMap>
