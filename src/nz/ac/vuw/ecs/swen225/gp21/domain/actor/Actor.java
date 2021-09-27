@@ -35,7 +35,7 @@ public abstract class Actor {
      * Default constructor no parameters.
      */
     public Actor() {
-
+        this.position = new Coordinate(-1,-1);
     }
 
     /**
@@ -47,7 +47,7 @@ public abstract class Actor {
      *
      */
     public Coordinate getResultingLocation(Direction direction) {
-        return new Coordinate(position.getX(), position.getY()).getResultingLocation(direction);
+        return new Coordinate(this.getPosition().getX(), this.getPosition().getY()).getResultingLocation(direction);
     }
 
     /**
