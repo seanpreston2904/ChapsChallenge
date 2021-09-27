@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.Border;
 
-import nz.ac.vuw.ecs.swen225.gp21.app.Main;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
@@ -31,12 +30,6 @@ public class KeyPresses implements KeyListener {
 	private JPanel pausedDialoge;
 	private int inventoryCount;
 		
-	/**
-	 * Constructor for the KeyPresses class 
-	 * 
-	 * @param app the app 
-	 * @param domain the domain
-	 */
 	public KeyPresses(App app, Domain domain) {
 		
 		this.app = app;
@@ -172,9 +165,6 @@ public class KeyPresses implements KeyListener {
 	
 	}
 	
-	/**
-	 * This method updates the display of the inventory everytime play makes a move
-	 */
 	public void updateInventoryPanel() {
 
 		// if hero's inventory is not the same size as the App's inventory
@@ -210,11 +200,6 @@ public class KeyPresses implements KeyListener {
 		
 	}
 	
-	/**
-	 * This method sets up the pause dialoge when player pauses the game
-	 * 
-	 * @return JPanel the pause panel
-	 */
 	public JPanel setPausedDialoge() {
 		
 		Border border = BorderFactory.createLineBorder(Color.BLACK, 8);
@@ -241,11 +226,7 @@ public class KeyPresses implements KeyListener {
 	}
 	
 	
-	/**
-	 * This method is called when player moves the hero 
-	 * 
-	 * @param dir direction of the movement
-	 */
+	
 	public void moveHero(Direction dir) {		
 		domain.moveActor(this.hero, dir);
 		app.updateChipsCount();
@@ -253,54 +234,38 @@ public class KeyPresses implements KeyListener {
 		updateInventoryPanel();		
 	}
 	
-	/**
-	 * This method is called when player wants to save the game by pressing CTRL-S
-	 */
 	public void saveGame() {
 		
-		countdownPanel.pause();
 		XMLFileWriter fileWriter = new XMLFileWriter();
 		String fname = JOptionPane.showInputDialog("Name your file:");
-		// TODO more details
 		if (fname != null) {
 			if (fname.length() > 0) {
-				String extension  = ".xmlsave";
-				String extension2 = ".xmlaction";
-				fileWriter.saveCurrentMap(fname + extension, this.app);
-				//app.getRecorder().saveAll(fname + extension2);
+				String directory = "";
+				String extension = ".xmlsave";
+				fileWriter.saveCurrentMap(directory + fname + extension, this.app);
 			}
 		}
-		countdownPanel.start();
 		
 	}
 	
-	/**
-	 * This method is called when player presses CTRL-R
-	 */
 	public void openSavedGame() {
-		countdownPanel.pause();
 		ImageIcon icon = new ImageIcon("...");
-		// TODO more details
-    	String file = (String) JOptionPane.showInputDialog(
+    	String[] levels = {"level1", "level2"};
+    	
+    	String level = (String) JOptionPane.showInputDialog(
     			app.getMainFrame(),
     			"Select a game to resume",
     			"",
     			JOptionPane.WARNING_MESSAGE,
     			icon,
-    			Main.getAllSavedFile().toArray(),
-    			Main.getAllSavedFile().get(0)
+    			levels,
+    			levels[0]
     			);        
     	
-    	new App(file);
+    	//TODO finish this!!!
  
 	}
 	
-	
-	/**
-	 * This method is called when player wants to restart a new game level by pressing CTRL-1 or CTRL-2
-	 * 
-	 * @param level the level that player wants to replay
-	 */
 	public void startNewGame(int level) {
 		
 		countdownPanel.pause();
@@ -318,9 +283,6 @@ public class KeyPresses implements KeyListener {
         
 	}
 	
-	/**
-	 * This method is called when player pauses the game by pressing SPACE or from the menu bar.
-	 */
 	public void pause() {
 		countdownPanel.pause();					
 		countdownPanel.getPanel().setVisible(false);
@@ -328,9 +290,6 @@ public class KeyPresses implements KeyListener {
 		pausedDialoge.setVisible(true);	
 	}
 	
-	/**
-	 * This method is called when player resumes the game by pressing ESC or from the menu bar.
-	 */
 	public void resume() {
 		countdownPanel.getPanel().setVisible(true);
 		app.getRenderView().setVisible(true);
@@ -338,20 +297,15 @@ public class KeyPresses implements KeyListener {
 		countdownPanel.start();	
 	}
 	
-	/**
-	 * This method is called when player presses the record menu.
-	 */
 	public void record() {
 		
 		String fname = JOptionPane.showInputDialog("Name your record file:");
 
 		if (fname != null) {
 			if (fname.length() > 0) {
-				String extension = ".xmlrecord";
-				fname = fname + extension;
-				//app.getRecorder().saveAll(fname, app.getLevel());
+				app.getRecorder().saveAll(fname, app.getLevel());
 			}
 		}
-				
+		
 	}
 }
