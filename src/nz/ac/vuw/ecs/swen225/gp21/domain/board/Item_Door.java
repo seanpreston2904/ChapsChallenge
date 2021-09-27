@@ -4,6 +4,8 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
 
+import java.util.ArrayList;
+
 public class Item_Door extends Item implements PreMove {
 
     private String color;
@@ -32,7 +34,7 @@ public class Item_Door extends Item implements PreMove {
      * @return
      */
     @Override
-    public boolean preInteract(Board board, Actor actor) {
+    public boolean preInteract(Board board, ArrayList<Actor> enemies, Actor actor) {
 
         // try to cast Actor to Player
         if (actor instanceof Player) {

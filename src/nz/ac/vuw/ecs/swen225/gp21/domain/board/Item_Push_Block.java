@@ -7,6 +7,8 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
 
+import java.util.ArrayList;
+
 public class Item_Push_Block extends Item implements PreMove {
 
     /**
@@ -25,16 +27,17 @@ public class Item_Push_Block extends Item implements PreMove {
      * @return
      */
     @Override
-    public boolean preInteract(Board board, Actor actor) {
+    public boolean preInteract(Board board, ArrayList<Actor> enemies, Actor actor) {
 
         // try to cast Actor to Player
         if (actor instanceof Player) {
 
             Player player = new Player(actor.getPosition());
 
-            Direction currentPath = actor.getFacing(); // the way the block is being pushed
+            // NOTE: there is an expectation that actor.getFacing actually points towards this item. If this is not true it will err.
+            Direction currentPath = actor.getFacing();
 
-            // load the coordinates
+            // load the coordinates for the item, the actor and the final tile
             Coordinate startingCoordinate = actor.getPosition();
             Coordinate itemCoordinate = startingCoordinate.getResultingLocation(currentPath);
             Coordinate finalCoordinate = itemCoordinate.getResultingLocation(currentPath);
@@ -43,9 +46,9 @@ public class Item_Push_Block extends Item implements PreMove {
 
             Tile finalTile = board.getTile(finalCoordinate);
 
-
             // now check if the place the block ends up is free
-            if (finalTile.getType().equals(TileType.FREE) && finalTile.getItem() == null) {
+            if (board.validMove(enemies, finalCoordinate, new Actor(itemCoordinate) {}))
+            {
                 System.out.println("Apparently its legal to go into: " + finalCoordinate + " from " + itemCoordinate + " from " + actor.getPosition());
 
                 // it is free so lets move it

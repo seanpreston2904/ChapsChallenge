@@ -4,6 +4,8 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
 
+import java.util.ArrayList;
+
 public class Item_Exit extends Item implements PreMove {
 
     private int treasure;
@@ -26,7 +28,7 @@ public class Item_Exit extends Item implements PreMove {
      * @return
      */
     @Override
-    public boolean preInteract(Board board, Actor actor) {
+    public boolean preInteract(Board board, ArrayList<Actor> enemies, Actor actor) {
 
         // check if it is a player
         if (actor instanceof Player) {
