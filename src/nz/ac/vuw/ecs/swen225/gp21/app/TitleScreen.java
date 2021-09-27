@@ -80,11 +80,12 @@ public class TitleScreen{
 							Main.getAllSavedFile().toArray(),
 							Main.getAllSavedFile().get(0)
 	            			);
+					if(file != null) {
+						//TODO generate a saved game
+						new App(file);
+		            	frame.dispose();
 
-	            	frame.dispose();
-
-	            	//TODO generate the resumed game
-	            	//new App(level, file);
+					}
 
 	            // if player hasnt saved any game.
 				}else {
@@ -115,7 +116,7 @@ public class TitleScreen{
             			JOptionPane.WARNING_MESSAGE,
             			icon,
             			levels,
-            			levels[0]
+            			levels[1]
             			);            	 
             	
             	if(level != null) { 
@@ -175,3 +176,4 @@ public class TitleScreen{
 		new Main().main(args);
 	}
 }
+

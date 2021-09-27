@@ -3,15 +3,23 @@ package nz.ac.vuw.ecs.swen225.gp21.app;
 import java.io.File;
 import java.util.ArrayList;
 
+import nz.ac.vuw.ecs.swen225.gp21.app.TitleScreen;
+
 /**
  * This class is used to start a game.
  */
 public class Main{		
 	private static ArrayList<String> savedFile = new ArrayList<>();
+	private static ArrayList<String> savedRecording = new ArrayList<>();
 	
 	public static ArrayList<String> getAllSavedFile() {
 		return savedFile;
 	}
+	
+	public static ArrayList<String> getAllSavedRecording() {
+		return savedRecording;
+	}
+	
 	public static void main(String[] args) {
 		new TitleScreen();
 
@@ -40,12 +48,19 @@ public class Main{
 						String fileName = file.getName();
 						savedFile.add(fileName);
 					}
+					
+					if (extension.equals("xmlrecord")) {
+						String fileName = file.getName();
+						savedRecording.add(fileName);
+					}
 				}
 
 				i++;
 			}
-
+			
+			for(int j = 0; j<savedFile.size(); j++) {
+				System.out.println("file name: " + savedFile.get(j));
+			}
 		}
 	}	
 }
-

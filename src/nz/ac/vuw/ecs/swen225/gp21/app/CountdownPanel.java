@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -19,6 +20,9 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
+import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
+import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 
 /**
  * The class countdown panel that creates the countdown panel
@@ -31,6 +35,7 @@ public class CountdownPanel implements ActionListener {
 	private int chips_left_value;
 	private int level_value;
 	private App app;
+	private ArrayList<Actor> bugs;
 	
     //private boolean replay = false;
 
@@ -84,6 +89,27 @@ public class CountdownPanel implements ActionListener {
 			
 		}});
 	
+	Timer bugTimer = new Timer(3000, new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			for (Actor actor: bugs) {
+				if(actor instanceof Enemy) {
+	
+					Enemy enemy = (Enemy) actor;
+					System.out.println("enemy class: " + enemy.getClass());					
+					Direction dir = enemy.movementModeAIDirection(app.getDomain().getBoard(),app.getDomain().getPlayer());
+					System.out.println("direction: " + dir);
+					app.getDomain().moveActor(actor, dir);
+					
+				}
+	
+			}
+		}
+			
+	});
+	
 	
 	 /**
      * Constructor for the coundown panel.
@@ -94,8 +120,9 @@ public class CountdownPanel implements ActionListener {
      */
 	
 	public CountdownPanel(int time, int current_level, int chipsleft, App app) {
-		
+
 		this.app = app;
+		this.bugs = app.getDomain().getActors();
 		this.seconds_remaining = time;
 		this.chips_left_value = chipsleft;
 		this.level_value = current_level;
@@ -252,6 +279,7 @@ public class CountdownPanel implements ActionListener {
 	public void start() {
 		started = true;
 		timer.start();
+		bugTimer.start();
 	}
 	
 	/**
@@ -261,6 +289,7 @@ public class CountdownPanel implements ActionListener {
 	public void pause() {
 		started = false;		
 		timer.stop();
+		bugTimer.stop();
 	}	
 	
 	/**
@@ -268,7 +297,8 @@ public class CountdownPanel implements ActionListener {
      */	
 	public void stop() {
 		started = false;
-		timer.stop();		
+		timer.stop();	
+		bugTimer.stop();
 	}
 	
 	public void setUpInventoryPanel() {
@@ -280,7 +310,6 @@ public class CountdownPanel implements ActionListener {
 		
 		for(int i=0; i<6; i++) {
 			item_slots[i] = new JLabel();
-			// TODO might check this line
 			item_slots[i].setBorder(BorderFactory.createRaisedBevelBorder());
 			item_slots[i].setBackground(Color.LIGHT_GRAY);
 			inventory.add(item_slots[i]);
