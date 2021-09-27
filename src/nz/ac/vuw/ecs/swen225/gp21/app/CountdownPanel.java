@@ -105,7 +105,9 @@ public class CountdownPanel implements ActionListener {
 						app.getDomain().moveActor(actor, dir);
 						
 						if(!app.getDomain().isRunning()) {
-							app.finishGame();							
+							bugTimer.stop();
+							timer.stop();
+							JOptionPane.showMessageDialog(app.getMainFrame(), "You got killed by a " + actor.getName());							
 						}
 						
 					}
