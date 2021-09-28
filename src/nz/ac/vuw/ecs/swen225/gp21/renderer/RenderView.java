@@ -212,19 +212,42 @@ public class RenderView extends JPanel {
      */
     private Coordinate getViewportDimensions(){
 
-        //Get the player's position
+        //Get the player's position and the current viewport
         Coordinate playerPosition = game.getPlayer().getPosition();
-        Coordinate viewportTopLeft = this.topLeft;
+        Coordinate viewportTopLeft = new Coordinate(-1, -1);
 
-        int topLeft;
-        int topRight;
+        //If the player's X position is within the size of the board - 4 on both edges, center the
+        //viewport on the player.
+        if(playerPosition.getX() >= 4
+                && playerPosition.getX() < game.getBoard().getDimension().width - 4){
 
-        if(playerPosition.getX() >= 4 && playerPosition.getX() < game.getBoard().getDimension().width - 4){
             viewportTopLeft.setX(playerPosition.getX()-4);
+
+        } else {
+
+            //If the player is on the left side of the board, set the viewport position to the left edge
+            if(playerPosition.getX() < 4){ viewportTopLeft.setX(0); }
+
+            //Otherwise, the player is on the right edge: set the viewport position to the right edge
+            else{ viewportTopLeft.setX(game.getBoard().getDimension().width - 9); }
+
         }
 
-        if(playerPosition.getY() >= 4 && playerPosition.getY() < game.getBoard().getDimension().height - 4){
+        //If the player's Y position is within the size of the board - 4 on both edges, center the
+        //viewport on the player.
+        if(playerPosition.getY() >= 4
+                && playerPosition.getY() < game.getBoard().getDimension().height - 4){
+
             viewportTopLeft.setY(playerPosition.getY()-4);
+
+        }else {
+
+            //If the player is on the top side of the board, set the viewport position to the top edge
+            if(playerPosition.getY() < 4){ viewportTopLeft.setY(0); }
+
+            //Otherwise, the player is on the bottom edge: set the viewport position to the bottom edge
+            else{viewportTopLeft.setY(game.getBoard().getDimension().height - 9);}
+
         }
 
         return viewportTopLeft;
