@@ -45,9 +45,9 @@ public class CountdownPanel implements ActionListener {
 	private JLabel time_left = new JLabel();
 	private JLabel level = new JLabel();
 	private JLabel chips_left = new JLabel();
-    private JButton start_pause = new JButton("START");
+    public JButton start_pause = new JButton("START");
     
-    private JPanel inventory;
+    public JPanel inventory;
     private JLabel[] item_slots = new JLabel[8];
    
 	

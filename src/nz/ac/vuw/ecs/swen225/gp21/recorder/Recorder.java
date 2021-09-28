@@ -74,21 +74,24 @@ public class Recorder {
         }
 	}
 	
-	public void loadAll(String name) {//fill the actionqueue
-		XMLFileReader reader=new XMLFileReader();
-		List<Map<String, String>> loadSavedActions = reader.loadSavedActions(name);
-		int t;
-		Direction d;
-		Actor a;
-		for(int i=0; i<loadSavedActions.size(); i+=3) {
-			t=Integer.parseInt(loadSavedActions.get(i).get("time"));
-			d=Direction.parseDirection(loadSavedActions.get(i+1).get("direction"));
-			a=Actor.parseActor(loadSavedActions.get(i+2).get("actor"));
-			actionQueue.add(new ActionRecord(d,a,t));
-		}
-	}
+    public void loadAll(String name) {//fill the actionqueue
+        XMLFileReader reader=new XMLFileReader();
+        List<Map<String, String>> loadSavedActions = reader.loadSavedActions(name);
+        int t;
+        Direction d;
+        Actor a;
+        for(int i=0; i<loadSavedActions.size(); i+=3) {
+           // System.out.println("Println " + loadSavedActions.get(i).get("timer") + " " + loadSavedActions.get(i+1).get("actor") +  " " + loadSavedActions.get(i+2).get("direction"));
+            t=Integer.parseInt(loadSavedActions.get(i).get("timer"));
+            a=Actor.parseActor(loadSavedActions.get(i+1).get("actor"));
+            d=Direction.parseDirection(loadSavedActions.get(i+2).get("direction"));
+            actionQueue.add(new ActionRecord(d,a,t));
+            //System.out.println("A: " + t + " " + a + " " + d);
+        }
+    }
 	
 	public void replay(App app) {
+		System.out.println("Shawtys like a melody");
 		Timer timer= new Timer();
 
 		timer.schedule(new TimerTask() { //start of main loop
@@ -99,8 +102,8 @@ public class Recorder {
         	@Override
 			public void run() {
 			time-=1;
-
-			if(actionQueue.peek().getTime()==time) { //if this action was done at this time apply it to the board using step
+			//System.out.println("In my head"+time+actionQueue.peek().getTime());
+			if(actionQueue.peek().getTime()>=time) { //if this action was done at this time apply it to the board using step
 				finishedBoard=step(finishedBoard, time);
 				app.setDomain(finishedBoard);
 			}
@@ -116,8 +119,16 @@ public class Recorder {
 	}
 	
 	public Domain step(Domain finishedBoard, int time) {//Next step button is pressed or replay calls it
+		
 		current = actionQueue.poll();
-		finishedBoard.moveActor(current.getActor(), current.getDirection());
+		System.out.println("That I cannot"+current.getActor()+current.getDirection());
+		try {
+			Thread.sleep(100);//no teleporting
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		finishedBoard.moveActor(finishedBoard.getPlayer(), current.getDirection());//needs to be adjusted for enemies
+		System.out.println("That I can't"+current.getActor()+current.getDirection());
 		if(actionQueue.peek().getTime()>=time) {
 			return step(finishedBoard, time);
 		}
