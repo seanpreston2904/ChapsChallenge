@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<savedAction level="1">
+  <action>
+    <timer timer="60"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="60"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="60"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="60"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="59"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="59"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="59"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="59"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="59"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="58"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="58"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="58"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="57"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="57"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="57"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="57"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="56"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="56"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="56"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="55"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="55"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="55"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="55"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="55"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="55"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="54"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="54"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="54"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="54"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="54"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="54"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="53"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="53"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="53"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="53"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="53"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="53"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="53"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="53"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="52"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="52"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="52"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="52"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="52"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="52"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="51"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="51"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="51"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="51"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="51"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="51"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="51"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="51"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="50"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="50"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="50"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="50"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="50"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="50"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="50"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="50"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="49"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="49"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="49"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="49"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="49"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="49"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="49"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="49"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="48"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="48"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="48"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="48"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="48"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="48"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="47"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="47"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="47"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="47"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="47"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="47"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="47"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="47"/>
+    <actor actor="hero"/>
+    <direction direction="EAST"/>
+  </action>
+  <action>
+    <timer timer="46"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="46"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="46"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="46"/>
+    <actor actor="hero"/>
+    <direction direction="SOUTH"/>
+  </action>
+  <action>
+    <timer timer="46"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="45"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="45"/>
+    <actor actor="hero"/>
+    <direction direction="WEST"/>
+  </action>
+  <action>
+    <timer timer="45"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+  <action>
+    <timer timer="45"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
+</savedAction>
