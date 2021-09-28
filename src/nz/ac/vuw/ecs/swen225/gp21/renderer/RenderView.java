@@ -48,7 +48,7 @@ public class RenderView extends JPanel {
     private HashMap<Tile, TileAnimator> tiles;
 
     //Top left and bottom right position on the screen
-    private Point topLeft;
+    private Coordinate topLeft;
 
     //Pixel offsets for camera
     private int viewOffsetX;
@@ -69,11 +69,19 @@ public class RenderView extends JPanel {
         this.setMaximumSize(VIEWPORT_SIZE);
         this.setMinimumSize(VIEWPORT_SIZE);
 
+        //TODO FIX THIS NASTINESS
+        //Coordinate playerPosition = game.getPlayer().getPosition();
+        //this.topLeft = new Coordinate(playerPosition.getX()-4, playerPosition.getY()-4);
+
         //Construct timer
         timer = new Timer((int)FPS_60, action -> update());
 
         //Set board reference
         this.game = game;
+
+        this.topLeft = new Coordinate(game.getPlayer().getPosition().getX() -4,
+                game.getPlayer().getPosition().getX() -4);
+        this.topLeft = getViewportDimensions();
 
         //Construct animator maps
         this.actors = new HashMap<>();
@@ -149,12 +157,8 @@ public class RenderView extends JPanel {
         int boardWidth = this.game.getBoard().getDimension().width;
         int boardHeight = this.game.getBoard().getDimension().height;
 
-        //TODO FIX THIS NASTINESS
-        Coordinate playerPosition = game.getPlayer().getPosition();
-        this.topLeft = new Point(playerPosition.getX()-4, playerPosition.getY()-4);
-
         //Get the viewport position
-        getViewportDimensions();
+        this.topLeft = getViewportDimensions();
 
         for(int row = 0; row < boardHeight; row++){
             for(int col = 0; col < boardWidth; col++){
@@ -166,8 +170,8 @@ public class RenderView extends JPanel {
                 Item item = this.game.getBoard().getTile(new Coordinate(col, row)).getItem();
 
                 //Calculate the X and Y position of the tile
-                int xPos = (tile.getLocation().getX() - topLeft.x) * TILE_SIZE ;
-                int yPos = (tile.getLocation().getY() - topLeft.y) * TILE_SIZE ;
+                int xPos = (tile.getLocation().getX() - topLeft.getX()) * TILE_SIZE ;
+                int yPos = (tile.getLocation().getY() - topLeft.getY()) * TILE_SIZE ;
 
                 //Render tile graphic
                 g.drawImage(tiles.get(tile).getImage(), xPos, yPos, null);
@@ -188,8 +192,8 @@ public class RenderView extends JPanel {
         for(Actor a: actors.keySet()){
 
             //Calculate its X and Y positions
-            int xPos = (a.getPosition().getX() - topLeft.x) * TILE_SIZE;
-            int yPos = (a.getPosition().getY() - topLeft.y) * TILE_SIZE;
+            int xPos = (a.getPosition().getX() - topLeft.getX()) * TILE_SIZE;
+            int yPos = (a.getPosition().getY() - topLeft.getY()) * TILE_SIZE;
 
             //Render actor graphic
            g.drawImage(actors.get(a).getImage(), xPos, yPos, null);
@@ -206,17 +210,24 @@ public class RenderView extends JPanel {
     /**
      * Gets the appropriate viewport dimensions
      */
-    private void getViewportDimensions(){
+    private Coordinate getViewportDimensions(){
 
         //Get the player's position
         Coordinate playerPosition = game.getPlayer().getPosition();
+        Coordinate viewportTopLeft = this.topLeft;
 
-        if(playerPosition.getX() >= 4 && playerPosition.getX() < game.getBoard().getDimension().width - 4
-        && playerPosition.getY() >= 4 && playerPosition.getY() < game.getBoard().getDimension().height - 4){
+        int topLeft;
+        int topRight;
 
-            this.topLeft = new Point(playerPosition.getX()-4, playerPosition.getY()-4);
-
+        if(playerPosition.getX() >= 4 && playerPosition.getX() < game.getBoard().getDimension().width - 4){
+            viewportTopLeft.setX(playerPosition.getX()-4);
         }
+
+        if(playerPosition.getY() >= 4 && playerPosition.getY() < game.getBoard().getDimension().height - 4){
+            viewportTopLeft.setY(playerPosition.getY()-4);
+        }
+
+        return viewportTopLeft;
 
     }
 
