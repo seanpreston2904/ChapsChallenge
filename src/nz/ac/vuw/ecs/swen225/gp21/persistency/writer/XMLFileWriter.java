@@ -26,14 +26,6 @@ public class XMLFileWriter implements FileWriter {
     private static final int WIDTH = 11;  // the width of the board
     private LeafWriter leafWriter = new LeafWriter();
 
-    /*----------------The debug function--------------------------------------------------------*/
-    public static void main(String[] args) {
-        XMLFileWriter writer = new XMLFileWriter();
-        writer.saveCurrentMap("src/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml",
-                new App("level2"));
-
-    }
-    /* ------------------------------------------------------------------------------------------ */
     /**
      * save the board of the current game.
      *
@@ -60,6 +52,33 @@ public class XMLFileWriter implements FileWriter {
     }
 
     /**
+     * set the XML output to path.
+     *
+     * @param filename out path
+     * @param document doc
+     */
+    public void setupXMLOut(String filename, Document document){
+        try {
+            // output Format
+            OutputFormat XMLFormat = OutputFormat.createPrettyPrint();
+            XMLFormat.setEncoding("UTF-8");
+
+            // write the output XML to the path
+            OutputStreamWriter stream = new OutputStreamWriter(
+                    new FileOutputStream(filename),
+                    StandardCharsets.UTF_8);
+            XMLWriter XMLWriter = new XMLWriter(stream, XMLFormat);
+            XMLWriter.write(document);
+            XMLWriter.flush();
+            XMLWriter.close();
+
+            System.out.println("\nXML file created!");
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * save the game state to XML file.
      *
      * @param fName file name to save as
@@ -67,34 +86,17 @@ public class XMLFileWriter implements FileWriter {
      *
      */
     private void writeGameToXML(String fName, String rootName, App app){
-        try {
-            Document document = DocumentHelper.createDocument();
-            Element root = document.addElement(rootName);
+        Document document = DocumentHelper.createDocument();
+        Element root = document.addElement(rootName);
 
-            if(rootName.equals("savedMap")){
-                //get all objects from the current game state to create the XML file
-                objectsToXML(root, app);
-                root.addAttribute("level", Integer.toString(app.getLevel()));
+        if(rootName.equals("savedMap")){
+            //get all objects from the current game state to create the XML file
+            objectsToXML(root, app);
+            root.addAttribute("level", Integer.toString(app.getLevel()));
 
-            }
-
-            /* set the XML output Format with line change and index */
-            OutputFormat XMLFormat = OutputFormat.createPrettyPrint();
-            XMLFormat.setEncoding("UTF-8");
-
-            // write the output XML to the path
-            OutputStreamWriter writer = new OutputStreamWriter(
-                    new FileOutputStream(fName), StandardCharsets.UTF_8);
-            XMLWriter XMLWriter = new XMLWriter(writer, XMLFormat);
-            XMLWriter.write(document);
-            XMLWriter.flush();
-            XMLWriter.close();
-
-            System.out.println("\nXML file created!");
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+
+        this.setupXMLOut(fName, document);
 
     }
 

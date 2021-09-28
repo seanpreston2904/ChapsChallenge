@@ -325,25 +325,20 @@ public class App {
 
                 if (replaySpeed == null) return;
 
-                    // TODO execute a replay!
-                    
-                    //if(playType.equals("auto replay")) {
+                    // Setup the recorder to run the replays
 
-                        System.out.println("REPLAYING STUFF");
-                        this.getRenderView().startRender();
-                        this.getDomain().setRunning(true);
-                        //start();    
-                        countdown_pan.start_pause.setVisible(false);
-                       countdown_pan.inventory.setVisible(true);
-                        Recorder recorder = new Recorder(this.getDomain());
-                        recorder.loadAll(file);
-                        recorder.replay(this);
-                        
-                    //}
-                    //else {
-                        
-                        
-                    //}
+					System.out.println("REPLAYING STUFF");
+					this.getRenderView().startRender();
+					this.getDomain().setRunning(true);
+					countdown_pan.start_pause.setVisible(false);
+					countdown_pan.inventory.setVisible(true);
+					Recorder recorder = new Recorder(this.getDomain());
+					recorder.loadAll(file);
+
+                    if(playType.equals("Auto replay")) {
+
+						recorder.replay(this);
+                    }
             }
             else {
                 JOptionPane.showMessageDialog(main_frame, "No recording has been saved yet!");                

@@ -73,10 +73,9 @@ public class Recorder {
         }
     }
 	
-	public void replay(App app) {
+	public void replay(App app, double increment) {
 		System.out.println("Shawtys like a melody");
 		Timer timer= new Timer();
-
 		timer.schedule(new TimerTask() { //start of main loop
 
 			int time = app.getTimer();
@@ -86,19 +85,18 @@ public class Recorder {
 			public void run() {
 			time-=1;
 			//System.out.println("In my head"+time+actionQueue.peek().getTime());
-			if(actionQueue.peek().getTime()>=time) { //if this action was done at this time apply it to the board using step
+			if(!actionQueue.isEmpty() && actionQueue.peek().getTime()>=time) { //if this action was done at this time apply it to the board using step
+				// update time
+				app.setTimer(actionQueue.peek().getTime());
+				app.getCoundownPanel().updateTime(actionQueue.peek().getTime());
+
+				// play action
 				finishedBoard=step(finishedBoard, time);
 				app.setDomain(finishedBoard);
 			}
-
-			else {
-				//advance time
-				time -= 1;
-				app.setTimer(time);
-			}
         }
 
-     }, 0, 1000);
+     }, 0, (int)(1000/increment));
 	}
 	
 <<<<<<< Updated upstream
@@ -113,7 +111,7 @@ public class Recorder {
 		}
 		finishedBoard.moveActor(finishedBoard.getPlayer(), current.getDirection());//needs to be adjusted for enemies
 		System.out.println("That I can't"+current.getActor()+current.getDirection());
-		if(actionQueue.peek().getTime()>=time) {
+		if(!actionQueue.isEmpty() && actionQueue.peek().getTime()>=time) {
 			return step(finishedBoard, time);
 		}
 		else {
