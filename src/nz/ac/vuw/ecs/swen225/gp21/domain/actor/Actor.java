@@ -119,16 +119,16 @@ public abstract class Actor {
      *
      */
     public static Actor parseActor(String actor) {
-        if (actor.equals("Hero")) {
+        if (actor.toLowerCase().equals("hero")) {
 
             return new Player(new Coordinate(0,0));
 
-        } else if (actor.equals("Enemy")) {
+        } else if (actor.toLowerCase().equals("enemy")) {
 
-            return null;
-
+            return new Enemy(new Coordinate(0,0)) {};
         }
         else {
+        	
             return null;
         }
     }
