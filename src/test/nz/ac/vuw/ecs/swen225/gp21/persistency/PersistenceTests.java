@@ -16,6 +16,7 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,6 +28,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * unit tests for Persistence Module.
@@ -128,8 +130,8 @@ public class PersistenceTests {
         List<Enemy> lis = loadEnemyFile.loadEnemyClasses(reader, reader.getEnemyName());
         for(int i = 0; i<pos.size(); i++){
             assertEquals(lis.get(i).getPosition().getY(), pos.get(i).getY());
-
         }
+
     }
 
     /**
@@ -189,7 +191,5 @@ public class PersistenceTests {
         assertEquals("hero", actor.get("actor"));
         assertEquals("NORTH", dir.get("direction"));
     }
-
-
 
 }

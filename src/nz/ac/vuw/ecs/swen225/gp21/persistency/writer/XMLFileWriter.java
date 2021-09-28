@@ -123,19 +123,16 @@ public class XMLFileWriter implements FileWriter {
                     switch (item) {
                         case "KEY":
                             col = ((Item_Key) tile.getItem()).getColor();
-                            //System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ col);
                             break;
                         case "LOCK_DOOR":
                             col = ((Item_Door) tile.getItem()).getColor();
-                            // System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ col);
+
                             break;
                         case "INFO":
                             info = ((Item_Info) tile.getItem()).getInfo();
-                            // System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ info);
                             break;
                         case "LOCK_EXIT":
                             chips = Integer.toString(((Item_Exit) tile.getItem()).getTreasure());
-                            System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ chips);
                             break;
                         default:
                             System.out.println("No match tile found.");

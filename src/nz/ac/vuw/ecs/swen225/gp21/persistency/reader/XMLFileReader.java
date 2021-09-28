@@ -130,13 +130,10 @@ public class XMLFileReader implements FileReader {
             //parse the each node in the file
             if (isMap) {
                 parseOriginalMap(document);
-                //System.out.println("Game level "+ level +" loaded.");
             }else {
                 if(this.isAction) {
-                    //System.out.println("NB: This is a copy of the saved actions.");
                     parseSavedActions(document);
                 }else {
-                    //System.out.println("NB: This is a copy of the saved game.");
                     parseSavedMap(document);
                 }
             }
