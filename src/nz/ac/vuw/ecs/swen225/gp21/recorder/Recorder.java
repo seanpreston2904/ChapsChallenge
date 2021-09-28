@@ -122,7 +122,12 @@ public class Recorder {
 		
 		current = actionQueue.poll();
 		System.out.println("That I cannot"+current.getActor()+current.getDirection());
-		finishedBoard.moveActor(current.getActor(), current.getDirection());
+		try {
+			Thread.sleep(100);//no teleporting
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		finishedBoard.moveActor(finishedBoard.getPlayer(), current.getDirection());//needs to be adjusted for enemies
 		System.out.println("That I can't"+current.getActor()+current.getDirection());
 		if(actionQueue.peek().getTime()>=time) {
 			return step(finishedBoard, time);

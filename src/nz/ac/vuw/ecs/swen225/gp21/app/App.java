@@ -280,69 +280,79 @@ public class App {
         String[] type = {"Step by Step", "Auto replay"};
         String[] speed = {"0,5", "1", "1,5", "2"};
         
-		
-		ImageIcon icon = new ImageIcon();
-		JMenuItem replayMenu = new JMenuItem("Replay a game");
-		
-	    replayMenu.addActionListener(e -> {
-			if(Main.getAllSavedRecording().size() > 0) {
-		    	String file = (String) JOptionPane.showInputDialog(
-		    			main_frame,
-		    			"Select a game to replay",
-		    			"",
-		    			JOptionPane.WARNING_MESSAGE,
-		    			icon,
-		    			Main.getAllSavedRecording().toArray(),
-		    			Main.getAllSavedRecording().get(0)
-		    			);
-	    	
-		    	String playType = (String) JOptionPane.showInputDialog(
-		    			main_frame,
-		    			"Manual or Auto replay",
-		    			"",
-		    			JOptionPane.WARNING_MESSAGE,
-		    			icon,
-		    			type,
-		    			type[0]
-		    			);
-	        		
-		        String replaySpeed = (String) JOptionPane.showInputDialog(
-		        		main_frame,
-		        		"Select a replay speed",
-		        		"",
-		        		JOptionPane.WARNING_MESSAGE,
-		        		icon,
-		        		speed,
-		        		speed[0]
-		        		);
-	        	    
-		        if(file != null && playType != null && replaySpeed != null) {
-		        	
-		        	// TODO execute a replay!
-		        	
-		        	if(playType.equals("auto replay")) {
-		        		
-	//	        		String level = "level" + fileReader.getLevel(file);
-	//	        		Recorder recorder = new Recorder(new App(level).getDomain());
-	//	        		recorder.loadAll("");
-	//	        		recorder.replay(new App(level));
-		        		
-		        	}
-		        	
-		        	else {
-		        		
-		        		
-		        	}
-		        }
-	        }
-			else {
-				JOptionPane.showMessageDialog(main_frame, "No recording has been saved yet!");				
-			}
-	        		
-	    });	    
-		
-		return replayMenu; 
-	}
+        
+        ImageIcon icon = new ImageIcon();
+        JMenuItem replayMenu = new JMenuItem("Replay a game");
+        
+        replayMenu.addActionListener(e -> {
+
+            System.out.println("MAIN: " + Main.getAllSavedRecording());
+
+            if(Main.getAllSavedRecording().size() > 0) {
+                String file = (String) JOptionPane.showInputDialog(
+                        main_frame,
+                        "Select a game to replay",
+                        "",
+                        JOptionPane.WARNING_MESSAGE,
+                        icon,
+                        Main.getAllSavedRecording().toArray(),
+                        Main.getAllSavedRecording().get(0)
+                        );
+
+                if (file == null) return;
+
+                String playType = (String) JOptionPane.showInputDialog(
+                        main_frame,
+                        "Manual or Auto replay",
+                        "",
+                        JOptionPane.WARNING_MESSAGE,
+                        icon,
+                        type,
+                        type[0]
+                        );
+
+                if (playType == null) return;
+                    
+                String replaySpeed = (String) JOptionPane.showInputDialog(
+                        main_frame,
+                        "Select a replay speed",
+                        "",
+                        JOptionPane.WARNING_MESSAGE,
+                        icon,
+                        speed,
+                        speed[0]
+                        );
+
+                if (replaySpeed == null) return;
+
+                    // TODO execute a replay!
+                    
+                    //if(playType.equals("auto replay")) {
+
+                        System.out.println("REPLAYING STUFF");
+                        this.getRenderView().startRender();
+                        this.getDomain().setRunning(true);
+                        //start();    
+                        countdown_pan.start_pause.setVisible(false);
+                       countdown_pan.inventory.setVisible(true);
+                        Recorder recorder = new Recorder(this.getDomain());
+                        recorder.loadAll(file);
+                        recorder.replay(this);
+                        
+                    //}
+                    //else {
+                        
+                        
+                    //}
+            }
+            else {
+                JOptionPane.showMessageDialog(main_frame, "No recording has been saved yet!");                
+            }
+                    
+        });        
+        
+        return replayMenu; 
+    }
 		
 	/**
 	 * This method enables the record in the menu bar, stop the countdown and pop
