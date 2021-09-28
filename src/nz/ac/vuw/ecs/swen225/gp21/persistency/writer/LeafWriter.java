@@ -51,7 +51,6 @@ public class LeafWriter implements FileWriter{
             element1.addAttribute("type", type);
         }
 
-        //TODO add the image icon attribute
         //element1.addAttribute("image", icon);
 
         //set the value
@@ -85,9 +84,7 @@ public class LeafWriter implements FileWriter{
 
 
     @Override
-    public void saveCurrentMap(String fName, App app) {
-
-    }
+    public void saveCurrentMap(String fName, App app) { }
 
 
 }

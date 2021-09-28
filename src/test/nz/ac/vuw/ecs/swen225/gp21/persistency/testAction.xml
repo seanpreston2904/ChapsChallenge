@@ -16,4 +16,9 @@
     <actor actor="hero"/>
     <direction direction="NORTH"/>
   </action>
+  <action>
+    <timer timer="60"/>
+    <actor actor="hero"/>
+    <direction direction="NORTH"/>
+  </action>
 </savedAction>
