@@ -29,19 +29,21 @@ public class App {
 	public final KeyPresses keypress;
 	private CountdownPanel countdown_pan;
 	private JFrame main_frame;
-	private XMLFileReader fileReader;
 	
-	private Player hero;
-	private ArrayList<Actor> enemy;
 	
 	// PERSISTENCY WILL SET THESES VALUES WHEN A GAME LOADS
 	private int timer;
 	private int level;
 	private int remaining_chips;
+	private Player hero;
+	private ArrayList<Actor> enemy;
 	
-    JMenuItem m2 = new JMenuItem("Pause");
-    JMenuItem m4 = new JMenuItem("Resume");
-    JMenuItem m6 = new JMenuItem("Record Game");
+    JMenuItem pauseMenuItem = new JMenuItem("Pause");
+    JMenuItem resumeMenuItem = new JMenuItem("Resume");
+    JMenuItem recordGameMenuItem = new JMenuItem("Record Game");
+    JMenuItem stepMenuItem = new JMenuItem("Step");
+    JMenuItem replayAGameMenu = new JMenu("Replay a game");
+    JMenu     stopTheRecordingMenu = new JMenu("Stop the recording");
 
 	/**
 	 * Constructor for an app.
@@ -49,10 +51,7 @@ public class App {
 	public App(String levelName) {
 		
 		/*----------------Initialising game setup-------------------------------*/		
-//		this.remaining_chips = this.domain.getRemainingChips();
-//		this.hero = this.domain.getPlayer();
-		//this.enemy = this.domain.getActors();
-		
+	
 		if(levelName.equals("level1")) {
 			this.timer = 60;
 			this.level = 1;
@@ -115,6 +114,238 @@ public class App {
 		/*----------------------------------------------------------------------*/
 	    
 	}
+			
+			
+	/**
+	 * This method enables the record in the menu bar, stop the countdown and pop
+	 * up a message saying you finished the level.
+	 */
+	public void finishGame() {
+		
+		if(domain.getRemainingChips() == 0) {
+			recordGameMenuItem.setEnabled(true);
+			countdown_pan.stop();		
+			JOptionPane.showMessageDialog(getMainFrame(), "You finished the level!");	
+		}
+		
+		else {
+			countdown_pan.stop();		
+			JOptionPane.showMessageDialog(getMainFrame(), "You touch an enemy");	
+		}
+		
+	}
+	
+	/**
+	 * This method stops the recording state and back to gaming state
+	 */
+	public void stopRecording() {
+		//TODO stop the recording.
+		stopTheRecordingMenu.setVisible(false);
+		stepMenuItem.setVisible(false);
+		replayAGameMenu.setVisible(true);
+	}
+	
+	/**
+	 * This method stop the countdown and terminate the main frame.
+	 */
+	public void terminateFrame() {
+		countdown_pan.stop();
+		main_frame.dispose();
+	}
+	
+	
+	
+	
+	/*----------------JMENU BAR SET UP--------------------------------------*/
+	
+	/**
+	 * This method is called to set up the menu bar on the main frame
+	 */
+	private void setUpMenuBar() {
+        JMenuBar myMenuBar = new JMenuBar();
+        JMenu menu1 = new JMenu("Menu");
+        replayAGameMenu = this.setupReplayGameMenu();
+        
+        JMenuItem m1 = new JMenuItem("New Game");       
+        m1.addActionListener(e -> {
+            main_frame.dispose();
+            SwingUtilities.invokeLater(()->new TitleScreen());
+        });
+  
+        pauseMenuItem.addActionListener(e -> {
+            keypress.pause();
+        });
+        
+        resumeMenuItem.addActionListener(e -> {
+            keypress.resume();
+        });
+        
+        JMenuItem m3 = new JMenuItem("Save Game");
+        m3.addActionListener(e -> {
+            keypress.saveGame();
+        });
+               
+        JMenuItem m5 = new JMenuItem("Exit");
+        m5.addActionListener(e -> {
+            System.exit(0);
+        });
+        
+        recordGameMenuItem.addActionListener(e -> {
+            keypress.record();
+        });
+        
+        stepMenuItem.addActionListener(e -> {
+            recorder.step(this.domain, this.countdown_pan.getTimer());            
+        });
+        
+        JMenuItem m9 = new JMenuItem("Stop recording");
+        m9.addActionListener(e -> {
+        	this.stopRecording();
+        });
+        
+        stopTheRecordingMenu.add(m9);
+                      
+        pauseMenuItem.setEnabled(false);
+        resumeMenuItem.setEnabled(false);
+        recordGameMenuItem.setEnabled(false);
+        stepMenuItem.setVisible(false);
+        stopTheRecordingMenu.setVisible(false);
+        
+        menu1.add(m1);
+        menu1.add(pauseMenuItem);
+        menu1.add(resumeMenuItem);
+        menu1.add(m3);
+        menu1.add(m5);
+        menu1.add(recordGameMenuItem);
+               
+        myMenuBar.add(menu1); 
+        myMenuBar.add(stopTheRecordingMenu);
+        myMenuBar.add(replayAGameMenu);
+        myMenuBar.add(stepMenuItem);
+        
+        main_frame.setJMenuBar(myMenuBar);
+        
+        
+	}
+		
+	/**
+	 * This method set up the replay a game menu on the menu bar.
+	 * 
+	 * @return JMenu the menu item in the menu bar
+	 */
+	private JMenuItem setupReplayGameMenu() {
+        String[] type = {"Step by Step", "Auto replay"};
+        String[] speed = {"0,5", "1", "1,5", "2"};             
+        ImageIcon icon = new ImageIcon();
+        JMenuItem replayMenu = new JMenuItem("Replay a game");
+        
+        replayMenu.addActionListener(e -> {
+            if(Main.getAllSavedRecording().size() > 0) {
+                String file = (String) JOptionPane.showInputDialog(
+                        main_frame,
+                        "Select a game to replay",
+                        "",
+                        JOptionPane.WARNING_MESSAGE,
+                        icon,
+                        Main.getAllSavedRecording().toArray(),
+                        Main.getAllSavedRecording().get(0)
+                        );
+
+                if (file == null) return;
+
+                String playType = (String) JOptionPane.showInputDialog(
+                        main_frame,
+                        "Manual or Auto replay",
+                        "",
+                        JOptionPane.WARNING_MESSAGE,
+                        icon,
+                        type,
+                        type[0]
+                        );
+
+                if (playType == null) return;
+                    
+                String replaySpeed = (String) JOptionPane.showInputDialog(
+                        main_frame,
+                        "Select a replay speed",
+                        "",
+                        JOptionPane.WARNING_MESSAGE,
+                        icon,
+                        speed,
+                        speed[0]
+                        );
+
+                if (replaySpeed == null) return;
+
+                    // Setup the recorder to run the replays
+
+					System.out.println("REPLAYING STUFF");
+					this.getRenderView().startRender();
+					this.getDomain().setRunning(true);
+					countdown_pan.start_pause.setVisible(false);
+					countdown_pan.inventory.setVisible(true);
+					recorder = new Recorder(this.getDomain());
+					recorder.loadAll(file);
+					
+					replayMenu.setVisible(false);
+					stopTheRecordingMenu.setVisible(true);
+
+                    if(playType.equals("Auto replay")) {
+
+						recorder.replay(this);
+                    }
+                    
+                    else {
+                    	
+                    	stepMenuItem.setVisible(true);
+                    	
+                    }
+            }
+            else {
+                JOptionPane.showMessageDialog(main_frame, "No recording has been saved yet!");                
+            }
+                    
+        });        
+        
+        return replayMenu; 
+    }
+	
+	/*----------------------------------------------------------------------------*/
+	
+	
+
+	/*----------------SETTERS AND GETTERS METHODS --------------------------------*/
+	
+	public void setTimer(int timer) {
+		this.timer = timer;
+	}
+	
+	public void setRemainingTreasures(int remainingTreasures) {
+		this.remaining_chips = remainingTreasures;
+	}
+	
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	
+	public void setDomain(Domain finishedDomain) {
+		this.domain = finishedDomain;
+	}
+	
+	public int getTimer() {
+		return countdown_pan.getTimer();				
+	}
+	
+	public int getLevel() {
+		return level;
+	}
+	
+	public int getRemainingTreasures() {
+		return domain.getRemainingChips();
+	}
+			
+	/*--------------------------------------------------------------------------*/
+	
 	
 	/*-------------------FIELD GETERS METHOD -----------------------------------*/
 	/**
@@ -176,199 +407,10 @@ public class App {
 	 */
 	public void updateChipsCount() {	
 		//update chips
-		this.remaining_chips = this.domain.getRemainingChips();
+		this.remaining_chips = this.domain.getRemainingChips();	
 		
 		// update Label
 		countdown_pan.updateRemainingChip(this.remaining_chips);
 	}	
 	/*----------------------------------------------------------------------*/
-	
-	
-	// ---------------SETTERS AND GETTERS METHODS---------------------------------
-	
-	public void setTimer(int timer) {
-		this.timer = timer;
-	}
-	
-	public void setRemainingTreasures(int remainingTreasures) {
-		this.remaining_chips = remainingTreasures;
-	}
-	
-	public void setLevel(int level) {
-		this.level = level;
-	}
-	
-	public void setDomain(Domain finishedDomain) {
-		this.domain = finishedDomain;
-	}
-	
-	public int getTimer() {
-		return countdown_pan.getTimer();				
-	}
-	
-	public int getLevel() {
-		return level;
-	}
-	
-	public int getRemainingTreasures() {
-		return domain.getRemainingChips();
-	}
-			
-	// ------------------------------------------------------------------
-	/**
-	 * This method is called to set up the menu bar on the main frame
-	 */
-	public void setUpMenuBar() {
-        JMenuBar myMenuBar = new JMenuBar();
-        JMenu menu1 = new JMenu("Menu");
-        JMenuItem menu2 = this.setupReplayGameMenu();
-        //JMenu menu3 = new JMenu("Record game");
-        
-        JMenuItem m1 = new JMenuItem("New Game");       
-        m1.addActionListener(e -> {
-            main_frame.dispose();
-            SwingUtilities.invokeLater(()->new TitleScreen());
-        });
-  
-        m2.addActionListener(e -> {
-            keypress.pause();
-        });
-        
-        m4.addActionListener(e -> {
-            keypress.resume();
-        });
-        
-        JMenuItem m3 = new JMenuItem("Save Game");
-        m3.addActionListener(e -> {
-            keypress.saveGame();
-        });
-               
-        JMenuItem m5 = new JMenuItem("Exit");
-        m5.addActionListener(e -> {
-            System.exit(0);
-        });
-        
-        m6.addActionListener(e -> {
-            keypress.record();
-        });
-                
-        m2.setEnabled(false);
-        m4.setEnabled(false);
-        m6.setEnabled(false);
-        
-        menu1.add(m1);
-        menu1.add(m2);
-        menu1.add(m4);
-        menu1.add(m3);
-        menu1.add(m5);
-        menu1.add(m6);
-               
-        myMenuBar.add(menu1);    
-        myMenuBar.add(menu2);
-        
-        main_frame.setJMenuBar(myMenuBar);
-        
-        
-	}
-		
-	/**
-	 * This method set up the replay a game menu on the menu bar.
-	 * 
-	 * @return JMenu the menu item in the menu bar
-	 */
-	public JMenuItem setupReplayGameMenu() {
-        String[] type = {"Step by Step", "Auto replay"};
-        String[] speed = {"0,5", "1", "1,5", "2"};
-        
-		
-		ImageIcon icon = new ImageIcon();
-		JMenuItem replayMenu = new JMenuItem("Replay a game");
-		
-	    replayMenu.addActionListener(e -> {
-			if(Main.getAllSavedRecording().size() > 0) {
-		    	String file = (String) JOptionPane.showInputDialog(
-		    			main_frame,
-		    			"Select a game to replay",
-		    			"",
-		    			JOptionPane.WARNING_MESSAGE,
-		    			icon,
-		    			Main.getAllSavedRecording().toArray(),
-		    			Main.getAllSavedRecording().get(0)
-		    			);
-	    	
-		    	String playType = (String) JOptionPane.showInputDialog(
-		    			main_frame,
-		    			"Manual or Auto replay",
-		    			"",
-		    			JOptionPane.WARNING_MESSAGE,
-		    			icon,
-		    			type,
-		    			type[0]
-		    			);
-	        		
-		        String replaySpeed = (String) JOptionPane.showInputDialog(
-		        		main_frame,
-		        		"Select a replay speed",
-		        		"",
-		        		JOptionPane.WARNING_MESSAGE,
-		        		icon,
-		        		speed,
-		        		speed[0]
-		        		);
-	        	    
-		        if(file != null && playType != null && replaySpeed != null) {
-		        	
-		        	// TODO execute a replay!
-		        	
-		        	if(playType.equals("auto replay")) {
-		        		
-	//	        		String level = "level" + fileReader.getLevel(file);
-	//	        		Recorder recorder = new Recorder(new App(level).getDomain());
-	//	        		recorder.loadAll("");
-	//	        		recorder.replay(new App(level));
-		        		
-		        	}
-		        	
-		        	else {
-		        		
-		        		
-		        	}
-		        }
-	        }
-			else {
-				JOptionPane.showMessageDialog(main_frame, "No recording has been saved yet!");				
-			}
-	        		
-	    });	    
-		
-		return replayMenu; 
-	}
-		
-	/**
-	 * This method enables the record in the menu bar, stop the countdown and pop
-	 * up a message saying you finished the level.
-	 */
-	public void finishGame() {
-		
-		if(domain.getRemainingChips() == 0) {
-			m6.setEnabled(true);
-			countdown_pan.stop();		
-			JOptionPane.showMessageDialog(getMainFrame(), "You finished the level!");	
-		}
-		
-		else {
-			countdown_pan.stop();		
-			JOptionPane.showMessageDialog(getMainFrame(), "You touch an enemy");	
-		}
-		
-	}
-	
-	/**
-	 * This method stop the countdown and terminate the main frame.
-	 */
-	public void terminateFrame() {
-		countdown_pan.stop();
-		main_frame.dispose();
-	}
-			
 }
