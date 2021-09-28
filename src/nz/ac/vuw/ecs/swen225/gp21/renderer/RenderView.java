@@ -115,6 +115,10 @@ public class RenderView extends JPanel {
         int boardWidth = this.game.getBoard().getDimension().width;
         int boardHeight = this.game.getBoard().getDimension().height;
 
+        //TODO FIX THIS NASTINESS
+        Coordinate playerPosition = game.getPlayer().getPosition();
+        this.topLeft = new Point(playerPosition.getX()-4, playerPosition.getY()-4);
+
         //Get the viewport position
         getViewportDimensions();
 
