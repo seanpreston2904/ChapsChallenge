@@ -51,15 +51,15 @@ public class PersistenceTests {
     public void test_1() {
         Coordinate p1 = new Coordinate(0,0);
         Tile tile1 = originalBoard.getTile(p1);
-        assertTrue(tile1.getType().toString().equals("WALL"));
+        assertEquals("WALL", tile1.getType().toString());
 
         Coordinate p2 = new Coordinate(5,1);
         Tile tile2 = originalBoard.getTile(p2);
-        assertTrue(tile2.getType().toString().equals("EXIT"));
+        assertEquals("EXIT", tile2.getType().toString());
 
         Coordinate p3 = new Coordinate(1,1);
         Tile tile3 = originalBoard.getTile(p3);
-        assertTrue(tile3.getType().toString().equals("FREE"));
+        assertEquals("FREE", tile3.getType().toString());
     }
 
     /**
@@ -69,17 +69,17 @@ public class PersistenceTests {
     public void test_2() {
         Coordinate p1 = new Coordinate(3,2);
         Tile tile1 = originalBoard.getTile(p1);
-        assertTrue(tile1.getItem().getType().toString().equals("LOCK_DOOR"));
-        assertTrue(((Item_Door)tile1.getItem()).getColor().equals("green"));
+        assertEquals("LOCK_DOOR", tile1.getItem().getType().toString());
+        assertEquals("green", ((Item_Door) tile1.getItem()).getColor());
 
         Coordinate p2 = new Coordinate(3,4);
         Tile tile2 = originalBoard.getTile(p2);
-        assertTrue(tile2.getItem().getType().toString().equals("KEY"));
-        assertTrue(((Item_Key)tile2.getItem()).getColor().equals("blue"));
+        assertEquals("KEY", tile2.getItem().getType().toString());
+        assertEquals("blue", ((Item_Key) tile2.getItem()).getColor());
 
         Coordinate p3 = new Coordinate(2,1);
         Tile tile3 = originalBoard.getTile(p3);
-        assertTrue(tile3.getItem().getType().toString().equals("TREASURE"));
+        assertEquals("TREASURE", tile3.getItem().getType().toString());
     }
 
     /**
@@ -89,15 +89,15 @@ public class PersistenceTests {
     public void test_3() {
         Coordinate p1 = new Coordinate(1,2);
         Tile tile1 = savedBoard.getTile(p1);
-        assertTrue(tile1.getType().toString().equals("WALL"));
+        assertEquals("WALL", tile1.getType().toString());
 
         Coordinate p2 = new Coordinate(5,1);
         Tile tile2 = savedBoard.getTile(p2);
-        assertTrue(tile2.getType().toString().equals("EXIT"));
+        assertEquals("EXIT", tile2.getType().toString());
 
         Coordinate p3 = new Coordinate(3,3);
         Tile tile3 = savedBoard.getTile(p3);
-        assertTrue(tile3.getType().toString().equals("FREE"));
+        assertEquals("FREE", tile3.getType().toString());
 
     }
 
@@ -108,15 +108,15 @@ public class PersistenceTests {
     public void test_4() {
         Coordinate p1 = new Coordinate(5,2);
         Tile tile1 = savedBoard.getTile(p1);
-        assertTrue(tile1.getItem().getType().toString().equals("LOCK_EXIT"));
+        assertEquals("LOCK_EXIT", tile1.getItem().getType().toString());
 
         Coordinate p2 = new Coordinate(5,5);
         Tile tile2 = savedBoard.getTile(p2);
-        assertTrue(tile2.getItem().getType().toString().equals("INFO"));
+        assertEquals("INFO", tile2.getItem().getType().toString());
 
         Coordinate p3 = new Coordinate(9,6);
         Tile tile3 = savedBoard.getTile(p3);
-        assertTrue(tile3.getItem().getType().toString().equals("TREASURE"));
+        assertEquals("TREASURE", tile3.getItem().getType().toString());
     }
 
     /**
@@ -153,7 +153,8 @@ public class PersistenceTests {
     @Test
     public void test_7() {
         writer.saveCurrentMap(
-                "src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testMap.xml", new App("level1"));
+                "src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testMap.xml",
+                new App("level1"));
     }
 
     /**
