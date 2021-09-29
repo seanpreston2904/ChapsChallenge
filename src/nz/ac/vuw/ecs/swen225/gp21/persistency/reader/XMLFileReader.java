@@ -1,19 +1,18 @@
 package nz.ac.vuw.ecs.swen225.gp21.persistency.reader;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
-import nz.ac.vuw.ecs.swen225.gp21.persistency.plugin.LoadEnemyFile;
-import org.dom4j.*;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
 
@@ -29,12 +28,13 @@ public class XMLFileReader implements FileReader {
 
     private LeafReader leafReader = new LeafReader();
     private boolean isAction;            // indicates the saved file is a action records or not
-    private List<Map<String, String>> actionRecords = new ArrayList<>();// a map of actions with its records
     private Board board;
     private int level;
 
+    private List<Map<String, String>> actionRecords = new ArrayList<>();// a map of actions with its records
     private final String[] nodes =    // all XML tilesNodes
-            {"tile", "repeatTile", "enemyTile", "treasureTile", "wallTile", "doorTile", "keyTile", "boxTile"};
+            {"tile", "repeatTile", "enemyTile", "treasureTile",
+                    "wallTile", "doorTile", "keyTile", "boxTile"};
 
 
     /**
@@ -119,24 +119,21 @@ public class XMLFileReader implements FileReader {
     private void readGameFile(String fileName, boolean isMap) {
         try {
             File input = new File(fileName);
-            //InputStream inputStream = this.getClass().getResourceAsStream("/level"+level+".xml");
             SAXReader saxReader = new SAXReader();
             Document document = saxReader.read(input);
             String level =  document.getRootElement().attribute("level").getValue();
             this.level = Integer.parseInt(level);
+
             // initialize the board with free tiles
             leafReader.initializeBoard();
 
             //parse the each node in the file
             if (isMap) {
                 parseOriginalMap(document);
-                //System.out.println("Game level "+ level +" loaded.");
             }else {
                 if(this.isAction) {
-                    //System.out.println("NB: This is a copy of the saved actions.");
                     parseSavedActions(document);
                 }else {
-                    //System.out.println("NB: This is a copy of the saved game.");
                     parseSavedMap(document);
                 }
             }
@@ -158,8 +155,8 @@ public class XMLFileReader implements FileReader {
      * @param document all nodes
      */
     private void parseSavedActions(Document document){
-        List<Node> allNodes = document.selectNodes("/"+document.getRootElement().getName()+"/action");
-        //String level =  document.getRootElement().attribute("level").getValue();
+        List<Node> allNodes = document.selectNodes("/"
+                +document.getRootElement().getName()+"/action");
 
         for (Node node : allNodes) {
             Element element_root = (Element) node;
@@ -183,7 +180,8 @@ public class XMLFileReader implements FileReader {
         Element root = document.getRootElement();
         for (String node:this.nodes) {
             if (root.elements(node) != null) {
-                leafReader.parseSingleNodes(document.selectNodes("/"+document.getRootElement().getName()+"/tile"));
+                leafReader.parseSingleNodes(document.selectNodes("/"
+                        +document.getRootElement().getName()+"/tile"));
             }
         }
     }

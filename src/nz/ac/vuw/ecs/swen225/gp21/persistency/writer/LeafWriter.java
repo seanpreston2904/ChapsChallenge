@@ -5,14 +5,14 @@ import org.dom4j.Element;
 
 /**
  * "Leaf".
+ *
  * represents leaf objects in the composition.
  * Add all nodes to root element.
- * implements all Component methods.
+ * which implements all Component methods.
  *
  * @author Rae 300535154
  */
 public class LeafWriter implements FileWriter{
-
 
     /**
      * add all nodes to the file.
@@ -30,8 +30,6 @@ public class LeafWriter implements FileWriter{
         Element element1 = root.addElement("tile");
         Element XElement = element1.addElement("x");
         Element YElement = element1.addElement("y");
-
-
 
         if(info != null){
             Element infoElement = element1.addElement("message");

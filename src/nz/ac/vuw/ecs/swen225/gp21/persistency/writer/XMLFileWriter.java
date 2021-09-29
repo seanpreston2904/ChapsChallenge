@@ -6,9 +6,13 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
 import nz.ac.vuw.ecs.swen225.gp21.app.App;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.*;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Door;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Exit;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Info;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Key;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
-import nz.ac.vuw.ecs.swen225.gp21.persistency.reader.XMLFileReader;
 import org.dom4j.Element;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Document;
@@ -37,6 +41,7 @@ public class XMLFileWriter implements FileWriter {
         String rootName = "savedMap";
         writeGameToXML(fName, rootName, app);
     }
+
     /**
      *  add the game actions to XML.
      *  This is for Recorder to write each action records to a XML file.
@@ -52,7 +57,7 @@ public class XMLFileWriter implements FileWriter {
     }
 
     /**
-     * set the XML output to path.
+     * A helper method to set the XML output to path.
      *
      * @param filename out path
      * @param document doc
@@ -123,19 +128,15 @@ public class XMLFileWriter implements FileWriter {
                     switch (item) {
                         case "KEY":
                             col = ((Item_Key) tile.getItem()).getColor();
-                            //System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ col);
                             break;
                         case "LOCK_DOOR":
                             col = ((Item_Door) tile.getItem()).getColor();
-                            // System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ col);
                             break;
                         case "INFO":
                             info = ((Item_Info) tile.getItem()).getInfo();
-                            // System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ info);
                             break;
                         case "LOCK_EXIT":
                             chips = Integer.toString(((Item_Exit) tile.getItem()).getTreasure());
-                            System.out.println(tile.getType() +","+tile.getLocation()+", "+ item +" "+ chips);
                             break;
                         default:
                             System.out.println("No match tile found.");
@@ -147,8 +148,4 @@ public class XMLFileWriter implements FileWriter {
             }
         }
     }
-
-
-
-
 }
