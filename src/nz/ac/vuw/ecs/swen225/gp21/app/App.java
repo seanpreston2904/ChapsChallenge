@@ -278,7 +278,7 @@ public class App {
 	 */
 	public JMenuItem setupReplayGameMenu() {
         String[] type = {"Step by Step", "Auto replay"};
-        String[] speed = {"0.5", "1", "1.5", "2", "3"};
+        String[] speed = {"0,5", "1", "1,5", "2"};
         
         
         ImageIcon icon = new ImageIcon();
@@ -337,7 +337,7 @@ public class App {
 
                     if(playType.equals("Auto replay")) {
 
-						recorder.replay(this, Double.parseDouble(replaySpeed));
+						recorder.replay(this);
                     }
             }
             else {
