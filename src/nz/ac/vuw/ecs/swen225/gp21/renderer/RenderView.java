@@ -4,9 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.*;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
@@ -48,13 +46,11 @@ public class RenderView extends JPanel {
     private HashMap<Tile, TileAnimator> tiles;
 
     //Top left and bottom right position on the screen
-    private Point topLeft;
+    private Coordinate topLeft;
 
     //Pixel offsets for camera
     private int viewOffsetX;
     private int viewOffsetY;
-
-    Timer movePlayer;
 
     /**
      * RenderView Constructor.
@@ -74,6 +70,8 @@ public class RenderView extends JPanel {
 
         //Set board reference
         this.game = game;
+
+        this.topLeft = getViewportDimensions();
 
         //Construct animator maps
         this.actors = new HashMap<>();
@@ -110,21 +108,23 @@ public class RenderView extends JPanel {
                 //If the tile has an item, construct an animator for it
                 if(curr.getItem() != null){
 
+                    Item currItem = curr.getItem();
+
                     //Select appropriate item image
                     BufferedImage itemImage;
                     switch(curr.getItem().getType()){
 
                         case PUSH_BLOCK: itemImage = loadImage("./res/graphics/pushable_block.png"); break;
                         case LOCK_EXIT: itemImage = loadImage("./res/graphics/exit_door.png"); break;
-                        case LOCK_DOOR: itemImage = loadImage("./res/graphics/door.png"); break;
+                        case LOCK_DOOR: itemImage = loadImage("./res/graphics/door_"+((Item_Door) currItem).getColor()+".png"); break;
                         case TREASURE: itemImage = loadImage("./res/graphics/treasure.png"); break;
                         case INFO: itemImage = loadImage("./res/graphics/info.png"); break;
-                        case KEY: itemImage = loadImage("./res/graphics/key.png"); break;
+                        case KEY: itemImage = loadImage("./res/graphics/key_"+((Item_Key) currItem).getColor()+".png"); break;
                         default: itemImage = loadImage("./res/graphics/missing_texture.png"); break;
 
                     }
 
-                    items.put(curr.getItem(), new ItemAnimator(itemImage));
+                    items.put(currItem, new ItemAnimator(itemImage));
 
                 }
 
@@ -149,27 +149,23 @@ public class RenderView extends JPanel {
         int boardWidth = this.game.getBoard().getDimension().width;
         int boardHeight = this.game.getBoard().getDimension().height;
 
-        //TODO FIX THIS NASTINESS
-        Coordinate playerPosition = game.getPlayer().getPosition();
-        this.topLeft = new Point(playerPosition.getX()-4, playerPosition.getY()-4);
-
         //Get the viewport position
-        getViewportDimensions();
+        this.topLeft = getViewportDimensions();
 
         for(int row = 0; row < boardHeight; row++){
             for(int col = 0; col < boardWidth; col++){
 
-                //right, this makes sense
+                //Get tile at row, col on board.
                 Tile tile = this.game.getBoard().getTile(new Coordinate(col, row));
 
-                //Get item on tile
+                //Get item on tile.
                 Item item = this.game.getBoard().getTile(new Coordinate(col, row)).getItem();
 
-                //Calculate the X and Y position of the tile
-                int xPos = (tile.getLocation().getX() - topLeft.x) * TILE_SIZE ;
-                int yPos = (tile.getLocation().getY() - topLeft.y) * TILE_SIZE ;
+                //Calculate the X and Y position of the tile.
+                int xPos = (tile.getLocation().getX() - topLeft.getX()) * TILE_SIZE ;
+                int yPos = (tile.getLocation().getY() - topLeft.getY()) * TILE_SIZE ;
 
-                //Render tile graphic
+                //Render tile graphic.
                 g.drawImage(tiles.get(tile).getImage(), xPos, yPos, null);
 
                 //If the tile has an item on it, render it.
@@ -188,8 +184,8 @@ public class RenderView extends JPanel {
         for(Actor a: actors.keySet()){
 
             //Calculate its X and Y positions
-            int xPos = (a.getPosition().getX() - topLeft.x) * TILE_SIZE;
-            int yPos = (a.getPosition().getY() - topLeft.y) * TILE_SIZE;
+            int xPos = (a.getPosition().getX() - topLeft.getX()) * TILE_SIZE;
+            int yPos = (a.getPosition().getY() - topLeft.getY()) * TILE_SIZE;
 
             //Render actor graphic
            g.drawImage(actors.get(a).getImage(), xPos, yPos, null);
@@ -206,17 +202,47 @@ public class RenderView extends JPanel {
     /**
      * Gets the appropriate viewport dimensions
      */
-    private void getViewportDimensions(){
+    private Coordinate getViewportDimensions(){
 
-        //Get the player's position
+        //Get the player's position and the current viewport
         Coordinate playerPosition = game.getPlayer().getPosition();
+        Coordinate viewportTopLeft = new Coordinate(-1, -1);
 
-        if(playerPosition.getX() >= 4 && playerPosition.getX() < game.getBoard().getDimension().width - 4
-        && playerPosition.getY() >= 4 && playerPosition.getY() < game.getBoard().getDimension().height - 4){
+        //If the player's X position is within the size of the board - 4 on both edges, center the
+        //viewport on the player.
+        if(playerPosition.getX() >= 4
+                && playerPosition.getX() < game.getBoard().getDimension().width - 4){
 
-            this.topLeft = new Point(playerPosition.getX()-4, playerPosition.getY()-4);
+            viewportTopLeft.setX(playerPosition.getX()-4);
+
+        } else {
+
+            //If the player is on the left side of the board, set the viewport position to the left edge
+            if(playerPosition.getX() < 4){ viewportTopLeft.setX(0); }
+
+            //Otherwise, the player is on the right edge: set the viewport position to the right edge
+            else{ viewportTopLeft.setX(game.getBoard().getDimension().width - 9); }
 
         }
+
+        //If the player's Y position is within the size of the board - 4 on both edges, center the
+        //viewport on the player.
+        if(playerPosition.getY() >= 4
+                && playerPosition.getY() < game.getBoard().getDimension().height - 4){
+
+            viewportTopLeft.setY(playerPosition.getY()-4);
+
+        }else {
+
+            //If the player is on the top side of the board, set the viewport position to the top edge
+            if(playerPosition.getY() < 4){ viewportTopLeft.setY(0); }
+
+            //Otherwise, the player is on the bottom edge: set the viewport position to the bottom edge
+            else{viewportTopLeft.setY(game.getBoard().getDimension().height - 9);}
+
+        }
+
+        return viewportTopLeft;
 
     }
 

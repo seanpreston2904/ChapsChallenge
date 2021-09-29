@@ -159,34 +159,17 @@ public class PersistenceTests {
      */
     @Test
     public void test_8() {
-        try {
-            Document document = DocumentHelper.createDocument();
-            Element root = document.addElement("savedAction");
+        Document document = DocumentHelper.createDocument();
+        Element root = document.addElement("savedAction");
 
-            root.addAttribute("level", "2");
+        root.addAttribute("level", "2");
 
-            writer.addActionNode(root, 90, "hero", "NORTH");
-            writer.addActionNode(root, 80, "hero", "NORTH");
-            writer.addActionNode(root, 70, "hero", "NORTH");
+        writer.addActionNode(root, 90, "hero", "NORTH");
+        writer.addActionNode(root, 80, "hero", "NORTH");
+        writer.addActionNode(root, 70, "hero", "NORTH");
+        writer.addActionNode(root, 60, "hero", "NORTH");
 
-            /* set the XML output Format with line change and index */
-            OutputFormat XMLFormat = OutputFormat.createPrettyPrint();
-            XMLFormat.setEncoding("UTF-8");
-
-            // write the output XML to the path
-            OutputStreamWriter writer = new OutputStreamWriter(
-                    new FileOutputStream(outAction),
-                    StandardCharsets.UTF_8);
-            XMLWriter XMLWriter = new XMLWriter(writer, XMLFormat);
-            XMLWriter.write(document);
-            XMLWriter.flush();
-            XMLWriter.close();
-
-            System.out.println("\nXML file created!");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        writer.setupXMLOut(outAction, document);
 
     }
 
