@@ -41,6 +41,7 @@ public class XMLFileWriter implements FileWriter {
         String rootName = "savedMap";
         writeGameToXML(fName, rootName, app);
     }
+
     /**
      *  add the game actions to XML.
      *  This is for Recorder to write each action records to a XML file.
@@ -130,7 +131,6 @@ public class XMLFileWriter implements FileWriter {
                             break;
                         case "LOCK_DOOR":
                             col = ((Item_Door) tile.getItem()).getColor();
-
                             break;
                         case "INFO":
                             info = ((Item_Info) tile.getItem()).getInfo();

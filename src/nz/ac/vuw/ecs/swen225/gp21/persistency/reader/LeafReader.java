@@ -27,9 +27,10 @@ import java.util.Map;
 public class LeafReader implements FileReader{
     private static final int HEIGHT = 9;  // the height of the board
     private static final int WIDTH = 11;  // the width of the board
-    private Board board;                 // the current board
-    private List<String> enemyName = new ArrayList<>();       // enemy name
 
+    private Board board;                 // the current board
+
+    private List<String> enemyName = new ArrayList<>();       // enemy name
     private List<Coordinate> bugStartPos = new ArrayList<>();
 
     /**

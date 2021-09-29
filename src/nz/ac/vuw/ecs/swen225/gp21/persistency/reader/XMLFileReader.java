@@ -28,10 +28,10 @@ public class XMLFileReader implements FileReader {
 
     private LeafReader leafReader = new LeafReader();
     private boolean isAction;            // indicates the saved file is a action records or not
-    private List<Map<String, String>> actionRecords = new ArrayList<>();// a map of actions with its records
     private Board board;
     private int level;
 
+    private List<Map<String, String>> actionRecords = new ArrayList<>();// a map of actions with its records
     private final String[] nodes =    // all XML tilesNodes
             {"tile", "repeatTile", "enemyTile", "treasureTile",
                     "wallTile", "doorTile", "keyTile", "boxTile"};

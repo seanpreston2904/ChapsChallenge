@@ -14,7 +14,6 @@ import org.dom4j.Element;
  */
 public class LeafWriter implements FileWriter{
 
-
     /**
      * add all nodes to the file.
      *
@@ -31,8 +30,6 @@ public class LeafWriter implements FileWriter{
         Element element1 = root.addElement("tile");
         Element XElement = element1.addElement("x");
         Element YElement = element1.addElement("y");
-
-
 
         if(info != null){
             Element infoElement = element1.addElement("message");
