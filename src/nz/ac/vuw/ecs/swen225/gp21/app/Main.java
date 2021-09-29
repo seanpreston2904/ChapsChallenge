@@ -10,16 +10,24 @@ import nz.ac.vuw.ecs.swen225.gp21.app.TitleScreen;
  */
 public class Main{		
 	private static ArrayList<String> savedFile = new ArrayList<>();
-	private static ArrayList<String> savedRecording = new ArrayList<>();
-	
+	private static ArrayList<String> savedRecording = new ArrayList<>();	
 	public static ArrayList<String> getAllSavedFile() {
 		return savedFile;
 	}
 	
+	/**
+	 * A getter method that returns all the saved recordings.
+	 * 
+	 * @return savedRecording all the saved recordings
+	 */	
 	public static ArrayList<String> getAllSavedRecording() {
 		return savedRecording;
 	}
+	 
 	
+	/**
+	 * A main method that executes the game by opening a title screen first.
+	 */
 	public static void main(String[] args) {
 		new TitleScreen();
 

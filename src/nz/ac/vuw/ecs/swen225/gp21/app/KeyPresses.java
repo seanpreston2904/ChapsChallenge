@@ -13,6 +13,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Key;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.writer.XMLFileWriter;
 import nz.ac.vuw.ecs.swen225.gp21.recorder.Recorder;
@@ -131,14 +132,7 @@ public class KeyPresses implements KeyListener {
 			if(!app.getDomain().isRunning()) {
 				app.finishGame();				
 			}
-			else {
-				
-			}
-			
-//			if(infoMessage != null) {
-//				JOptionPane.showMessageDialog(app.getMainFrame(), infoMessage);	
-//			}
-										
+									
 		}
 			
 		// ESC
@@ -164,6 +158,10 @@ public class KeyPresses implements KeyListener {
 	
 	}
 	
+	/**
+	 * This method is called whenever a move is made so that the game updates the inventory panel if 
+	 * is picked up or used.
+	 */
 	public void updateInventoryPanel() {
 
 		// if hero's inventory is not the same size as the App's inventory
@@ -183,7 +181,8 @@ public class KeyPresses implements KeyListener {
 				if(items[i] != null) {
 
 					String id = items[i].getId();
-					itemsPanel[i].setIcon(new ImageIcon("res/graphics/key.png"));						
+					Item_Key itemKey = (Item_Key) items[i];
+					itemsPanel[i].setIcon(new ImageIcon("res/graphics/key_" + itemKey.getColor() + ".png"));					
 				}
 				
 				else {
@@ -199,6 +198,12 @@ public class KeyPresses implements KeyListener {
 		
 	}
 	
+	/**
+	 * This method is called whenever a move is made so that the game updates the inventory panel if 
+	 * is picked up or used.
+	 * 
+	 * @return the paused dialoge
+	 */
 	public JPanel setPausedDialoge() {
 		
 		Border border = BorderFactory.createLineBorder(Color.BLACK, 8);
@@ -225,7 +230,11 @@ public class KeyPresses implements KeyListener {
 	}
 	
 	
-	
+	/**
+	 * This method is used to move a hero at a given direction.
+	 * 
+	 * @param dir direction 
+	 */
 	public void moveHero(Direction dir) {	
 		this.hero.setFacing(dir);
 		domain.moveActor(this.hero, dir);
@@ -239,6 +248,9 @@ public class KeyPresses implements KeyListener {
 
 	}
 	
+	/**
+	 * This method is called when player wants to save a game.
+	 */
 	public void saveGame() {
 		
 		XMLFileWriter fileWriter = new XMLFileWriter();
@@ -253,6 +265,9 @@ public class KeyPresses implements KeyListener {
 		
 	}
 	
+	/**
+	 * This method is called when player wants to open a saved game.
+	 */
 	public void openSavedGame() {
 		ImageIcon icon = new ImageIcon("...");
     	String[] levels = {"level1", "level2"};
@@ -271,6 +286,11 @@ public class KeyPresses implements KeyListener {
  
 	}
 	
+	/**
+	 * This method is called when player wants to start a new game with a specified level.
+	 * 
+	 * @param level level of the game that player wants to play
+	 */
 	public void startNewGame(int level) {
 		
 		countdownPanel.pause();
@@ -288,27 +308,41 @@ public class KeyPresses implements KeyListener {
         
 	}
 	
+	/**
+	 * This method is called when player wants to pause the game.
+	 */
 	public void pause() {
 		countdownPanel.pause();					
 		countdownPanel.getPanel().setVisible(false);
 		app.getRenderView().setVisible(false);
-		pausedDialoge.setVisible(true);	
+		pausedDialoge.setVisible(true);
+		app.pauseMenuItem.setEnabled(false);
+		app.resumeMenuItem.setEnabled(true);
 	}
 	
+	/**
+	 * This method is called when player wants to resume the game.
+	 */
 	public void resume() {
 		countdownPanel.getPanel().setVisible(true);
 		app.getRenderView().setVisible(true);
 		pausedDialoge.setVisible(false);
 		countdownPanel.start();	
+		app.pauseMenuItem.setEnabled(true);
+		app.resumeMenuItem.setEnabled(false);
 	}
 	
+	/**
+	 * This method is called when player wants to record a finished game.
+	 */
 	public void record() {
 		
 		String fname = JOptionPane.showInputDialog("Name your record file:");
 
 		if (fname != null) {
 			if (fname.length() > 0) {
-				app.getRecorder().saveAll(fname, app.getLevel());
+				String extension = ".xmlrecord";
+				app.getRecorder().saveAll(fname+extension, app.getLevel());
 			}
 		}
 		

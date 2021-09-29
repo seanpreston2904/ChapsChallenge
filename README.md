@@ -31,6 +31,8 @@
     Level 2:  
     - time 90sec
     - total chip: 6
+    - monsters: 2 bugs, 1 Wasp
+    - pushable block: 4
     NB: watch out the monsters.
 
 
