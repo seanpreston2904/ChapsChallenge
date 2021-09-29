@@ -292,7 +292,7 @@ public class App {
 
                     if(playType.equals("Auto replay")) {
 
-						recorder.replay(this);
+						recorder.replay(this, Double.parseDouble(replaySpeed));
                     }
                     
                     else {
@@ -316,30 +316,57 @@ public class App {
 
 	/*----------------SETTERS AND GETTERS METHODS --------------------------------*/
 	
+	/**
+	 * A setter method for the timer.
+	 */
 	public void setTimer(int timer) {
 		this.timer = timer;
 	}
 	
+	/**
+	 * A setter method for the remaining treasure.
+	 */
 	public void setRemainingTreasures(int remainingTreasures) {
 		this.remaining_chips = remainingTreasures;
 	}
 	
+	/**
+	 * A setter method for the level.
+	 */
 	public void setLevel(int level) {
 		this.level = level;
 	}
 	
+	/**
+	 * A setter method for the domain.
+	 */
 	public void setDomain(Domain finishedDomain) {
 		this.domain = finishedDomain;
 	}
 	
+	/**
+	 * A getter method that returns the remaining time.
+	 * 
+	 * @return time
+	 */
 	public int getTimer() {
 		return countdown_pan.getTimer();				
 	}
 	
+	/**
+	 * A getter method that returns the game's level.
+	 * 
+	 * @return level of the game
+	 */	
 	public int getLevel() {
 		return level;
 	}
 	
+	/**
+	 * A getter method that returns the game's remaining treasures.
+	 * 
+	 * @return remaining treasures in the game
+	 */	
 	public int getRemainingTreasures() {
 		return domain.getRemainingChips();
 	}
