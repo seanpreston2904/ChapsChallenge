@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * unit tests for Persistence Module.
  */
-public class PersistenceTests {
+public class PersistenceTest {
     private String file1 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"; // game level1 map
     private String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
     private String outAction = "src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testAction.xml";
