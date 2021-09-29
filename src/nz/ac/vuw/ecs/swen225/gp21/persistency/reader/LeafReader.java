@@ -1,13 +1,20 @@
 package nz.ac.vuw.ecs.swen225.gp21.persistency.reader;
 
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.*;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Door;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Exit;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Info;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Key;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Push_Block;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Treasure;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
-import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * "Leaf".
@@ -54,7 +61,8 @@ public class LeafReader implements FileReader{
             // get the location of the tile
             String x = node.selectSingleNode("x").getText();
             String y = node.selectSingleNode("y").getText();
-            Coordinate pos = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
+            Coordinate pos = new Coordinate(Integer.parseInt(x),
+                    Integer.parseInt(y));
 
             // set each tile at corresponding position
             setSingleTileOnBoard(type, pos, message, col, total_chips);
@@ -76,11 +84,13 @@ public class LeafReader implements FileReader{
             // get the start location
             String x_start = node.selectSingleNode("x_start").getText();
             String y_start = node.selectSingleNode("y_start").getText();
-            Coordinate startPos = new Coordinate(Integer.parseInt(x_start), Integer.parseInt(y_start));
+            Coordinate startPos = new Coordinate(Integer.parseInt(x_start),
+                    Integer.parseInt(y_start));
             // get the end location
             String x_end = node.selectSingleNode("x_end").getText();
             String y_end = node.selectSingleNode("y_end").getText();
-            Coordinate endPos = new Coordinate(Integer.parseInt(x_end), Integer.parseInt(y_end));
+            Coordinate endPos = new Coordinate(Integer.parseInt(x_end),
+                    Integer.parseInt(y_end));
 
             //set each wall tile at corresponding position
             setWallOnBoard(startPos, endPos);
@@ -112,7 +122,8 @@ public class LeafReader implements FileReader{
                 String x = ele.attributeValue("x");
                 String y = ele.attributeValue("y");
                 //System.out.println("x : " + x + ", y : " + y);
-                Coordinate coordinate = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
+                Coordinate coordinate = new Coordinate(Integer.parseInt(x),
+                        Integer.parseInt(y));
 
                 //set list of tiles at corresponding position
                 setSingleTileOnBoard(type, coordinate, null, col, null);
@@ -129,7 +140,8 @@ public class LeafReader implements FileReader{
         //fill each tile as FREE type
         for (int x = 0; x < WIDTH; x++){
             for (int y = 0; y < HEIGHT; y++){
-                this.board.setTile(new Coordinate(x, y), new Tile(new Coordinate(x, y), TileType.FREE,null));
+                this.board.setTile(new Coordinate(x, y), new Tile(new Coordinate(x, y),
+                        TileType.FREE,null));
             }
         }
     }
@@ -143,7 +155,8 @@ public class LeafReader implements FileReader{
     public void setWallOnBoard(Coordinate startPos, Coordinate endPos){
         for (int x = startPos.getX(); x < endPos.getX()+1; x++){
             for (int y = startPos.getY(); y < endPos.getY()+1; y++){
-                this.board.setTile(new Coordinate(x, y), new Tile(new Coordinate(x, y), TileType.WALL,null));
+                this.board.setTile(new Coordinate(x, y), new Tile(new Coordinate(x, y),
+                        TileType.WALL,null));
             }
         }
     }
@@ -156,7 +169,8 @@ public class LeafReader implements FileReader{
      * @param message info msg
      * @param col key/door color
      */
-    public void setSingleTileOnBoard(String type, Coordinate pos, String message, String col, String total_chips){
+    public void setSingleTileOnBoard(String type, Coordinate pos, String message,
+                                     String col, String total_chips){
         // set each tile at corresponding position
         switch (type) {
             case "chap":
@@ -175,7 +189,8 @@ public class LeafReader implements FileReader{
                 board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Info(message)));
                 break;
             case "LOCK_EXIT":
-                board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Exit(Integer.parseInt(total_chips))));
+                board.setTile(pos, new Tile(pos, TileType.FREE,
+                        new Item_Exit(Integer.parseInt(total_chips))));
                 break;
             case "TREASURE":
                 board.setTile(pos, new Tile(pos, TileType.FREE, new Item_Treasure()));

@@ -6,9 +6,13 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
 import nz.ac.vuw.ecs.swen225.gp21.app.App;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.*;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Door;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Exit;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Info;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Key;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
-import nz.ac.vuw.ecs.swen225.gp21.persistency.reader.XMLFileReader;
 import org.dom4j.Element;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Document;
@@ -52,7 +56,7 @@ public class XMLFileWriter implements FileWriter {
     }
 
     /**
-     * set the XML output to path.
+     * A helper method to set the XML output to path.
      *
      * @param filename out path
      * @param document doc
@@ -144,8 +148,4 @@ public class XMLFileWriter implements FileWriter {
             }
         }
     }
-
-
-
-
 }

@@ -5,9 +5,10 @@ import org.dom4j.Element;
 
 /**
  * "Leaf".
+ *
  * represents leaf objects in the composition.
  * Add all nodes to root element.
- * implements all Component methods.
+ * which implements all Component methods.
  *
  * @author Rae 300535154
  */

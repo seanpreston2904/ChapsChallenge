@@ -13,22 +13,10 @@ import nz.ac.vuw.ecs.swen225.gp21.persistency.writer.XMLFileWriter;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.XMLWriter;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.MalformedURLException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * unit tests for Persistence Module.
