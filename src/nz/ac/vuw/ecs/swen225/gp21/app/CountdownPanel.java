@@ -289,6 +289,8 @@ public class CountdownPanel implements ActionListener {
 		started = true;
 		timer.start();
 		bugTimer.start();
+		app.pauseMenuItem.setEnabled(true);
+		app.resumeMenuItem.setEnabled(false);
 	}
 	
 	/**
@@ -299,6 +301,8 @@ public class CountdownPanel implements ActionListener {
 		started = false;		
 		timer.stop();
 		bugTimer.stop();
+		app.pauseMenuItem.setEnabled(false);
+		app.resumeMenuItem.setEnabled(true);
 	}	
 	
 	/**
@@ -347,6 +351,15 @@ public class CountdownPanel implements ActionListener {
 		return started;
 	}
 	
+	/**
+	 * Set the started field true or false.
+	 * 
+	 * @param startedOrPaused started or not
+	 */
+	public void setStarted(boolean startedOrPaused) {
+		this.started = startedOrPaused;
+	}
+	
 	//--------------GETTER METHODS----------------------------------
 	
 	public int getTimer() {
@@ -356,4 +369,18 @@ public class CountdownPanel implements ActionListener {
 	public int getRemainingTreasures() {
 		return chips_left_value;
 	}	
+	
+	/**
+	 * Setter method for both the seconds remaining and the label to display them.
+	 *
+	 * @param seconds_remaining
+	 *
+	 */
+	public void updateTime(int seconds_remaining) {
+		this.seconds_remaining = seconds_remaining;
+		time_left.setText("" + seconds_remaining);
+	}
+	
+
+
 }

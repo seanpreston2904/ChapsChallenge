@@ -131,14 +131,7 @@ public class KeyPresses implements KeyListener {
 			if(!app.getDomain().isRunning()) {
 				app.finishGame();				
 			}
-			else {
-				
-			}
-			
-//			if(infoMessage != null) {
-//				JOptionPane.showMessageDialog(app.getMainFrame(), infoMessage);	
-//			}
-										
+									
 		}
 			
 		// ESC
@@ -292,7 +285,9 @@ public class KeyPresses implements KeyListener {
 		countdownPanel.pause();					
 		countdownPanel.getPanel().setVisible(false);
 		app.getRenderView().setVisible(false);
-		pausedDialoge.setVisible(true);	
+		pausedDialoge.setVisible(true);
+		app.pauseMenuItem.setEnabled(false);
+		app.resumeMenuItem.setEnabled(true);
 	}
 	
 	public void resume() {
@@ -300,6 +295,8 @@ public class KeyPresses implements KeyListener {
 		app.getRenderView().setVisible(true);
 		pausedDialoge.setVisible(false);
 		countdownPanel.start();	
+		app.pauseMenuItem.setEnabled(true);
+		app.resumeMenuItem.setEnabled(false);
 	}
 	
 	public void record() {
@@ -308,7 +305,8 @@ public class KeyPresses implements KeyListener {
 
 		if (fname != null) {
 			if (fname.length() > 0) {
-				app.getRecorder().saveAll(fname, app.getLevel());
+				String extension = ".xmlrecord";
+				app.getRecorder().saveAll(fname+extension, app.getLevel());
 			}
 		}
 		
