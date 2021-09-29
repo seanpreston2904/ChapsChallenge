@@ -21,7 +21,9 @@ public abstract class Enemy extends Actor {
     /**
      * Default constructor no parameters.
      */
-    public Enemy() {}
+    public Enemy() {
+        super();
+    }
 
     /**
      * Alternative constructor which randomly generates.

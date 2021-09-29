@@ -19,8 +19,13 @@ public enum Direction {
      * @return
      *
      */
-    public static Direction parseDirection(String direction) {
-        switch (direction) {
+	public static Direction parseDirection(String direction) {
+        // boundary case checks
+        if (direction == null) return null;
+
+        //System.out.print("WE GOT HERE");
+
+        switch (direction.toLowerCase()) {
             case "north":
                 return NORTH;
             case "east":
@@ -30,6 +35,7 @@ public enum Direction {
             case "west":
                 return WEST;
             default:
+                //System.out.println("OTHER " + direction);
                 return null;
         }
     }

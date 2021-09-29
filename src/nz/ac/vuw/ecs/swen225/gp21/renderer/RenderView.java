@@ -4,9 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.*;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
@@ -48,13 +46,11 @@ public class RenderView extends JPanel {
     private HashMap<Tile, TileAnimator> tiles;
 
     //Top left and bottom right position on the screen
-    private Point topLeft;
+    private Coordinate topLeft;
 
     //Pixel offsets for camera
     private int viewOffsetX;
     private int viewOffsetY;
-
-    Timer movePlayer;
 
     /**
      * RenderView Constructor.
@@ -75,13 +71,19 @@ public class RenderView extends JPanel {
         //Set board reference
         this.game = game;
 
+        this.topLeft = getViewportDimensions();
+
         //Construct animator maps
         this.actors = new HashMap<>();
         this.items = new HashMap<>();
         this.tiles = new HashMap<>();
 
-        //Add player to actor map
-        this.actors.put(this.game.getPlayer(), new ActorAnimator(this.game.getPlayer()));
+        //Add actors to actor map
+        for(Actor a: this.game.getActors()){
+            actors.put(a, new ActorAnimator(loadImage("./res/graphics/"+a.getName()+".png")));
+        }
+
+        actors.put(this.game.getPlayer(), new ActorAnimator(loadImage("./res/graphics/player.png")));
 
         //Set animator maps
         for(int row = 0; row < this.game.getBoard().getDimension().height; row++){
@@ -89,10 +91,42 @@ public class RenderView extends JPanel {
 
                 //Get the current tile on the board and construct an animator for it
                 Tile curr = this.game.getBoard().getTile(new Coordinate(col, row));
-                tiles.put(curr, new TileAnimator(curr));
+
+                //Select appropriate tile image
+                BufferedImage tileImage;
+                switch(curr.getType()){
+
+                    case WALL: tileImage = loadImage("./res/graphics/wall_full.png"); break;
+                    case FREE: tileImage = loadImage("./res/graphics/floor.png"); break;
+                    case EXIT: tileImage = loadImage("./res/graphics/exit.png"); break;
+                    default: tileImage = loadImage("./res/graphics/missing_texture.png");
+
+                }
+
+                tiles.put(curr, new TileAnimator(tileImage));
 
                 //If the tile has an item, construct an animator for it
-                if(curr.getItem() != null){ items.put(curr.getItem(), new ItemAnimator()); }
+                if(curr.getItem() != null){
+
+                    Item currItem = curr.getItem();
+
+                    //Select appropriate item image
+                    BufferedImage itemImage;
+                    switch(curr.getItem().getType()){
+
+                        case PUSH_BLOCK: itemImage = loadImage("./res/graphics/pushable_block.png"); break;
+                        case LOCK_EXIT: itemImage = loadImage("./res/graphics/exit_door.png"); break;
+                        case LOCK_DOOR: itemImage = loadImage("./res/graphics/door_"+((Item_Door) currItem).getColor()+".png"); break;
+                        case TREASURE: itemImage = loadImage("./res/graphics/treasure.png"); break;
+                        case INFO: itemImage = loadImage("./res/graphics/info.png"); break;
+                        case KEY: itemImage = loadImage("./res/graphics/key_"+((Item_Key) currItem).getColor()+".png"); break;
+                        default: itemImage = loadImage("./res/graphics/missing_texture.png"); break;
+
+                    }
+
+                    items.put(currItem, new ItemAnimator(itemImage));
+
+                }
 
             }
 
@@ -116,42 +150,29 @@ public class RenderView extends JPanel {
         int boardHeight = this.game.getBoard().getDimension().height;
 
         //Get the viewport position
-        getViewportDimensions();
+        this.topLeft = getViewportDimensions();
 
         for(int row = 0; row < boardHeight; row++){
             for(int col = 0; col < boardWidth; col++){
 
-                //right, this makes sense
-                TileAnimator tile = tiles.get(this.game.getBoard().getTile(new Coordinate(col, row)));
+                //Get tile at row, col on board.
+                Tile tile = this.game.getBoard().getTile(new Coordinate(col, row));
 
-                //Get item on tile
-                ItemAnimator item = items.get(this.game.getBoard().getTile(new Coordinate(col, row)).getItem());
+                //Get item on tile.
+                Item item = this.game.getBoard().getTile(new Coordinate(col, row)).getItem();
 
-                //Calculate the X and Y position of the tile
-                int xPos = (tile.getTile().getLocation().getX() - topLeft.x) * TILE_SIZE ;
-                int yPos = (tile.getTile().getLocation().getY() - topLeft.y) * TILE_SIZE ;
+                //Calculate the X and Y position of the tile.
+                int xPos = (tile.getLocation().getX() - topLeft.getX()) * TILE_SIZE ;
+                int yPos = (tile.getLocation().getY() - topLeft.getY()) * TILE_SIZE ;
 
-                //Render appropriate tile graphic
-                switch(tile.getTile().getType()){
-
-                    case FREE: g.drawImage(ImagePaths.IMG_FLOOR, xPos, yPos, null); break;
-                    case WALL: g.drawImage(ImagePaths.IMG_WALL_FULL, xPos, yPos, null); break;
-                    case EXIT: g.drawImage(ImagePaths.IMG_EXIT, xPos, yPos, null); break;
-
-                }
+                //Render tile graphic.
+                g.drawImage(tiles.get(tile).getImage(), xPos, yPos, null);
 
                 //If the tile has an item on it, render it.
                 if(item != null){
 
-                    //Draw appropriate image
-                    switch (tile.getTile().getItem().getType()){
-
-                        case INFO: g.drawImage(ImagePaths.IMG_INFO, xPos, yPos, null); break;
-                        case TREASURE: g.drawImage(ImagePaths.IMG_TREASURE, xPos, yPos, null); break;
-                        case KEY: g.drawImage(ImagePaths.IMG_KEY, xPos, yPos, null); break;
-                        case LOCK_DOOR: g.drawImage(ImagePaths.IMG_DOOR, xPos, yPos, null); break;
-
-                    }
+                    //Render image graphic
+                    g.drawImage(items.get(item).getImage(), xPos, yPos, null);
 
                 }
 
@@ -160,14 +181,14 @@ public class RenderView extends JPanel {
         }
 
         //For each actor...
-        for(ActorAnimator a: actors.values()){
+        for(Actor a: actors.keySet()){
 
             //Calculate its X and Y positions
-            int xPos = (a.actor.getPosition().getX() - topLeft.x) * TILE_SIZE;
-            int yPos = (a.actor.getPosition().getY() - topLeft.y) * TILE_SIZE;
+            int xPos = (a.getPosition().getX() - topLeft.getX()) * TILE_SIZE;
+            int yPos = (a.getPosition().getY() - topLeft.getY()) * TILE_SIZE;
 
-            //If the actor is a player, render the player graphic
-            if(a.actor instanceof Player){ g.drawImage(ImagePaths.IMG_PLAYER, xPos, yPos, null); }
+            //Render actor graphic
+           g.drawImage(actors.get(a).getImage(), xPos, yPos, null);
 
         }
 
@@ -181,17 +202,47 @@ public class RenderView extends JPanel {
     /**
      * Gets the appropriate viewport dimensions
      */
-    private void getViewportDimensions(){
+    private Coordinate getViewportDimensions(){
 
-        //Get the player's position
+        //Get the player's position and the current viewport
         Coordinate playerPosition = game.getPlayer().getPosition();
+        Coordinate viewportTopLeft = new Coordinate(-1, -1);
 
-        if(playerPosition.getX() >= 4 && playerPosition.getX() < game.getBoard().getDimension().width - 4
-        && playerPosition.getY() >= 4 && playerPosition.getY() < game.getBoard().getDimension().height - 4){
+        //If the player's X position is within the size of the board - 4 on both edges, center the
+        //viewport on the player.
+        if(playerPosition.getX() >= 4
+                && playerPosition.getX() < game.getBoard().getDimension().width - 4){
 
-            this.topLeft = new Point(playerPosition.getX()-4, playerPosition.getY()-4);
+            viewportTopLeft.setX(playerPosition.getX()-4);
+
+        } else {
+
+            //If the player is on the left side of the board, set the viewport position to the left edge
+            if(playerPosition.getX() < 4){ viewportTopLeft.setX(0); }
+
+            //Otherwise, the player is on the right edge: set the viewport position to the right edge
+            else{ viewportTopLeft.setX(game.getBoard().getDimension().width - 9); }
 
         }
+
+        //If the player's Y position is within the size of the board - 4 on both edges, center the
+        //viewport on the player.
+        if(playerPosition.getY() >= 4
+                && playerPosition.getY() < game.getBoard().getDimension().height - 4){
+
+            viewportTopLeft.setY(playerPosition.getY()-4);
+
+        }else {
+
+            //If the player is on the top side of the board, set the viewport position to the top edge
+            if(playerPosition.getY() < 4){ viewportTopLeft.setY(0); }
+
+            //Otherwise, the player is on the bottom edge: set the viewport position to the bottom edge
+            else{viewportTopLeft.setY(game.getBoard().getDimension().height - 9);}
+
+        }
+
+        return viewportTopLeft;
 
     }
 
@@ -204,5 +255,27 @@ public class RenderView extends JPanel {
      * Stops the renderer.
      */
     public void stopRender(){ timer.stop(); }
+
+    /**
+     * Loads an image from a specified directory
+     *
+     * @param dir Location of image on disk.
+     * @return a BufferedImage loaded with image from specified location.
+     */
+    private BufferedImage loadImage(String dir){
+
+        try{
+
+            return ImageIO.read(new File(dir));
+
+        }catch(IOException e){
+
+            System.err.println("Image at: \"" + dir + "\" was not found!\n"+e.getMessage());
+
+        }
+
+        return null;
+
+    }
 
 }

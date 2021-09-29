@@ -110,46 +110,6 @@ public class XMLFileReader implements FileReader {
         return leafReader.getEnemyName();
     }
 
-
-    /*----------------The debug function--------------------------------------------------------*/
-
-    /**
-     * print the board with all tiles.
-     */
-    public void printBoard() {
-        String file1 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"; // game level1 map
-        String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
-        Board board = loadOriginMap(file2);
-        //Board board =loadSavedMap("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/savedMap.xml");
-
-        for (int x = 0; x < 11; x++){
-            for (int y = 0; y < 9; y++){
-                Tile tile = board.getTile(new Coordinate(x,y));
-                System.out.println(tile.getType() +", "+tile.getLocation()+", "+tile.getItem());
-            }
-        }
-        System.out.println("\n--------------------\nBug starts pos: "
-                + getEnemyStartPos()
-                +"\n--------------------\n");
-
-    }
-
-    public static void main(String[] args) throws ClassNotFoundException, MalformedURLException, InstantiationException, IllegalAccessException {
-        XMLFileReader p = new XMLFileReader();
-//        p.printBoard();
-        String file1 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level1.xml"; // game level1 map
-        String file2 = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/level2.xml"; // game level2 map
-        p.loadOriginMap(file2);
-        System.out.println("\n--------------------\nenemy: "
-                + p.getEnemyStartPos()+ p.getEnemyName()
-                +"\n--------------------\n");
-
-//        System.out.println("Records: " +
-//                p.loadSavedActions("src/test/nz/ac/vuw/ecs/swen225/gp21/persistency/testAction.xml"));
-
-    }
-    /* ------------------------------------------------------------------------------------------ */
-
     /**
      * loads game from XML files.The original game level file & saved game state file.
      *
@@ -170,13 +130,13 @@ public class XMLFileReader implements FileReader {
             //parse the each node in the file
             if (isMap) {
                 parseOriginalMap(document);
-                System.out.println("Game level "+ level +" loaded.");
+                //System.out.println("Game level "+ level +" loaded.");
             }else {
                 if(this.isAction) {
-                    System.out.println("NB: This is a copy of the saved actions.");
+                    //System.out.println("NB: This is a copy of the saved actions.");
                     parseSavedActions(document);
                 }else {
-                    System.out.println("NB: This is a copy of the saved game.");
+                    //System.out.println("NB: This is a copy of the saved game.");
                     parseSavedMap(document);
                 }
             }

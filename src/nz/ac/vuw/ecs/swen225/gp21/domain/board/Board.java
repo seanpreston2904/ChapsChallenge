@@ -1,12 +1,15 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain.board;
 
 
+import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
+import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -125,7 +128,7 @@ public class Board {
      * @return - TRUE if it is a valid move.
      *
      */
-    public boolean validMove(Coordinate moveTo, Actor actor) {
+    public boolean validMove(ArrayList<Actor> enemies, Coordinate moveTo, Actor actor) {
         // is it null
         if (moveTo == null) {
             throw new NullPointerException("Illegal moveTo location");
@@ -141,6 +144,13 @@ public class Board {
             return false;
         }
 
+        // check a list of other actors to not collide with, (is an enemy trying to stand on another enemy)
+        if (!(actor instanceof Player)) {
+            if (Domain.anotherEnemyInThisSpace(enemies, moveTo) != null) {
+                return false;
+            }
+        }
+
         // check for impassible items
         // check for items that interaction will allow us to pass through
         Item item = board[moveTo.getX()][moveTo.getY()].getItem();
@@ -154,7 +164,7 @@ public class Board {
                 // attempt to interact with
                 if (item instanceof PreMove) {
                     System.out.println("Pre Moving " + actor.getPosition());
-                    return ((PreMove) item).preInteract(this, actor);
+                    return ((PreMove) item).preInteract(this, enemies, actor);
                 }
 
                 return false;
