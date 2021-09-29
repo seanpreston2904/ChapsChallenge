@@ -4,9 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.*;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
@@ -54,8 +52,6 @@ public class RenderView extends JPanel {
     private int viewOffsetX;
     private int viewOffsetY;
 
-    Timer movePlayer;
-
     /**
      * RenderView Constructor.
      *
@@ -69,18 +65,12 @@ public class RenderView extends JPanel {
         this.setMaximumSize(VIEWPORT_SIZE);
         this.setMinimumSize(VIEWPORT_SIZE);
 
-        //TODO FIX THIS NASTINESS
-        //Coordinate playerPosition = game.getPlayer().getPosition();
-        //this.topLeft = new Coordinate(playerPosition.getX()-4, playerPosition.getY()-4);
-
         //Construct timer
         timer = new Timer((int)FPS_60, action -> update());
 
         //Set board reference
         this.game = game;
 
-        this.topLeft = new Coordinate(game.getPlayer().getPosition().getX() -4,
-                game.getPlayer().getPosition().getX() -4);
         this.topLeft = getViewportDimensions();
 
         //Construct animator maps
@@ -118,21 +108,23 @@ public class RenderView extends JPanel {
                 //If the tile has an item, construct an animator for it
                 if(curr.getItem() != null){
 
+                    Item currItem = curr.getItem();
+
                     //Select appropriate item image
                     BufferedImage itemImage;
                     switch(curr.getItem().getType()){
 
                         case PUSH_BLOCK: itemImage = loadImage("./res/graphics/pushable_block.png"); break;
                         case LOCK_EXIT: itemImage = loadImage("./res/graphics/exit_door.png"); break;
-                        case LOCK_DOOR: itemImage = loadImage("./res/graphics/door.png"); break;
+                        case LOCK_DOOR: itemImage = loadImage("./res/graphics/door_"+((Item_Door) currItem).getColor()+".png"); break;
                         case TREASURE: itemImage = loadImage("./res/graphics/treasure.png"); break;
                         case INFO: itemImage = loadImage("./res/graphics/info.png"); break;
-                        case KEY: itemImage = loadImage("./res/graphics/key.png"); break;
+                        case KEY: itemImage = loadImage("./res/graphics/key_"+((Item_Key) currItem).getColor()+".png"); break;
                         default: itemImage = loadImage("./res/graphics/missing_texture.png"); break;
 
                     }
 
-                    items.put(curr.getItem(), new ItemAnimator(itemImage));
+                    items.put(currItem, new ItemAnimator(itemImage));
 
                 }
 
@@ -163,17 +155,17 @@ public class RenderView extends JPanel {
         for(int row = 0; row < boardHeight; row++){
             for(int col = 0; col < boardWidth; col++){
 
-                //right, this makes sense
+                //Get tile at row, col on board.
                 Tile tile = this.game.getBoard().getTile(new Coordinate(col, row));
 
-                //Get item on tile
+                //Get item on tile.
                 Item item = this.game.getBoard().getTile(new Coordinate(col, row)).getItem();
 
-                //Calculate the X and Y position of the tile
+                //Calculate the X and Y position of the tile.
                 int xPos = (tile.getLocation().getX() - topLeft.getX()) * TILE_SIZE ;
                 int yPos = (tile.getLocation().getY() - topLeft.getY()) * TILE_SIZE ;
 
-                //Render tile graphic
+                //Render tile graphic.
                 g.drawImage(tiles.get(tile).getImage(), xPos, yPos, null);
 
                 //If the tile has an item on it, render it.
