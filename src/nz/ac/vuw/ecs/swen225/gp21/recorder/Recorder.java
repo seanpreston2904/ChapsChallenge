@@ -42,20 +42,37 @@ public class Recorder {
 	}
 	
 	public void saveAll(String filename, int level) {
-        Document document = DocumentHelper.createDocument();
-        Element root = document.addElement("savedAction");
+		try {
+            Document document = DocumentHelper.createDocument();
+            Element root = document.addElement("savedAction");
 
-        root.addAttribute("level", "" + level);
+            root.addAttribute("level", "" + level);
 
-        XMLFileWriter writer = new XMLFileWriter();
+			XMLFileWriter writer = new XMLFileWriter();
 
-        for(ActionRecord a: actionQueue) {
-            writer.addActionNode(root, a.getTime(), a.getActor().getName(), a.getDirection().toString());
+            for(ActionRecord a: actionQueue) {
+                writer.addActionNode(root, a.getTime(), a.getActor().getName(), a.getDirection().toString());
+            }
+
+            /* set the XML output Format with line change and index */
+            OutputFormat XMLFormat = OutputFormat.createPrettyPrint();
+            XMLFormat.setEncoding("UTF-8");
+
+            // write the output XML to the path
+            OutputStreamWriter stream = new OutputStreamWriter(
+                    new FileOutputStream(filename),
+                    StandardCharsets.UTF_8);
+            XMLWriter XMLWriter = new XMLWriter(stream, XMLFormat);
+            XMLWriter.write(document);
+            XMLWriter.flush();
+            XMLWriter.close();
+
+            System.out.println("\nXML file created!");
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        writer.setupXMLOut(filename, document);
-
-    }
+	}
 	
     public void loadAll(String name) {//fill the actionqueue
         XMLFileReader reader=new XMLFileReader();
@@ -99,7 +116,6 @@ public class Recorder {
      }, 0, (int)(1000/increment));
 	}
 	
-<<<<<<< Updated upstream
 	public Domain step(Domain finishedBoard, int time) {//Next step button is pressed or replay calls it
 		
 		current = actionQueue.poll();
@@ -118,13 +134,6 @@ public class Recorder {
 			return finishedBoard;
 		}
 	}
-=======
-	public Domain step(Domain finishedBoard) {
-        current = actionQueue.poll();
-        finishedBoard.moveActor(finishedBoard.getPlayer(), current.getDirection());//needs to be adjusted for enemies
-        return finishedBoard;
-    }
->>>>>>> Stashed changes
 	
 	public Domain getDomain() {
 		return initalBoard;
