@@ -1,6 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp21.app;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -10,16 +9,13 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
-import javax.swing.border.Border;
 
-import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
@@ -27,20 +23,17 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 /**
  * The class countdown panel that creates the countdown panel
  * on the right of the main frame.
+ * 
+ * @author Nguyen Van 300528860
  */
 public class CountdownPanel implements ActionListener {
 	
-//	private Board board;
 	private int seconds_remaining;
 	private int chips_left_value;
 	private int level_value;
 	private App app;
-	private ArrayList<Actor> bugs;
-	
-    //private boolean replay = false;
-
-	private boolean started = false;
-		
+	private ArrayList<Actor> bugs;	
+	private boolean started = false;		
 	private JLayeredPane countdownPanel = new JLayeredPane(); 
 	private JLabel time_left = new JLabel();
 	private JLabel level = new JLabel();
@@ -89,7 +82,8 @@ public class CountdownPanel implements ActionListener {
 			
 		}});
 	
-	Timer bugTimer = new Timer(300, new ActionListener() {
+	// every bugs moves every 2 seconds
+	Timer bugTimer = new Timer(2000, new ActionListener() {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -101,13 +95,15 @@ public class CountdownPanel implements ActionListener {
 					if(app.getDomain().isRunning()) {
 						
 						Enemy enemy = (Enemy) actor;				
-						Direction dir = enemy.movementModeAIDirection(app.getDomain().getBoard(),app.getDomain().getPlayer());
+						Direction dir = enemy.movementModeAIDirection(app.getDomain().getBoard(),
+																	  app.getDomain().getPlayer());
 						app.getDomain().moveActor(actor, dir);
 						
 						if(!app.getDomain().isRunning()) {
 							bugTimer.stop();
 							timer.stop();
-							JOptionPane.showMessageDialog(app.getMainFrame(), "You got killed by a " + actor.getName());							
+							JOptionPane.showMessageDialog(app.getMainFrame(), "You got killed by a " + 
+														  actor.getName());							
 						}
 						
 					}
@@ -125,9 +121,9 @@ public class CountdownPanel implements ActionListener {
      *
      * @param time duration given in the level
      * @param current_level level player is playing
-     * @param remaining_chips number of chips on board in the level
-     */
-	
+     * @param chipsleft number of chips on board in the level
+     * @param app the app class
+     */	
 	public CountdownPanel(int time, int current_level, int chipsleft, App app) {
 
 		this.app = app;
@@ -137,8 +133,6 @@ public class CountdownPanel implements ActionListener {
 		this.level_value = current_level;
 		this.setUpInventoryPanel();
 		
-		
-		//this.board = board;
 		start_pause.addActionListener(this);
 		start_pause.setFocusable(false);
 		seconds_remaining = time;	
@@ -209,8 +203,6 @@ public class CountdownPanel implements ActionListener {
 		return countdownPanel;
 	}
 	
-
-	
 	
 	/**
      * This method sets up JLabel for all the time, chips left, level labels on the panel 
@@ -255,7 +247,6 @@ public class CountdownPanel implements ActionListener {
      *
      * @param remaining_chips the remaining number of chips on board
      */
-
 	public void updateRemainingChip(int remaining_chips) {		
 		chips_left.setText(String.valueOf(remaining_chips));
 	}
@@ -283,7 +274,7 @@ public class CountdownPanel implements ActionListener {
 	
 	/**
      * This method is called when the game starts or to resume the game
-     * and also change the button label.
+     * and also change the button label in menu bar.
      */
 	public void start() {
 		started = true;
@@ -294,8 +285,8 @@ public class CountdownPanel implements ActionListener {
 	}
 	
 	/**
-     * This method is called when the game is paused which timer will stop counting bu
-     * and also change the button label.
+     * This method is called when the game is paused which timer will stop counting
+     * and also change the button label in menu bar.
      */	
 	public void pause() {
 		started = false;		
@@ -314,6 +305,10 @@ public class CountdownPanel implements ActionListener {
 		bugTimer.stop();
 	}
 	
+	
+	/**
+     * This method sets up the inventory panel.
+     */	
 	public void setUpInventoryPanel() {
 		
 		inventory = new JPanel();
@@ -333,10 +328,20 @@ public class CountdownPanel implements ActionListener {
 		
 	}
 	
+	/**
+	 * Return the inventory item panel.
+	 * 
+	 * @return item panel
+	 */
 	public JLabel[] getItemPanel() {
 		return item_slots;
 	}
 	
+	/**
+	 * Return the panel that can hold an item.
+	 * 
+	 * @return item panel
+	 */
 	public JPanel getInventoryPanel() {
 		return inventory;
 	}
@@ -362,18 +367,30 @@ public class CountdownPanel implements ActionListener {
 	
 	//--------------GETTER METHODS----------------------------------
 	
+	/**
+     * This method return the remaining time in game.
+     * 
+     * @return remaining time
+     */	
 	public int getTimer() {
 		return seconds_remaining;				
 	}
 	
+	/**
+     * This method return the remaining treasures.
+     * 
+     * @return remaining treasures
+     */	
 	public int getRemainingTreasures() {
 		return chips_left_value;
 	}	
 	
+	//--------------------------------------------------------------
+	
 	/**
 	 * Setter method for both the seconds remaining and the label to display them.
 	 *
-	 * @param seconds_remaining
+	 * @param seconds_remaining the remaining second
 	 *
 	 */
 	public void updateTime(int seconds_remaining) {
@@ -381,6 +398,4 @@ public class CountdownPanel implements ActionListener {
 		time_left.setText("" + seconds_remaining);
 	}
 	
-
-
 }
