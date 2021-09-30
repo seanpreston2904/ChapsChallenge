@@ -221,10 +221,11 @@ public class RenderView extends JPanel {
         //Repaint the screen
         repaint();
 
+        //Update view offset
         if(viewOffsetX < 0){ viewOffsetX+=16; }
         if(viewOffsetX > 0){ viewOffsetX-=16; }
-        if(viewOffsetX < 0){ viewOffsetX+=16; }
-        if(viewOffsetX > 0){ viewOffsetX-=16; }
+        if(viewOffsetY < 0){ viewOffsetY+=16; }
+        if(viewOffsetY > 0){ viewOffsetY-=16; }
 
         //Process actor animations
         for(Map.Entry<Actor, ActorAnimator> entry : actors.entrySet()){ entry.getValue().tick(); }
