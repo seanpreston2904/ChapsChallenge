@@ -2,7 +2,10 @@ package nz.ac.vuw.ecs.swen225.gp21.renderer;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.*;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Door;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Key;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.audio.AudioEngine;
@@ -20,34 +23,34 @@ import java.util.stream.Collectors;
 public class RenderView extends JPanel {
 
     //Frame interval in milliseconds at 60 FPS
-    private static final float FPS_60 = 1000.0f/60.0f;
+    private static final float FPS_60 = 1000.0f / 60.0f;
 
     //Size of a tile in pixels
     private static final int TILE_SIZE = 64;
 
     //The size of the viewport
     private static final Dimension VIEWPORT_SIZE =
-            new Dimension(TILE_SIZE*9, TILE_SIZE*9);
-
-    //Event timer (used to render board)
-    private Timer timer;
+            new Dimension(TILE_SIZE * 9, TILE_SIZE * 9);
 
     //Audio engine
     AudioEngine audioEngine;
+    HashMap<Coordinate, Item_Door> doorObserver;
+
+    //Event timer (used to render board)
+    private final Timer timer;
 
     //Reference to game domain
-    private Domain game;
+    private final Domain game;
 
     //Element -> Animator maps
-    private HashMap<Actor, ActorAnimator> actors;
-    private HashMap<Item, ItemAnimator> items;
-    private HashMap<Tile, TileAnimator> tiles;
+    private final HashMap<Actor, ActorAnimator> actors;
+    private final HashMap<Item, ItemAnimator> items;
+    private final HashMap<Tile, TileAnimator> tiles;
 
     //"Out of Time" observers for playing sounds
     private ArrayList<Item> inventoryObserver;
-    private Coordinate playerPosObserver;
+    private final Coordinate playerPosObserver;
     private int treasureObserver;
-    HashMap<Coordinate, Item_Door> doorObserver;
 
     //Top left and bottom right position on the screen
     private Coordinate topLeft;
@@ -61,7 +64,7 @@ public class RenderView extends JPanel {
      *
      * @param game game to construct animator data from.
      */
-    public RenderView(Domain game){
+    public RenderView(Domain game) {
 
         //Forces a fixed size for the panel
         this.setSize(VIEWPORT_SIZE);
@@ -70,7 +73,7 @@ public class RenderView extends JPanel {
         this.setMinimumSize(VIEWPORT_SIZE);
 
         //Construct timer
-        timer = new Timer((int)FPS_60, action -> update());
+        timer = new Timer((int) FPS_60, action -> update());
 
         //Construct audio engine
         this.audioEngine = new AudioEngine();
@@ -87,43 +90,39 @@ public class RenderView extends JPanel {
         this.tiles = new HashMap<>();
 
         //Add actors to actor map
-        for(Actor a: this.game.getActors()){
-            actors.put(a, new ActorAnimator(loadImage("./res/graphics/"+a.getName().toUpperCase()+".png")));
+        for (Actor a : this.game.getActors()) {
+            actors.put(a, new ActorAnimator(loadImage("./res/graphics/" + a.getName().toUpperCase() + ".png")));
         }
 
         actors.put(this.game.getPlayer(), new ActorAnimator(loadImage("./res/graphics/player.png")));
 
         //Set animator maps
-        for(int row = 0; row < this.game.getBoard().getDimension().height; row++){
-            for(int col = 0; col < this.game.getBoard().getDimension().width; col++){
+        for (int row = 0; row < this.game.getBoard().getDimension().height; row++) {
+            for (int col = 0; col < this.game.getBoard().getDimension().width; col++) {
 
                 //Get the current tile on the board and construct an animator for it
                 Tile curr = this.game.getBoard().getTile(new Coordinate(col, row));
-                tiles.put(curr, new TileAnimator(loadImage("./res/graphics/"+curr.getType().toString()+".png")));
+                tiles.put(curr, new TileAnimator(loadImage("./res/graphics/" + curr.getType().toString() + ".png")));
 
                 //If the tile has an item, construct an animator for it
-                if(curr.getItem() != null){
+                if (curr.getItem() != null) {
 
                     Item currItem = curr.getItem();
 
-                    if(currItem.getType() == ItemType.LOCK_DOOR){
+                    if (currItem.getType() == ItemType.LOCK_DOOR) {
                         items.put(currItem, new ItemAnimator(
                                 loadImage("./res/graphics/"
-                                        +currItem.getType()+"_"+((Item_Door)currItem).getColor().toUpperCase()
-                                        +".png")));
-                    }
-
-                    else if(currItem.getType() == ItemType.KEY){
+                                        + currItem.getType() + "_" + ((Item_Door) currItem).getColor().toUpperCase()
+                                        + ".png")));
+                    } else if (currItem.getType() == ItemType.KEY) {
                         items.put(currItem, new ItemAnimator(
                                 loadImage("./res/graphics/"
-                                        +currItem.getType()+"_"+((Item_Key)currItem).getColor().toUpperCase()
-                                        +".png")));
-                    }
-
-                    else{
+                                        + currItem.getType() + "_" + ((Item_Key) currItem).getColor().toUpperCase()
+                                        + ".png")));
+                    } else {
                         items.put(currItem, new ItemAnimator(loadImage(
                                 "./res/graphics/"
-                                        +currItem.getType().toString()+
+                                        + currItem.getType().toString() +
                                         ".png")));
                     }
 
@@ -139,16 +138,13 @@ public class RenderView extends JPanel {
         this.doorObserver = new HashMap<>();
 
         //Get all doors on the board and add them to the doorObserver
-        for(int x = 0; x < game.getBoard().getDimension().getWidth(); x++){
-            for(int y = 0; y < game.getBoard().getDimension().getHeight(); y++){
+        for (int x = 0; x < game.getBoard().getDimension().getWidth(); x++) {
+            for (int y = 0; y < game.getBoard().getDimension().getHeight(); y++) {
 
                 Tile t = game.getBoard().getTile(new Coordinate(x, y));
 
-                if(t.getItem() != null && t.getItem().getType() == ItemType.LOCK_DOOR){
-
-                    doorObserver.put(new Coordinate(x, y), (Item_Door)t.getItem());
-
-                }
+                if (t.getItem() != null && t.getItem().getType() == ItemType.LOCK_DOOR)
+                    doorObserver.put(new Coordinate(x, y), (Item_Door) t.getItem());
 
             }
         }
@@ -163,8 +159,6 @@ public class RenderView extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
 
-        System.out.println(doorObserver);
-
         //Draw Background
         super.paintComponent(g);
 
@@ -175,8 +169,8 @@ public class RenderView extends JPanel {
         //Get the viewport position
         this.topLeft = getViewportDimensions();
 
-        for(int row = 0; row < boardHeight; row++){
-            for(int col = 0; col < boardWidth; col++){
+        for (int row = 0; row < boardHeight; row++) {
+            for (int col = 0; col < boardWidth; col++) {
 
                 //Get tile at row, col on board.
                 Tile tile = this.game.getBoard().getTile(new Coordinate(col, row));
@@ -185,14 +179,14 @@ public class RenderView extends JPanel {
                 Item item = this.game.getBoard().getTile(new Coordinate(col, row)).getItem();
 
                 //Calculate the X and Y position of the tile.
-                int xPos = (tile.getLocation().getX() - topLeft.getX()) * TILE_SIZE ;
-                int yPos = (tile.getLocation().getY() - topLeft.getY()) * TILE_SIZE ;
+                int xPos = (tile.getLocation().getX() - topLeft.getX()) * TILE_SIZE;
+                int yPos = (tile.getLocation().getY() - topLeft.getY()) * TILE_SIZE;
 
                 //Render tile graphic.
                 g.drawImage(tiles.get(tile).getImage(), xPos, yPos, null);
 
                 //If the tile has an item on it, render it.
-                if(item != null){
+                if (item != null) {
 
                     //Render image graphic
                     g.drawImage(items.get(item).getImage(), xPos, yPos, null);
@@ -204,23 +198,23 @@ public class RenderView extends JPanel {
         }
 
         //For each actor...
-        for(Actor a: actors.keySet()){
+        for (Actor a : actors.keySet()) {
 
             //Calculate its X and Y positions
             int xPos = (a.getPosition().getX() - topLeft.getX()) * TILE_SIZE;
             int yPos = (a.getPosition().getY() - topLeft.getY()) * TILE_SIZE;
 
             //Render actor graphic
-           g.drawImage(actors.get(a).getImage(), xPos, yPos, null);
+            g.drawImage(actors.get(a).getImage(), xPos, yPos, null);
 
         }
 
     }
 
     /**
-     * Transforms necessary graphics data and draws to panel.
+     * Transforms necessary graphics data, updates observers and draws to panel.
      */
-    private void update(){
+    private void update() {
 
         //Repaint the screen
         repaint();
@@ -228,36 +222,32 @@ public class RenderView extends JPanel {
         //Get player position (for comparison with observer)
         Coordinate playerPos = game.getPlayer().getPosition();
 
-        //Get all items player may have picked up
+        //Get all items the player may have picked up
         ArrayList<Item> newItems = game.getPlayer().getInventory().stream()
                 .filter(i -> !inventoryObserver.contains(i))
                 .collect(Collectors.toCollection(ArrayList::new));
 
         //If the player has picked up new items, play the new item sound
-        if(!newItems.isEmpty() || treasureObserver != game.getPlayer().getTreasure()){ audioEngine.playItemSound(); }
+        if (!newItems.isEmpty() || treasureObserver != game.getPlayer().getTreasure()) {
+            audioEngine.playItemSound();
+        }
 
         //If the player has moved, play movement sound
-        if(playerPosObserver.getX() != playerPos.getX() || playerPosObserver.getY() != playerPos.getY()) {
+        if (playerPosObserver.getX() != playerPos.getX() || playerPosObserver.getY() != playerPos.getY()) {
 
             audioEngine.playMoveSound();
 
         }
 
+        //If a door has been opened, play door open sound and flag it for removal from the door observer.
         Coordinate toRemove = null;
 
-        //If a door has been opened, play door open sound
-        for(Coordinate c: doorObserver.keySet()){
-
-            if(game.getBoard().getTile(c).getItem() == null){
-
+        for (Coordinate c : doorObserver.keySet()) {
+            if (game.getBoard().getTile(c).getItem() == null) {
                 audioEngine.playDoorSound();
                 toRemove = c;
-
             }
-
         }
-
-        if(toRemove != null){ doorObserver.remove(toRemove); }
 
         //Update observers
         inventoryObserver = new ArrayList<>(game.getPlayer().getInventory());
@@ -267,12 +257,17 @@ public class RenderView extends JPanel {
 
         treasureObserver = game.getPlayer().getTreasure();
 
+        if (toRemove != null) {
+            doorObserver.remove(toRemove);
+        }
+
     }
 
     /**
      * Gets the appropriate viewport dimensions
+     * @return the top left corner of the viewport
      */
-    private Coordinate getViewportDimensions(){
+    private Coordinate getViewportDimensions() {
 
         //Get the player's position and the current viewport
         Coordinate playerPosition = game.getPlayer().getPosition();
@@ -280,35 +275,43 @@ public class RenderView extends JPanel {
 
         //If the player's X position is within the size of the board - 4 on both edges, center the
         //viewport on the player.
-        if(playerPosition.getX() >= 4
-                && playerPosition.getX() < game.getBoard().getDimension().width - 4){
+        if (playerPosition.getX() >= 4
+                && playerPosition.getX() < game.getBoard().getDimension().width - 4) {
 
-            viewportTopLeft.setX(playerPosition.getX()-4);
+            viewportTopLeft.setX(playerPosition.getX() - 4);
 
         } else {
 
             //If the player is on the left side of the board, set the viewport position to the left edge
-            if(playerPosition.getX() < 4){ viewportTopLeft.setX(0); }
+            if (playerPosition.getX() < 4) {
+                viewportTopLeft.setX(0);
+            }
 
             //Otherwise, the player is on the right edge: set the viewport position to the right edge
-            else{ viewportTopLeft.setX(game.getBoard().getDimension().width - 9); }
+            else {
+                viewportTopLeft.setX(game.getBoard().getDimension().width - 9);
+            }
 
         }
 
         //If the player's Y position is within the size of the board - 4 on both edges, center the
         //viewport on the player.
-        if(playerPosition.getY() >= 4
-                && playerPosition.getY() < game.getBoard().getDimension().height - 4){
+        if (playerPosition.getY() >= 4
+                && playerPosition.getY() < game.getBoard().getDimension().height - 4) {
 
-            viewportTopLeft.setY(playerPosition.getY()-4);
+            viewportTopLeft.setY(playerPosition.getY() - 4);
 
-        }else {
+        } else {
 
             //If the player is on the top side of the board, set the viewport position to the top edge
-            if(playerPosition.getY() < 4){ viewportTopLeft.setY(0); }
+            if (playerPosition.getY() < 4) {
+                viewportTopLeft.setY(0);
+            }
 
             //Otherwise, the player is on the bottom edge: set the viewport position to the bottom edge
-            else{viewportTopLeft.setY(game.getBoard().getDimension().height - 9);}
+            else {
+                viewportTopLeft.setY(game.getBoard().getDimension().height - 9);
+            }
 
         }
 
@@ -319,12 +322,16 @@ public class RenderView extends JPanel {
     /**
      * Starts the renderer.
      */
-    public void startRender(){ timer.start(); }
+    public void startRender() {
+        timer.start();
+    }
 
     /**
      * Stops the renderer.
      */
-    public void stopRender(){ timer.stop(); }
+    public void stopRender() {
+        timer.stop();
+    }
 
     /**
      * Loads an image from a specified directory
@@ -332,18 +339,24 @@ public class RenderView extends JPanel {
      * @param dir Location of image on disk.
      * @return a BufferedImage loaded with image from specified location.
      */
-    private BufferedImage loadImage(String dir){
+    private BufferedImage loadImage(String dir) {
 
-        try{
+        try {
 
+            //Read file from provided directory
             return ImageIO.read(new File(dir));
 
-        }catch(IOException e){
+        } catch (IOException e) {
 
-            System.err.println("Image at: \"" + dir + "\" was not found!\n"+e.getMessage());
+            //Return error message
+            System.err.println("Image at: \"" + dir + "\" was not found!\n" + e.getMessage());
 
-            try{return ImageIO.read(new File("MISSING_TEXTURE"));}
-            catch (IOException f){ System.err.println("If you can read this something is horribly wrong"); }
+            //Return the missing texture file
+            try {
+                return ImageIO.read(new File("./res/graphics/MISSING_TEXTURE.png"));
+            } catch (IOException f) {
+                System.err.println("If you can read this something is horribly wrong");
+            }
 
         }
 
