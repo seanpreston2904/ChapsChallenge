@@ -1,17 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp21.app;
 
-import java.awt.Color;
-import java.util.ArrayList;
-
 import javax.swing.*;
-
-import nz.ac.vuw.ecs.swen225.gp21.app.CountdownPanel;
-import nz.ac.vuw.ecs.swen225.gp21.app.KeyPresses;
-import nz.ac.vuw.ecs.swen225.gp21.app.Main;
-import nz.ac.vuw.ecs.swen225.gp21.app.TitleScreen;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
-import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
-import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.reader.XMLFileReader;
 import nz.ac.vuw.ecs.swen225.gp21.recorder.Recorder;
@@ -19,7 +9,9 @@ import nz.ac.vuw.ecs.swen225.gp21.renderer.RenderView;
 
 
 /**
- * App module.
+ * App class where all other modules are initualised.
+ * 
+ * @author Nguyen Van 300528860
  */
 public class App {
 	
@@ -35,8 +27,6 @@ public class App {
 	private int timer;
 	private int level;
 	private int remaining_chips;
-	private Player hero;
-	private ArrayList<Actor> enemy;
 	
     JMenuItem pauseMenuItem = new JMenuItem("Pause");
     JMenuItem resumeMenuItem = new JMenuItem("Resume");
@@ -44,9 +34,12 @@ public class App {
     JMenuItem stepMenuItem = new JMenuItem("Step");
     JMenuItem replayAGameMenu = new JMenu("Replay a game");
     JMenuItem saveGameMenu = new JMenuItem("Save game");
+    JMenu instructions = new JMenu("Game instructions");
 
 	/**
 	 * Constructor for an app.
+	 * 
+	 * @param levelName name of the level
 	 */	
 	public App(String levelName) {
 		
@@ -71,13 +64,8 @@ public class App {
 		
 		
 		/*----------------Initialising modules----------------------------------*/
-		System.out.println("LEVEL NAME IS: " + levelName);
-		System.out.println("LEVEL is: " + level);
-		
 		this.domain = new Domain(levelName);
 		this.remaining_chips = this.domain.getRemainingChips();
-		this.hero = this.domain.getPlayer();
-		this.enemy = this.domain.getActors();
 		this.recorder = new Recorder(this.domain);
 		this.renderView = new RenderView(this.domain);
 		this.main_frame = new JFrame("Chip Chaps");
@@ -136,25 +124,35 @@ public class App {
 		this.pauseMenuItem.setEnabled(false);
 		this.resumeMenuItem.setEnabled(false);
 		
+		if(this.level == 1) {
+			
+      	  int confirm = JOptionPane.showOptionDialog(
+                    main_frame, "Do you want to move onto lv2?",
+                    "", JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,null , null, null);
+                        	  
+          if(confirm == 0) {   
+        	  new App("level2");    	
+          }  
+            
+		}
+		
 		
 	}
 	
-
 	/**
 	 * This method stop the countdown and terminate the main frame.
 	 */
 	public void terminateFrame() {
 		countdown_pan.stop();
+		
 		main_frame.dispose();
 	}
-	
-	
-	
 	
 	/*----------------JMENU BAR SET UP--------------------------------------*/
 	
 	/**
-	 * This method is called to set up the menu bar on the main frame
+	 * This method is called to set up the menu bar on the main frame.
 	 */
 	private void setUpMenuBar() {
         JMenuBar myMenuBar = new JMenuBar();
@@ -191,6 +189,26 @@ public class App {
         stepMenuItem.addActionListener(e -> {
             recorder.step(this.domain, this.countdown_pan.getTimer());            
         });
+        
+        JMenuItem gameInstruction = new JMenuItem("Game instruction");
+        gameInstruction.addActionListener(e -> {
+            if(this.level == 1) {
+            	JOptionPane.showMessageDialog(main_frame,
+            			 "CTRL-1/2 = restart a new level,"
+            			 + " SPACE = pause game, ESC = unpause, "
+            			 + "Arrow keys = move, "
+            			 + "CTRL-S = save a game, "
+            			 + "CTRL-R = resume a game, "
+            			 + "CTRL-X = exit a game.");  
+            }
+            
+            else {
+            	JOptionPane.showMessageDialog(main_frame,
+           			 "Same rule as in Lv1. Avoid touching bugs and wasp!"); 
+            }
+        });
+        
+        this.instructions.add(gameInstruction);
                       
         pauseMenuItem.setEnabled(false);
         resumeMenuItem.setEnabled(false);
@@ -205,6 +223,7 @@ public class App {
         menu1.add(recordGameMenuItem);
                
         myMenuBar.add(menu1); 
+        myMenuBar.add(instructions);
         myMenuBar.add(replayAGameMenu);
         myMenuBar.add(stepMenuItem);
         
@@ -216,11 +235,11 @@ public class App {
 	/**
 	 * This method set up the replay a game menu on the menu bar.
 	 * 
-	 * @return JMenu the menu item in the menu bar
+	 * @return the menu item in the menu bar
 	 */
 	private JMenuItem setupReplayGameMenu() {
         String[] type = {"Step by Step", "Auto replay"};
-        String[] speed = {"0,5", "1", "1,5", "2"};             
+        String[] speed = {"0.5", "1", "1,5", "2"};             
         ImageIcon icon = new ImageIcon();
         JMenuItem replayMenu = new JMenuItem("Replay a game");
         
@@ -304,6 +323,8 @@ public class App {
 	
 	/**
 	 * A setter method for the timer.
+	 * 
+	 * @param timer the time needs to be set
 	 */
 	public void setTimer(int timer) {
 		this.timer = timer;
@@ -311,6 +332,8 @@ public class App {
 	
 	/**
 	 * A setter method for the remaining treasure.
+	 * 
+	 * @param remainingTreasures remaining treasures
 	 */
 	public void setRemainingTreasures(int remainingTreasures) {
 		this.remaining_chips = remainingTreasures;
@@ -318,6 +341,8 @@ public class App {
 	
 	/**
 	 * A setter method for the level.
+	 * 
+	 * @param level game level
 	 */
 	public void setLevel(int level) {
 		this.level = level;
@@ -325,6 +350,8 @@ public class App {
 	
 	/**
 	 * A setter method for the domain.
+	 * 
+	 * @param finishedDomain the finishedDomain
 	 */
 	public void setDomain(Domain finishedDomain) {
 		this.domain = finishedDomain;
@@ -371,25 +398,25 @@ public class App {
 	}
 	
 	/**
-	 * This method returns the main frame of the game
+	 * This method returns the main frame of the game.
 	 * 
-	 * @return JFrame the main frame of the game
+	 * @return the main frame of the game
 	 */
 	public JFrame getMainFrame() {
 		return main_frame;
 	}
 	
 	/**
-	 * This method returns the game's domain
+	 * This method returns the game's domain.
 	 * 
-	 * @return Domain the game's domain
+	 * @return the game's domain
 	 */
 	public Domain getDomain() {
 		return domain;
 	}
 	
 	/**
-	 * This method returns the game's recorder
+	 * This method returns the game's recorder.
 	 * 
 	 * @return Recorder the game's recorder
 	 */
@@ -398,16 +425,16 @@ public class App {
 	}
 	
 	/**
-	 * This method returns the game's RenderView
+	 * This method returns the game's RenderView.
 	 * 
-	 * @return RenderView the game's renderview
+	 * @return the game's renderview
 	 */
 	public RenderView getRenderView() {
 		return renderView;
 	}
 
 	/**
-	 * This method returns the game's board
+	 * This method returns the game's board.
 	 * 
 	 * @return Board the game's recorder
 	 */
@@ -416,7 +443,7 @@ public class App {
 	}
 	
 	/**
-	 * This method is called to get the remaining number of chips on board
+	 * This method is called to get the remaining number of chips on board.
 	 */
 	public void updateChipsCount() {	
 		//update chips
