@@ -2,25 +2,20 @@ package nz.ac.vuw.ecs.swen225.gp21.renderer;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
-import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
-import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.*;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
-import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
-import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
-import nz.ac.vuw.ecs.swen225.gp21.renderer.util.ImagePaths;
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
+import nz.ac.vuw.ecs.swen225.gp21.renderer.audio.AudioEngine;
 
 import javax.imageio.ImageIO;
-import javax.naming.ldap.Control;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class RenderView extends JPanel {
 
@@ -37,6 +32,9 @@ public class RenderView extends JPanel {
     //Event timer (used to render board)
     private Timer timer;
 
+    //Audio engine
+    AudioEngine audioEngine;
+
     //Reference to game domain
     private Domain game;
 
@@ -44,6 +42,12 @@ public class RenderView extends JPanel {
     private HashMap<Actor, ActorAnimator> actors;
     private HashMap<Item, ItemAnimator> items;
     private HashMap<Tile, TileAnimator> tiles;
+
+    //"Out of Time" observers for playing sounds
+    private ArrayList<Item> inventoryObserver;
+    private Coordinate playerPosObserver;
+    private int treasureObserver;
+    HashMap<Coordinate, Item_Door> doorObserver;
 
     //Top left and bottom right position on the screen
     private Coordinate topLeft;
@@ -68,9 +72,13 @@ public class RenderView extends JPanel {
         //Construct timer
         timer = new Timer((int)FPS_60, action -> update());
 
+        //Construct audio engine
+        this.audioEngine = new AudioEngine();
+
         //Set board reference
         this.game = game;
 
+        //Calculate initial viewport dimensions
         this.topLeft = getViewportDimensions();
 
         //Construct animator maps
@@ -132,6 +140,26 @@ public class RenderView extends JPanel {
 
         }
 
+        //Construct observer variables
+        this.playerPosObserver = new Coordinate(0, 0);
+        this.treasureObserver = game.getPlayer().getTreasure();
+        this.doorObserver = new HashMap<>();
+
+        //Get all doors on the board
+        for(int x = 0; x < game.getBoard().getDimension().getWidth(); x++){
+            for(int y = 0; y < game.getBoard().getDimension().getHeight(); y++){
+
+                Tile t = game.getBoard().getTile(new Coordinate(x, y));
+
+                if(t.getItem() != null && t.getItem().getType() == ItemType.LOCK_DOOR){
+
+                    doorObserver.put(new Coordinate(x, y), (Item_Door)t.getItem());
+
+                }
+
+            }
+        }
+
     }
 
     /**
@@ -141,6 +169,8 @@ public class RenderView extends JPanel {
      */
     @Override
     protected void paintComponent(Graphics g) {
+
+        System.out.println(doorObserver);
 
         //Draw Background
         super.paintComponent(g);
@@ -197,7 +227,54 @@ public class RenderView extends JPanel {
     /**
      * Transforms necessary graphics data and draws to panel.
      */
-    private void update(){ repaint(); }
+    private void update(){
+
+        //Repaint the screen
+        repaint();
+
+        //Get player position (for comparison with observer)
+        Coordinate playerPos = game.getPlayer().getPosition();
+
+        //Get all items player may have picked up
+        ArrayList<Item> newItems = game.getPlayer().getInventory().stream()
+                .filter(i -> !inventoryObserver.contains(i))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        //If the player has picked up new items, play the new item sound
+        if(!newItems.isEmpty() || treasureObserver != game.getPlayer().getTreasure()){ audioEngine.playItemSound(); }
+
+        //If the player has moved, play movement sound
+        if(playerPosObserver.getX() != playerPos.getX() || playerPosObserver.getY() != playerPos.getY()) {
+
+            audioEngine.playMoveSound();
+
+        }
+
+        Coordinate toRemove = null;
+
+        //If a door has been opened, play door open sound
+        for(Coordinate c: doorObserver.keySet()){
+
+            if(game.getBoard().getTile(c).getItem() == null){
+
+                audioEngine.playDoorSound();
+                toRemove = c;
+
+            }
+
+        }
+
+        if(toRemove != null){ doorObserver.remove(toRemove); }
+
+        //Update observers
+        inventoryObserver = new ArrayList<>(game.getPlayer().getInventory());
+
+        playerPosObserver.setX(playerPos.getX());
+        playerPosObserver.setY(playerPos.getY());
+
+        treasureObserver = game.getPlayer().getTreasure();
+
+    }
 
     /**
      * Gets the appropriate viewport dimensions
