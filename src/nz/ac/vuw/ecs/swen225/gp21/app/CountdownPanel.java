@@ -158,18 +158,18 @@ public class CountdownPanel implements ActionListener {
         
 
 		/*----------------Setting up the locations for each label-----------------------*/
-        timer_title.setBounds(75, 30, 96, 35);
-        timer_title2.setBounds(76, 28, 96, 35);
-        time_left.setBounds(55, 65, 96, 40);
-        chips_title.setBounds(75, 115, 96, 35);
-        chips_title2.setBounds(76, 113, 96, 35);
-        left_title.setBounds(80,140,96,35);
-        left_title2.setBounds(81,138,96,35);
-        chips_left.setBounds(55, 175, 96, 40);
-        level_title.setBounds(72, 225, 96, 35);
-        level_title2.setBounds(73, 223, 96, 35);
-        level.setBounds(55, 260, 96, 40);
-        start_pause.setBounds(60, 350, 90, 40);
+        timer_title.setBounds(95, 30, 96, 35);
+        timer_title2.setBounds(96, 28, 96, 35);
+        time_left.setBounds(75, 65, 96, 40);
+        chips_title.setBounds(95, 115, 96, 35);
+        chips_title2.setBounds(96, 113, 96, 35);
+        left_title.setBounds(100,140,96,35);
+        left_title2.setBounds(101,138,96,35);
+        chips_left.setBounds(75, 175, 96, 40);
+        level_title.setBounds(92, 225, 96, 35);
+        level_title2.setBounds(93, 223, 96, 35);
+        level.setBounds(75, 260, 96, 40);
+        start_pause.setBounds(80, 350, 90, 40);
 		/*------------------------------------------------------------------------------*/
         
         countdownPanel.setLayout(null);
