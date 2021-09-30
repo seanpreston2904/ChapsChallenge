@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class RenderView extends JPanel {
@@ -198,14 +199,14 @@ public class RenderView extends JPanel {
         }
 
         //For each actor...
-        for (Actor a : actors.keySet()) {
+        for (Map.Entry<Actor, ActorAnimator> entry : actors.entrySet()) {
 
             //Calculate its X and Y positions
-            int xPos = (a.getPosition().getX() - topLeft.getX()) * TILE_SIZE;
-            int yPos = (a.getPosition().getY() - topLeft.getY()) * TILE_SIZE;
+            int xPos = (entry.getKey().getPosition().getX() - topLeft.getX()) * TILE_SIZE;
+            int yPos = (entry.getKey().getPosition().getY() - topLeft.getY()) * TILE_SIZE;
 
             //Render actor graphic
-            g.drawImage(actors.get(a).getImage(), xPos, yPos, null);
+            g.drawImage(entry.getValue().getImage(), xPos, yPos, null);
 
         }
 
