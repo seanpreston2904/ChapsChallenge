@@ -3,14 +3,21 @@ package nz.ac.vuw.ecs.swen225.gp21.app;
 import java.io.File;
 import java.util.ArrayList;
 
-import nz.ac.vuw.ecs.swen225.gp21.app.TitleScreen;
-
 /**
- * This class is used to start a game.
+ * Main class is used to start a game.
+ * 
+ * @author Nguyen Van 300528860
  */
 public class Main{		
+	
 	private static ArrayList<String> savedFile = new ArrayList<>();
 	private static ArrayList<String> savedRecording = new ArrayList<>();	
+	
+	/**
+	 * A getter method that returns all the saved games.
+	 * 
+	 * @return savedRecording all the saved games
+	 */	
 	public static ArrayList<String> getAllSavedFile() {
 		return savedFile;
 	}
@@ -23,16 +30,16 @@ public class Main{
 	public static ArrayList<String> getAllSavedRecording() {
 		return savedRecording;
 	}
-	 
-	
+	 	
 	/**
 	 * A main method that executes the game by opening a title screen first.
+	 * 
+	 * @param args arguments
 	 */
 	public static void main(String[] args) {
 		new TitleScreen();
 
 		File[] files = new File(new File("").getAbsolutePath()).listFiles();
-		int i = 0;
 
 		// Adding all the saved file into the savedFile list.
 		if(files != null) {
@@ -62,8 +69,7 @@ public class Main{
 						savedRecording.add(fileName);
 					}
 				}
-
-				i++;
+				
 			}
 			
 			for(int j = 0; j<savedFile.size(); j++) {
