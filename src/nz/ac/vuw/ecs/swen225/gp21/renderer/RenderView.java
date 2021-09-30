@@ -7,6 +7,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Door;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Key;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
+import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.audio.AudioEngine;
 
@@ -134,7 +135,7 @@ public class RenderView extends JPanel {
         }
 
         //Construct observer variables
-        this.playerPosObserver = new Coordinate(0, 0);
+        this.playerPosObserver = game.getPlayer().getPosition();
         this.treasureObserver = game.getPlayer().getTreasure();
         this.doorObserver = new HashMap<>();
 
@@ -180,8 +181,8 @@ public class RenderView extends JPanel {
                 Item item = this.game.getBoard().getTile(new Coordinate(col, row)).getItem();
 
                 //Calculate the X and Y position of the tile.
-                int xPos = (tile.getLocation().getX() - topLeft.getX()) * TILE_SIZE;
-                int yPos = (tile.getLocation().getY() - topLeft.getY()) * TILE_SIZE;
+                int xPos = (tile.getLocation().getX() - topLeft.getX()) * TILE_SIZE + viewOffsetX;
+                int yPos = (tile.getLocation().getY() - topLeft.getY()) * TILE_SIZE + viewOffsetY;
 
                 //Render tile graphic.
                 g.drawImage(tiles.get(tile).getImage(), xPos, yPos, null);
@@ -202,8 +203,8 @@ public class RenderView extends JPanel {
         for (Map.Entry<Actor, ActorAnimator> entry : actors.entrySet()) {
 
             //Calculate its X and Y positions
-            int xPos = (entry.getKey().getPosition().getX() - topLeft.getX()) * TILE_SIZE;
-            int yPos = (entry.getKey().getPosition().getY() - topLeft.getY()) * TILE_SIZE;
+            int xPos = (entry.getKey().getPosition().getX() - topLeft.getX()) * TILE_SIZE + viewOffsetX + entry.getValue().animationOffset.getX();
+            int yPos = (entry.getKey().getPosition().getY() - topLeft.getY()) * TILE_SIZE + viewOffsetY  + entry.getValue().animationOffset.getY();
 
             //Render actor graphic
             g.drawImage(entry.getValue().getImage(), xPos, yPos, null);
@@ -220,8 +221,19 @@ public class RenderView extends JPanel {
         //Repaint the screen
         repaint();
 
+        if(viewOffsetX < 0){ viewOffsetX+=16; }
+        if(viewOffsetX > 0){ viewOffsetX-=16; }
+        if(viewOffsetX < 0){ viewOffsetX+=16; }
+        if(viewOffsetX > 0){ viewOffsetX-=16; }
+
+        //Process actor animations
+        for(Map.Entry<Actor, ActorAnimator> entry : actors.entrySet()){ entry.getValue().tick(); }
+
         //Get player position (for comparison with observer)
         Coordinate playerPos = game.getPlayer().getPosition();
+
+        //Get the dimensions of the board
+        Dimension boardSize = this.game.getBoard().getDimension();
 
         //Get all items the player may have picked up
         ArrayList<Item> newItems = game.getPlayer().getInventory().stream()
@@ -238,6 +250,30 @@ public class RenderView extends JPanel {
 
             audioEngine.playMoveSound();
 
+            //If the player moved to the left, shift the view offset back to the right
+            if(playerPosObserver.getX() > playerPos.getX()){
+                if(playerPos.getX() > 3 && playerPos.getX() < boardSize.getWidth() - 5) this.viewOffsetX = -64;
+                actors.get(game.getPlayer()).setAnimationOffset(Direction.WEST);
+            }
+
+            //If the player moved to the right, shift the view offset back to the left
+            else if(playerPosObserver.getX() < playerPos.getX()){
+                if(playerPos.getX() > 4 && playerPos.getX() < boardSize.getWidth() - 4) this.viewOffsetX = 64;
+                actors.get(game.getPlayer()).setAnimationOffset(Direction.EAST);
+            }
+
+            //If the player moved down, shift the view offset back upwards
+            else if(playerPosObserver.getY() > playerPos.getY()){
+                if(playerPos.getY() > 3 && playerPos.getY() < boardSize.getHeight() - 5) this.viewOffsetY = -64;
+                actors.get(game.getPlayer()).setAnimationOffset(Direction.SOUTH);
+            }
+
+            //If the player moved down, shift the view offset back upwards
+            else if(playerPosObserver.getY() < playerPos.getY()){
+                if(playerPos.getY() > 4 && playerPos.getY() < boardSize.getHeight() - 4) this.viewOffsetY = 64;
+                actors.get(game.getPlayer()).setAnimationOffset(Direction.NORTH);
+            }
+
         }
 
         //If a door has been opened, play door open sound and flag it for removal from the door observer.
@@ -250,7 +286,7 @@ public class RenderView extends JPanel {
             }
         }
 
-        //Update observers
+        //Update observers.
         inventoryObserver = new ArrayList<>(game.getPlayer().getInventory());
 
         playerPosObserver.setX(playerPos.getX());
@@ -258,6 +294,7 @@ public class RenderView extends JPanel {
 
         treasureObserver = game.getPlayer().getTreasure();
 
+        //If a door needs to be removed from the observer list, remove it.
         if (toRemove != null) {
             doorObserver.remove(toRemove);
         }

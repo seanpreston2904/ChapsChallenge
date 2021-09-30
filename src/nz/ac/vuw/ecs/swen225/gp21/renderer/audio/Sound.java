@@ -12,6 +12,9 @@ public class Sound extends Thread{
     //File destination of sound
     private String fileName;
 
+    //Thread exit flag
+    private volatile boolean exit = false;
+
     /**
      * Constructor for Sound object.
      *
@@ -33,9 +36,13 @@ public class Sound extends Thread{
             //Start the audio
             audio.start();
 
+            sleep(1000);
+
+            audio.close();
+
         } catch (LineUnavailableException e){
 
-        } catch (UnsupportedAudioFileException | IOException e) {
+        } catch (UnsupportedAudioFileException | IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
