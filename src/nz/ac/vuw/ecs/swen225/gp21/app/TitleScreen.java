@@ -30,7 +30,6 @@ public class TitleScreen{
 	
 	/**
 	 * Constructor for a title screen object.
-	 * 
 	 */
 	public TitleScreen() {
 		
@@ -143,12 +142,12 @@ public class TitleScreen{
             	
                   ImageIcon icon = new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp21/app/meme.jpg");
             	  int confirm = JOptionPane.showOptionDialog(
-                          frame, "ARE YOU SURE KEFE?",
+                          frame, "ARE YOU SURE?",
                           "", JOptionPane.YES_NO_OPTION,
                           JOptionPane.QUESTION_MESSAGE,icon , null, null);
                               	  
-                  if(confirm == 0) {           	
-                  	frame.dispose();     	
+                  if(confirm == 0) {   
+                	  System.exit(0);     	
                   }
             	
             }
@@ -168,12 +167,6 @@ public class TitleScreen{
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		       
-	}
-	
-	
-	/*---------------Test method----------------------------------*/
-	public static void main(String[] args) {
-		new Main().main(args);
-	}
+	}	
 }
 

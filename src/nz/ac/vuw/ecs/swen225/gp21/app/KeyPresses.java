@@ -270,19 +270,29 @@ public class KeyPresses implements KeyListener {
 	 */
 	public void openSavedGame() {
 		ImageIcon icon = new ImageIcon("...");
-    	String[] levels = {"level1", "level2"};
+    	ArrayList<String> savedFiles = Main.getAllSavedFile();
     	
-    	String level = (String) JOptionPane.showInputDialog(
-    			app.getMainFrame(),
-    			"Select a game to resume",
-    			"",
-    			JOptionPane.WARNING_MESSAGE,
-    			icon,
-    			levels,
-    			levels[0]
-    			);        
+    	if(savedFiles.size() > 0) {
+	    	String level = (String) JOptionPane.showInputDialog(
+	    			app.getMainFrame(),
+	    			"Select a game to resume",
+	    			"",
+	    			JOptionPane.WARNING_MESSAGE,
+	    			icon,
+	    			savedFiles.toArray(),
+	    			savedFiles.get(0)
+	    			);        
+	    	
+	    	//TODO finish this!!
+	    	
+	    	if(level != null) {
+	    		new App(level);
+	    	}
+    	}
     	
-    	//TODO finish this!!!
+    	else {
+    		JOptionPane.showMessageDialog(app.getMainFrame(), "No game is saved yet!");
+    	}
  
 	}
 	

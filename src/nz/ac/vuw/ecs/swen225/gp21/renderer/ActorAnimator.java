@@ -1,18 +1,17 @@
 package nz.ac.vuw.ecs.swen225.gp21.renderer;
 
-import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 
 import java.awt.image.BufferedImage;
 
-public class ActorAnimator extends ElementAnimator{
+public class ActorAnimator extends Animator {
 
     Coordinate animationOffset;         //Animation Offset (used to determine top left position of sprite mid-animation)
 
     /**
      * Actor Animator Constructor
-     * @param a actor to associate with animator
+     * @param i Image of actor to be displayed at runtime.
      */
     ActorAnimator(BufferedImage i){
 
