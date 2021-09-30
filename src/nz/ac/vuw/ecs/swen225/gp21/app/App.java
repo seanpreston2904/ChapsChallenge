@@ -43,7 +43,7 @@ public class App {
     JMenuItem recordGameMenuItem = new JMenuItem("Record Game");
     JMenuItem stepMenuItem = new JMenuItem("Step");
     JMenuItem replayAGameMenu = new JMenu("Replay a game");
-    JMenu     stopTheRecordingMenu = new JMenu("Stop the recording");
+    JMenuItem saveGameMenu = new JMenuItem("Save game");
 
 	/**
 	 * Constructor for an app.
@@ -133,18 +133,13 @@ public class App {
 			JOptionPane.showMessageDialog(getMainFrame(), "You touch an enemy");	
 		}
 		
+		this.pauseMenuItem.setEnabled(false);
+		this.resumeMenuItem.setEnabled(false);
+		
+		
 	}
 	
-	/**
-	 * This method stops the recording state and back to gaming state
-	 */
-	public void stopRecording() {
-		//TODO stop the recording.
-		stopTheRecordingMenu.setVisible(false);
-		stepMenuItem.setVisible(false);
-		replayAGameMenu.setVisible(true);
-	}
-	
+
 	/**
 	 * This method stop the countdown and terminate the main frame.
 	 */
@@ -180,8 +175,7 @@ public class App {
             keypress.resume();
         });
         
-        JMenuItem m3 = new JMenuItem("Save Game");
-        m3.addActionListener(e -> {
+        saveGameMenu.addActionListener(e -> {
             keypress.saveGame();
         });
                
@@ -197,29 +191,20 @@ public class App {
         stepMenuItem.addActionListener(e -> {
             recorder.step(this.domain, this.countdown_pan.getTimer());            
         });
-        
-        JMenuItem m9 = new JMenuItem("Stop recording");
-        m9.addActionListener(e -> {
-        	this.stopRecording();
-        });
-        
-        stopTheRecordingMenu.add(m9);
                       
         pauseMenuItem.setEnabled(false);
         resumeMenuItem.setEnabled(false);
         recordGameMenuItem.setEnabled(false);
         stepMenuItem.setVisible(false);
-        stopTheRecordingMenu.setVisible(false);
         
         menu1.add(m1);
         menu1.add(pauseMenuItem);
         menu1.add(resumeMenuItem);
-        menu1.add(m3);
+        menu1.add(saveGameMenu);
         menu1.add(m5);
         menu1.add(recordGameMenuItem);
                
         myMenuBar.add(menu1); 
-        myMenuBar.add(stopTheRecordingMenu);
         myMenuBar.add(replayAGameMenu);
         myMenuBar.add(stepMenuItem);
         
@@ -288,7 +273,6 @@ public class App {
 					recorder.loadAll(file);
 					
 					replayMenu.setVisible(false);
-					stopTheRecordingMenu.setVisible(true);
 
                     if(playType.equals("Auto replay")) {
 
@@ -304,6 +288,8 @@ public class App {
             else {
                 JOptionPane.showMessageDialog(main_frame, "No recording has been saved yet!");                
             }
+            
+            this.saveGameMenu.setEnabled(false);
                     
         });        
         
