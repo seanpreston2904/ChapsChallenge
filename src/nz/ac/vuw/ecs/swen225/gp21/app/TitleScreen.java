@@ -1,26 +1,20 @@
 package nz.ac.vuw.ecs.swen225.gp21.app;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
-import nz.ac.vuw.ecs.swen225.gp21.persistency.reader.XMLFileReader;
 
 /**
  * A title screen before the game starts.
  * 
+ * @author Nguyen Van 300528860
  */
 public class TitleScreen{
 	
@@ -65,7 +59,6 @@ public class TitleScreen{
 			@Override
             public void actionPerformed(ActionEvent e) {
 				
-				// if player has saved more than 1 game.
 				if(Main.getAllSavedFile().size() != 0) {
 
 					ImageIcon icon = new ImageIcon("...");
@@ -80,13 +73,12 @@ public class TitleScreen{
 							Main.getAllSavedFile().get(0)
 	            			);
 					if(file != null) {
-						//TODO generate a saved game
+
 						new App(file);
 		            	frame.dispose();
 
 					}
 
-	            // if player hasnt saved any game.
 				}else {
 
 					JOptionPane.showMessageDialog(frame, "No game is saved yet!");
@@ -154,8 +146,6 @@ public class TitleScreen{
         });
 		
 		frame.add(exitGameButton);
-		
-		
 		
 		//Add background picture				
 		ImageIcon img = new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp21/app/resized_gif.gif");
