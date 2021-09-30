@@ -18,9 +18,7 @@ import java.util.Random;
  */
 public abstract class Enemy extends Actor {
 
-    // static variable to ID the enemies
-    public static int enemyCount = 0;
-
+    private String ID;
     /**
      * Constructor with spawn location.
      *
@@ -28,7 +26,7 @@ public abstract class Enemy extends Actor {
      */
     public Enemy(Coordinate initial) {
         super(initial);
-        enemyCount++;
+        ID = "" + initial.getX() + initial.getY();
     }
 
     /**
@@ -72,7 +70,14 @@ public abstract class Enemy extends Actor {
      */
     @Override
     public String getID() {
-        return "enemy" + enemyCount;
+        return "enemy" + ID;
+    }
+
+    /**
+     * Setter for the actor's ID.
+     */
+    public void setID(String ID) {
+        this.ID = ID;
     }
 
     /**

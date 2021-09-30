@@ -61,6 +61,9 @@ public class Domain {
         try {
             for (Enemy e : loadEnemyFile.loadEnemyClasses(fileReader, fileReader.getEnemyName())) {
                 actors.add(e);
+                // initialize ID
+                e.setID("" + e.getPosition().getX() + e.getPosition().getY());
+
             }
         } catch (Exception e) {
             // ... no plugins to load, that's fine
@@ -201,7 +204,7 @@ public class Domain {
      */
     public Actor getActorByID(String ID) {
 
-        // first chcek player ID
+        // first check player ID
         if (ID.equals(getPlayer().getID())) {
             return getPlayer();
         }
@@ -209,6 +212,7 @@ public class Domain {
         else {
 
             for (Actor enemy : getActors()) {
+                System.out.print("ENEMY: " + enemy.getID());
                 if (enemy.getID().equals(ID)) {
                     return enemy;
                 }
