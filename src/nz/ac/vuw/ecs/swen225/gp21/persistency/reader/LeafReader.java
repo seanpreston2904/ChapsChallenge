@@ -169,6 +169,7 @@ public class LeafReader implements FileReader{
      * @param pos coordinate
      * @param message info msg
      * @param col key/door color
+     * @param total_chips total
      */
     public void setSingleTileOnBoard(String type, Coordinate pos, String message,
                                      String col, String total_chips){

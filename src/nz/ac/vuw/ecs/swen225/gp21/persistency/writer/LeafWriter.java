@@ -24,9 +24,9 @@ public class LeafWriter implements FileWriter{
      * @param item item on tile
      * @param col key/door col
      * @param info message tile
+     * @param chips remaining chip
      */
-    public void addNodes(Element root, String type, String x, String y,
-                          String item, String col, String info, String chips) {
+    public void addNodes(Element root, String type, String x, String y,String item, String col, String info, String chips) {
         Element element1 = root.addElement("tile");
         Element XElement = element1.addElement("x");
         Element YElement = element1.addElement("y");
