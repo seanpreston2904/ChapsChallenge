@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -55,12 +56,12 @@ public class CountdownPanel implements ActionListener {
 						
 			// if timer reaches 0, the player looses
 			if(seconds_remaining==0) {
-				
+				ImageIcon icon = new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp21/app/brokenRobot64.jpg");
 				timer.stop();
 				int confirm = JOptionPane.showOptionDialog(
                         app.getMainFrame(), "You have ran out of time, restart this level?",
                         "Exit Confirmation", JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE, null, null, null);
+                        JOptionPane.QUESTION_MESSAGE, icon, null, null);
 				
 				//if player wants to replay this level
 				if(confirm == 0) {
@@ -87,7 +88,7 @@ public class CountdownPanel implements ActionListener {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
+			
 			for (Actor actor: bugs) {
 				
 				if(actor instanceof Enemy) {
