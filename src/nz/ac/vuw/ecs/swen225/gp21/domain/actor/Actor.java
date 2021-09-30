@@ -9,7 +9,13 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Actor is the interface that movable actors in the levels will inherit
+ * Actor is the abstract class that movable actors in the levels will inherit.
+ *
+ * Note: Actor is part of the domain. I understand this is not exactly what is anticipated but spoke with Jens
+ * and he said it was fine as long as sub-actors where loaded by the Persistence for plugin features.
+ *
+ * See Persistency/levels/level2.jar for plugin features.
+ *
  */
 public abstract class Actor {
 
@@ -140,6 +146,12 @@ public abstract class Actor {
         return "abstract";
     }
 
+    /**
+     * Getter for the actor's ID.
+     */
+    public String getID() {
+        return "abstract";
+    }
 
     /**
      * Get the image of this Enemy.

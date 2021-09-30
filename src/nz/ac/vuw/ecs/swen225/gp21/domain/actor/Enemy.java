@@ -7,7 +7,19 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Enemy is the abstract class that enemies in the levels will inherit.
+ *
+ * Note: Enemy is part of the domain. I understand this is not exactly what is anticipated but spoke with Jens
+ * and he said it was fine as long as sub-actors where loaded by the Persistence for plugin features.
+ *
+ * See Persistency/levels/level2.jar for plugin features.
+ *
+ */
 public abstract class Enemy extends Actor {
+
+    // static variable to ID the enemies
+    public static int enemyCount = 0;
 
     /**
      * Constructor with spawn location.
@@ -16,6 +28,7 @@ public abstract class Enemy extends Actor {
      */
     public Enemy(Coordinate initial) {
         super(initial);
+        enemyCount++;
     }
 
     /**
@@ -52,6 +65,14 @@ public abstract class Enemy extends Actor {
     @Override
     public String getName() {
         return "abstract_enemy";
+    }
+
+    /**
+     * Getter for the actor's ID.
+     */
+    @Override
+    public String getID() {
+        return "enemy" + enemyCount;
     }
 
     /**

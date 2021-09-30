@@ -65,6 +65,14 @@ public class Player extends Actor {
     }
 
     /**
+     * Getter for the actor's ID.
+     */
+    @Override
+    public String getID() {
+        return "hero";
+    }
+
+    /**
      * Getter for treasure count.
      */
     public int getTreasure() {

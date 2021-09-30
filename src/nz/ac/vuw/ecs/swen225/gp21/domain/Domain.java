@@ -191,6 +191,31 @@ public class Domain {
     }
 
 
+    /**
+     * Get an actor from the board (hero or enemy) by ID.
+     *
+     * @param ID - string ID.
+     *
+     * @return
+     *
+     */
+    public Actor getActorByID(String ID) {
+
+        // first chcek player ID
+        if (ID.equals(getPlayer().getID())) {
+            return getPlayer();
+        }
+        // then check enemy ID's
+        else {
+
+            for (Actor enemy : getActors()) {
+                if (enemy.getID().equals(ID)) {
+                    return enemy;
+                }
+            }
+        }
+        return null;
+    }
 
     // INVENTORY //
     // - treasure
@@ -223,7 +248,7 @@ public class Domain {
         currentTile.getItem().interact(actor);
 
         // if it has no repeat uses, remove it
-        if (currentTile.getItem().isOneTimeUse()) {
+        if (currentTile.getItem().isOneTimeUse() && actor instanceof Player) {
             currentTile.setItem(null);
         }
 

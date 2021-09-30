@@ -239,7 +239,7 @@ public class KeyPresses implements KeyListener {
 		this.hero.setFacing(dir);
 		domain.moveActor(this.hero, dir);
 		app.updateChipsCount();
-		app.getRecorder().saveAction(dir, hero, countdownPanel.getTimer());
+		app.getRecorder().saveAction(dir, hero.getID(), countdownPanel.getTimer());
 		updateInventoryPanel();		
 		
 		if(hero.listenForMessage() != null) {
