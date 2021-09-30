@@ -104,13 +104,14 @@ public class KeyPresses implements KeyListener {
 				
 			/*----------------CTRL-X is pressed to exit game no save------------*/
 			if ((e.getKeyCode() == KeyEvent.VK_X) && ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
-
+				countdownPanel.pause();
+				ImageIcon icon = new ImageIcon("...");
 	            int confirm = JOptionPane.showOptionDialog(
 	                    app.getMainFrame(), "Save game before exiting?",
 	                    "", JOptionPane.YES_NO_OPTION,
-	                    JOptionPane.QUESTION_MESSAGE, null, null, null);
+	                    JOptionPane.QUESTION_MESSAGE, icon, null, null);
 	            
-	            if(confirm == 0) {           	
+	            if(confirm == 1) {           	
 	            	app.terminateFrame();          	
 	            }
 	            else {
@@ -257,9 +258,17 @@ public class KeyPresses implements KeyListener {
 	 * This method is called when player wants to save a game.
 	 */
 	public void saveGame() {
-		
+		countdownPanel.pause();
 		XMLFileWriter fileWriter = new XMLFileWriter();
-		String fname = JOptionPane.showInputDialog("Name your file:");
+		ImageIcon icon = new ImageIcon("..");
+		String fname = (String) JOptionPane.showInputDialog(
+				app.getMainFrame(),
+				"Name your file:",
+				"Save game",
+				JOptionPane.QUESTION_MESSAGE,
+				icon,null,""
+				);
+		
 		if (fname != null) {
 			if (fname.length() > 0) {
 				String directory = "";
@@ -268,15 +277,17 @@ public class KeyPresses implements KeyListener {
 			}
 		}
 		
+		countdownPanel.start();
 	}
 	
 	/**
 	 * This method is called when player wants to open a saved game.
 	 */
 	public void openSavedGame() {
+		countdownPanel.pause();
 		ImageIcon icon = new ImageIcon("...");
     	ArrayList<String> savedFiles = Main.getAllSavedFile();
-    	
+		
     	if(savedFiles.size() > 0) {
 	    	String level = (String) JOptionPane.showInputDialog(
 	    			app.getMainFrame(),
@@ -295,6 +306,7 @@ public class KeyPresses implements KeyListener {
     	
     	else {
     		JOptionPane.showMessageDialog(app.getMainFrame(), "No game is saved yet!");
+    		countdownPanel.start();
     	}
  
 	}
@@ -305,18 +317,32 @@ public class KeyPresses implements KeyListener {
 	 * @param level level of the game that player wants to play
 	 */
 	public void startNewGame(int level) {
-		
 		countdownPanel.pause();
+		ImageIcon icon;
 		
+		if(level == 1) {
+			icon = new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp21/app/one64.png");
+		}
+		
+		else {
+			icon = new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp21/app/two64.jpg");
+		}
+
+		countdownPanel.pause();
+
         int confirm = JOptionPane.showOptionDialog(
-                null, "Restart level "+level,
+                null, "Restart level "+level +"?",
                 "", JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE, null, null, null);
+                JOptionPane.QUESTION_MESSAGE,
+                icon, null, null);
         
         // yes = 0, no = 1
         if(confirm == 0) {           	
         	app.terminateFrame();
         	new App("level"+level);           	
+        }
+        else {
+        	countdownPanel.start();
         }
         
 	}
@@ -349,15 +375,24 @@ public class KeyPresses implements KeyListener {
 	 * This method is called when player wants to record a finished game.
 	 */
 	public void record() {
-		
-		String fname = JOptionPane.showInputDialog("Name your record file:");
+		ImageIcon icon = new ImageIcon("..");
+		countdownPanel.pause();
+
+		String fname = (String) JOptionPane.showInputDialog(
+				app.getMainFrame(),
+				"Name your record file:",
+				"Name your record",
+				JOptionPane.QUESTION_MESSAGE,
+				icon,null,""
+				);
 
 		if (fname != null) {
 			if (fname.length() > 0) {
 				String extension = ".xmlrecord";
 				app.getRecorder().saveAll(fname+extension, app.getLevel());
 			}
-		}
+		}		
 		
+		countdownPanel.start();		
 	}
 }
