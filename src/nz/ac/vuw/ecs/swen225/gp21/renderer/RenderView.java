@@ -88,7 +88,7 @@ public class RenderView extends JPanel {
 
         //Add actors to actor map
         for(Actor a: this.game.getActors()){
-            actors.put(a, new ActorAnimator(loadImage("./res/graphics/"+a.getName()+".png")));
+            actors.put(a, new ActorAnimator(loadImage("./res/graphics/"+a.getName().toUpperCase()+".png")));
         }
 
         actors.put(this.game.getPlayer(), new ActorAnimator(loadImage("./res/graphics/player.png")));
@@ -99,40 +99,33 @@ public class RenderView extends JPanel {
 
                 //Get the current tile on the board and construct an animator for it
                 Tile curr = this.game.getBoard().getTile(new Coordinate(col, row));
-
-                //Select appropriate tile image
-                BufferedImage tileImage;
-                switch(curr.getType()){
-
-                    case WALL: tileImage = loadImage("./res/graphics/wall_full.png"); break;
-                    case FREE: tileImage = loadImage("./res/graphics/floor.png"); break;
-                    case EXIT: tileImage = loadImage("./res/graphics/exit.png"); break;
-                    default: tileImage = loadImage("./res/graphics/missing_texture.png");
-
-                }
-
-                tiles.put(curr, new TileAnimator(tileImage));
+                tiles.put(curr, new TileAnimator(loadImage("./res/graphics/"+curr.getType().toString()+".png")));
 
                 //If the tile has an item, construct an animator for it
                 if(curr.getItem() != null){
 
                     Item currItem = curr.getItem();
 
-                    //Select appropriate item image
-                    BufferedImage itemImage;
-                    switch(curr.getItem().getType()){
-
-                        case PUSH_BLOCK: itemImage = loadImage("./res/graphics/pushable_block.png"); break;
-                        case LOCK_EXIT: itemImage = loadImage("./res/graphics/exit_door.png"); break;
-                        case LOCK_DOOR: itemImage = loadImage("./res/graphics/door_"+((Item_Door) currItem).getColor()+".png"); break;
-                        case TREASURE: itemImage = loadImage("./res/graphics/treasure.png"); break;
-                        case INFO: itemImage = loadImage("./res/graphics/info.png"); break;
-                        case KEY: itemImage = loadImage("./res/graphics/key_"+((Item_Key) currItem).getColor()+".png"); break;
-                        default: itemImage = loadImage("./res/graphics/missing_texture.png"); break;
-
+                    if(currItem.getType() == ItemType.LOCK_DOOR){
+                        items.put(currItem, new ItemAnimator(
+                                loadImage("./res/graphics/"
+                                        +currItem.getType()+"_"+((Item_Door)currItem).getColor().toUpperCase()
+                                        +".png")));
                     }
 
-                    items.put(currItem, new ItemAnimator(itemImage));
+                    else if(currItem.getType() == ItemType.KEY){
+                        items.put(currItem, new ItemAnimator(
+                                loadImage("./res/graphics/"
+                                        +currItem.getType()+"_"+((Item_Key)currItem).getColor().toUpperCase()
+                                        +".png")));
+                    }
+
+                    else{
+                        items.put(currItem, new ItemAnimator(loadImage(
+                                "./res/graphics/"
+                                        +currItem.getType().toString()+
+                                        ".png")));
+                    }
 
                 }
 
@@ -145,7 +138,7 @@ public class RenderView extends JPanel {
         this.treasureObserver = game.getPlayer().getTreasure();
         this.doorObserver = new HashMap<>();
 
-        //Get all doors on the board
+        //Get all doors on the board and add them to the doorObserver
         for(int x = 0; x < game.getBoard().getDimension().getWidth(); x++){
             for(int y = 0; y < game.getBoard().getDimension().getHeight(); y++){
 
@@ -348,6 +341,9 @@ public class RenderView extends JPanel {
         }catch(IOException e){
 
             System.err.println("Image at: \"" + dir + "\" was not found!\n"+e.getMessage());
+
+            try{return ImageIO.read(new File("MISSING_TEXTURE"));}
+            catch (IOException f){ System.err.println("If you can read this something is horribly wrong"); }
 
         }
 
