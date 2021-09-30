@@ -40,7 +40,7 @@ public class XMLFileReader implements FileReader {
     /**
      * load the board from the original game levels,
      * which contains all essential information of each tile.
-     * Tile type & Tile coordinate & (info message | key/door color)
+     * Tile type and Tile coordinate and (info message or key/door color)
      *
      * @param fileName game levels
      * @return the completed board

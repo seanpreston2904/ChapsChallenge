@@ -26,7 +26,9 @@ public class LoadEnemyFile {
     /**
      * load Enemies from jar file.
      *
+     * @param reader reader
      * @param name Enemy name
+     *
      * @return - the list
      */
     public List<Enemy> loadEnemyClasses(XMLFileReader reader, List<String> name) {
@@ -48,6 +50,7 @@ public class LoadEnemyFile {
      * store them in enemyClasses list.
      *
      * @param pos list of pos
+     * @param name class name
      * @throws ClassNotFoundException msg
      * @throws IllegalAccessException msg
      * @throws InstantiationException msg
