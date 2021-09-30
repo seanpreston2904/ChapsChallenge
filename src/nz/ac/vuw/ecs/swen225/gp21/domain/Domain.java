@@ -41,26 +41,31 @@ public class Domain {
      */
     public Domain(String levelName) {
         // load the current level's board from XML via Persistency
-        String fname = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/" + levelName + ".xml";
+        String fname = "src/nz/ac/vuw/ecs/swen225/gp21/persistency/levels/";
 
         XMLFileReader fileReader = new XMLFileReader();
         LoadEnemyFile loadEnemyFile = new LoadEnemyFile();
 
         if (levelName.contains("xmlsave")) {
             this.board = fileReader.loadSavedMap(levelName);
+            Board alt = fileReader.loadOriginMap(fname + "level" + fileReader.getLevel(levelName) + ".xml");
+            this.hero = new Player(alt.getPlayerStartPosition());
         } else {
-            this.board = fileReader.loadOriginMap(fname);
+            this.board = fileReader.loadOriginMap(fname + levelName + ".xml");
+            this.hero = new Player(board.getPlayerStartPosition());
         }
 
         // Initialize the board and starting game features.
         this.treasure = this.board.getTotalTreasures();
-        this.hero = new Player(board.getPlayerStartPosition());
         this.actors = new ArrayList<>();
 
         // load any and all enemies
         try {
             for (Enemy e : loadEnemyFile.loadEnemyClasses(fileReader, fileReader.getEnemyName())) {
                 actors.add(e);
+                // initialize ID
+                e.setID("" + e.getPosition().getX() + e.getPosition().getY());
+
             }
         } catch (Exception e) {
             // ... no plugins to load, that's fine
@@ -191,6 +196,32 @@ public class Domain {
     }
 
 
+    /**
+     * Get an actor from the board (hero or enemy) by ID.
+     *
+     * @param ID - string ID.
+     *
+     * @return
+     *
+     */
+    public Actor getActorByID(String ID) {
+
+        // first check player ID
+        if (ID.equals(getPlayer().getID())) {
+            return getPlayer();
+        }
+        // then check enemy ID's
+        else {
+
+            for (Actor enemy : getActors()) {
+                System.out.print("ENEMY: " + enemy.getID());
+                if (enemy.getID().equals(ID)) {
+                    return enemy;
+                }
+            }
+        }
+        return null;
+    }
 
     // INVENTORY //
     // - treasure
@@ -223,7 +254,7 @@ public class Domain {
         currentTile.getItem().interact(actor);
 
         // if it has no repeat uses, remove it
-        if (currentTile.getItem().isOneTimeUse()) {
+        if (currentTile.getItem().isOneTimeUse() && actor instanceof Player) {
             currentTile.setItem(null);
         }
 

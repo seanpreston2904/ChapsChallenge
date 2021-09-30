@@ -2,25 +2,22 @@ package nz.ac.vuw.ecs.swen225.gp21.app;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
-import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Enemy;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Player;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Key;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.writer.XMLFileWriter;
-import nz.ac.vuw.ecs.swen225.gp21.recorder.Recorder;
-import nz.ac.vuw.ecs.swen225.gp21.renderer.util.ImagePaths;
 
 /**
  * Class for the key presses implementation.
+ * 
+ * @author Nguyen Van 300528860
  */
 public class KeyPresses implements KeyListener {
 
@@ -30,7 +27,13 @@ public class KeyPresses implements KeyListener {
 	private App app;
 	private JPanel pausedDialoge;
 	private int inventoryCount;
-		
+			
+	/**
+	 * Constructor for Keypresses class.
+	 * 
+	 * @param app the app class
+	 * @param domain the domain class
+	 */
 	public KeyPresses(App app, Domain domain) {
 		
 		this.app = app;
@@ -75,9 +78,7 @@ public class KeyPresses implements KeyListener {
 		/*-----------WHEN GAME IS STARTED---------------------------------*/
 		
 		if(countdownPanel.getStarted()) {
-			
-			String infoMessage = hero.listenForMessage();
-			
+					
 			if(key == 37) {
 				moveHero(Direction.WEST);
 			}
@@ -147,12 +148,17 @@ public class KeyPresses implements KeyListener {
 
 	}
 	
-
+	/**
+	 * This method is unimplemented.
+	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
 		
 	}
 	
+	/**
+	 * This method is unimplemented.
+	 */
 	@Override
 	public void keyTyped(KeyEvent e) {
 	
@@ -180,7 +186,6 @@ public class KeyPresses implements KeyListener {
 				
 				if(items[i] != null) {
 
-					String id = items[i].getId();
 					Item_Key itemKey = (Item_Key) items[i];
 					itemsPanel[i].setIcon(new ImageIcon("res/graphics/key_" + itemKey.getColor() + ".png"));					
 				}
@@ -239,7 +244,7 @@ public class KeyPresses implements KeyListener {
 		this.hero.setFacing(dir);
 		domain.moveActor(this.hero, dir);
 		app.updateChipsCount();
-		app.getRecorder().saveAction(dir, hero, countdownPanel.getTimer());
+		app.getRecorder().saveAction(dir, hero.getID(), countdownPanel.getTimer());
 		updateInventoryPanel();		
 		
 		if(hero.listenForMessage() != null) {
@@ -282,9 +287,7 @@ public class KeyPresses implements KeyListener {
 	    			savedFiles.toArray(),
 	    			savedFiles.get(0)
 	    			);        
-	    	
-	    	//TODO finish this!!
-	    	
+	    	    	
 	    	if(level != null) {
 	    		new App(level);
 	    	}
