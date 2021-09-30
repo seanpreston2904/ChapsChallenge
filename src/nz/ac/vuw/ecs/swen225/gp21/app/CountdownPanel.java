@@ -89,7 +89,7 @@ public class CountdownPanel implements ActionListener {
 			
 		}});
 	
-	Timer bugTimer = new Timer(5000, new ActionListener() {
+	Timer bugTimer = new Timer(300, new ActionListener() {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
