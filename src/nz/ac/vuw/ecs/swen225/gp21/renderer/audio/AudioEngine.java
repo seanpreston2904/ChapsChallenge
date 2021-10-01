@@ -10,6 +10,23 @@ import java.util.ArrayList;
 
 public class AudioEngine {
 
+    File move = new File("./res/sound/player_move.wav");
+
+    ArrayList<Clip> sounds = new ArrayList<>();
+
+    Clip audio;
+
+    public AudioEngine(){
+
+        try{
+
+            audio = AudioSystem.getClip();
+            audio.open(AudioSystem.getAudioInputStream(move));
+
+        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e){}
+
+    }
+
     /**
      * Spawns a new thread and plays the item pickup sound.
      * TODO: Refactor this to use an ENUM, actually we may even be able to remove this class all together, it's basically
