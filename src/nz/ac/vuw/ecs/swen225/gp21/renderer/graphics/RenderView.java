@@ -1,11 +1,8 @@
-package nz.ac.vuw.ecs.swen225.gp21.renderer;
+package nz.ac.vuw.ecs.swen225.gp21.renderer.graphics;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Door;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Item_Key;
-import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
+import nz.ac.vuw.ecs.swen225.gp21.domain.board.*;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.ItemType;
@@ -36,7 +33,6 @@ public class RenderView extends JPanel {
 
     //Audio engine
     private final AudioEngine audioEngine;
-    private final HashMap<Coordinate, Item_Door> doorObserver;
 
     //Event timer (used to render board)
     private final Timer renderTimer;
@@ -45,13 +41,13 @@ public class RenderView extends JPanel {
     private final Domain game;
 
     //Element -> Animator maps
-    private final HashMap<Actor, ActorAnimator> actors;
-    private final HashMap<Item, ItemAnimator> items;
-    private final HashMap<Tile, TileAnimator> tiles;
+    private final HashMap<Actor, Animator> actors;
+    private final HashMap<Item, Animator> items;
+    private final HashMap<Tile, Animator> tiles;
 
     //"Out of Time" observers for playing sounds and calculating transitions
     private final ArrayList<Item> inventoryObserver;
-    private final HashMap<Actor, Coordinate> enemyObserver;
+    private final ArrayList<Coordinate> doorObserver;
     private final Coordinate playerPosObserver;
     private int treasureObserver;
 
@@ -94,10 +90,16 @@ public class RenderView extends JPanel {
 
         //Add actors to actor map
         for (Actor a : this.game.getActors()) {
-            actors.put(a, new ActorAnimator(loadImage("./res/graphics/" + a.getName().toUpperCase() + ".png")));
+            actors.put(a, new Animator(loadImage("./res/graphics/" + a.getName().toUpperCase() + ".png")));
         }
 
-        actors.put(this.game.getPlayer(), new ActorAnimator(loadImage("./res/graphics/player.png")));
+        actors.put(this.game.getPlayer(), new Animator(loadImage("./res/graphics/player.png")));
+
+        //Construct observer variables
+        this.playerPosObserver = game.getPlayer().getPosition();
+        this.treasureObserver = game.getPlayer().getTreasure();
+        this.inventoryObserver = new ArrayList<>(game.getPlayer().getInventory());
+        this.doorObserver = new ArrayList<>();
 
         //Set animator maps
         for (int row = 0; row < this.game.getBoard().getDimension().height; row++) {
@@ -105,7 +107,7 @@ public class RenderView extends JPanel {
 
                 //Get the current tile on the board and construct an animator for it
                 Tile curr = this.game.getBoard().getTile(new Coordinate(col, row));
-                tiles.put(curr, new TileAnimator(loadImage("./res/graphics/" + curr.getType().toString() + ".png")));
+                tiles.put(curr, new Animator(loadImage("./res/graphics/" + curr.getType().toString() + ".png")));
 
                 //If the tile has an item, construct an animator for it
                 if (curr.getItem() != null) {
@@ -113,17 +115,21 @@ public class RenderView extends JPanel {
                     Item currItem = curr.getItem();
 
                     if (currItem.getType() == ItemType.LOCK_DOOR) {
-                        items.put(currItem, new ItemAnimator(
+
+                        //Add door to observer list
+                        doorObserver.add(new Coordinate(col, row));
+
+                        items.put(currItem, new Animator(
                                 loadImage("./res/graphics/"
                                         + currItem.getType() + "_" + ((Item_Door) currItem).getColor().toUpperCase()
                                         + ".png")));
                     } else if (currItem.getType() == ItemType.KEY) {
-                        items.put(currItem, new ItemAnimator(
+                        items.put(currItem, new Animator(
                                 loadImage("./res/graphics/"
                                         + currItem.getType() + "_" + ((Item_Key) currItem).getColor().toUpperCase()
                                         + ".png")));
                     } else {
-                        items.put(currItem, new ItemAnimator(loadImage(
+                        items.put(currItem, new Animator(loadImage(
                                 "./res/graphics/"
                                         + currItem.getType().toString() +
                                         ".png")));
@@ -132,36 +138,6 @@ public class RenderView extends JPanel {
                 }
 
             }
-
-        }
-
-        //Construct observer variables
-        this.playerPosObserver = game.getPlayer().getPosition();
-        this.treasureObserver = game.getPlayer().getTreasure();
-        this.inventoryObserver = new ArrayList<>(game.getPlayer().getInventory());
-        this.doorObserver = new HashMap<>();
-        this.enemyObserver = new HashMap<>();
-
-        //Get all doors on the board and add them to the doorObserver
-        for (int x = 0; x < game.getBoard().getDimension().getWidth(); x++) {
-            for (int y = 0; y < game.getBoard().getDimension().getHeight(); y++) {
-
-                Tile t = game.getBoard().getTile(new Coordinate(x, y));
-
-                if (t.getItem() != null && t.getItem().getType() == ItemType.LOCK_DOOR)
-                    doorObserver.put(new Coordinate(x, y), (Item_Door) t.getItem());
-
-            }
-        }
-
-        //Get all actors on the board and add them to the observer list
-        //TODO: I just realized I really should be adding this to the Animator classes. Let's get it working first
-        //      then I can worr- WAIT I ALREADY LOOP OVER THE BOARD ONCE WHY AM I DOING IT ANOTHER
-        //      TWO TIMES??????????????????????????????????????????
-        //Get all enemies on the board and add them to the enemyObserver
-        for (Actor a: actors.keySet()) {
-
-            if(!a.getName().equals("hero")){ enemyObserver.put(a, a.getPosition()); }
 
         }
 
@@ -214,7 +190,7 @@ public class RenderView extends JPanel {
         }
 
         //For each actor...
-        for (Map.Entry<Actor, ActorAnimator> entry : actors.entrySet()) {
+        for (Map.Entry<Actor, Animator> entry : actors.entrySet()) {
 
             //Calculate its X and Y positions
             int xPos = (entry.getKey().getPosition().getX() - topLeft.getX()) * TILE_SIZE + viewOffsetX + entry.getValue().animationOffset.getX();
@@ -238,13 +214,8 @@ public class RenderView extends JPanel {
         if(viewOffsetY < 0){ viewOffsetY+=16; }
         if(viewOffsetY > 0){ viewOffsetY-=16; }
 
-        //Process actor animations
-        for(Map.Entry<Actor, ActorAnimator> entry : actors.entrySet()){
-
-            entry.getValue().tick();
-
-        }
-
+        //Process player animations
+        actors.get(game.getPlayer()).tick();
         //Get player position (for comparison with observer)
         Coordinate playerPos = game.getPlayer().getPosition();
 
@@ -259,27 +230,6 @@ public class RenderView extends JPanel {
         //If the player has picked up new items, play the new item sound
         if (!newItems.isEmpty() || treasureObserver != game.getPlayer().getTreasure()) {
             audioEngine.playItemSound();
-        }
-
-        //Loop through enemies and apply transitions
-        for(Map.Entry<Actor, Coordinate> entry : this.enemyObserver.entrySet()){
-
-                if(entry.getValue().getX() > entry.getKey().getPosition().getX()){
-                    actors.get(entry.getKey()).setAnimationOffset(Direction.WEST);
-                }
-
-                if(entry.getValue().getX() < entry.getKey().getPosition().getX()){
-                    actors.get(entry.getKey()).setAnimationOffset(Direction.EAST);
-                }
-
-                if(entry.getValue().getY() > entry.getKey().getPosition().getY()){
-                    actors.get(entry.getKey()).setAnimationOffset(Direction.NORTH);
-                }
-
-                if(entry.getValue().getY() < entry.getKey().getPosition().getY()){
-                    actors.get(entry.getKey()).setAnimationOffset(Direction.SOUTH);
-                }
-
         }
 
         //If the player has moved, play movement sound
@@ -316,7 +266,7 @@ public class RenderView extends JPanel {
         //If a door has been opened, play door open sound and flag it for removal from the door observer.
         Coordinate toRemove = null;
 
-        for (Coordinate c : doorObserver.keySet()) {
+        for (Coordinate c : doorObserver) {
             if (game.getBoard().getTile(c).getItem() == null) {
                 audioEngine.playDoorSound();
                 toRemove = c;
@@ -330,19 +280,9 @@ public class RenderView extends JPanel {
         playerPosObserver.setX(playerPos.getX());
         playerPosObserver.setY(playerPos.getY());
 
+        doorObserver.remove(toRemove);
+
         treasureObserver = game.getPlayer().getTreasure();
-
-        for(Actor a: enemyObserver.keySet()){
-
-            enemyObserver.get(a).setX(a.getPosition().getX());
-            enemyObserver.get(a).setY(a.getPosition().getY());
-
-        }
-
-        //If a door needs to be removed from the observer list, remove it.
-        if (toRemove != null) {
-            doorObserver.remove(toRemove);
-        }
 
         //Repaint the screen
         repaint();
