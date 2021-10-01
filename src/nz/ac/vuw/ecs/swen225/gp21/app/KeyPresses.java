@@ -169,7 +169,7 @@ public class KeyPresses implements KeyListener {
 	 * This method is called whenever a move is made so that the game updates the inventory panel if 
 	 * is picked up or used.
 	 */
-	public void updateInventoryPanel() {
+	private void updateInventoryPanel() {
 
 		// if hero's inventory is not the same size as the App's inventory
 		if(hero.getInventory().size() != inventoryCount) {
@@ -210,7 +210,7 @@ public class KeyPresses implements KeyListener {
 	 * 
 	 * @return the paused dialoge
 	 */
-	public JPanel setPausedDialoge() {
+	private JPanel setPausedDialoge() {
 		
 		Border border = BorderFactory.createLineBorder(Color.BLACK, 8);
 		pausedDialoge = new JPanel();
@@ -241,7 +241,7 @@ public class KeyPresses implements KeyListener {
 	 * 
 	 * @param dir direction 
 	 */
-	public void moveHero(Direction dir) {	
+	private void moveHero(Direction dir) {	
 		this.hero.setFacing(dir);
 		domain.moveActor(this.hero, dir);
 		app.updateChipsCount();
@@ -316,7 +316,7 @@ public class KeyPresses implements KeyListener {
 	 * 
 	 * @param level level of the game that player wants to play
 	 */
-	public void startNewGame(int level) {
+	private void startNewGame(int level) {
 		countdownPanel.pause();
 		ImageIcon icon;
 		
