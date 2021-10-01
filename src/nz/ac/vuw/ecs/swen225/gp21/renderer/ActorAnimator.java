@@ -7,7 +7,8 @@ import java.awt.image.BufferedImage;
 
 public class ActorAnimator extends Animator {
 
-    Coordinate animationOffset;         //Animation Offset (used to determine top left position of sprite mid-animation)
+    //Animation Offset (used to determine top left position of sprite mid-animation)
+    Coordinate animationOffset;
 
     /**
      * Actor Animator Constructor
@@ -18,18 +19,39 @@ public class ActorAnimator extends Animator {
         super(i);
 
         animationOffset = new Coordinate(0, 0);
+
     }
 
     /**
      * Move the animator in a specified direction
      * @param d direction to move animator in.
      */
-    public void move(Direction d){
+    public void setAnimationOffset(Direction d){
 
-        //TODO: update the animation offset (maybe on a separate thread? (maybe use timer? (this is gonna be interesting ¯\_(ツ)_/¯)))
-        //Assuming this method is called AFTER moving an actor, we can set the offset position such that the actor
-        //appears in their original position. We can then gradually ease it back to 0 (player input should not be
-        //possible during this time).
+        //Set the actor's animation offset based on the direction of movement
+        switch (d){
+
+            case NORTH: animationOffset.setY(64); break;
+            case SOUTH: animationOffset.setY(-64); break;
+            case EAST: animationOffset.setX(-64); break;
+            case WEST: animationOffset.setX(64); break;
+
+        }
+
+    }
+
+    /**
+     * Method to move one "tick" through the transition (who's current position is determined by the animation offset)
+     */
+    public void tick(){
+
+        //Increment or decrement the animation offset on the X axis, based on its current value
+        if(animationOffset.getX() > 0){ animationOffset.setX(animationOffset.getX() - 16); }
+        else if(animationOffset.getX() < 0){ animationOffset.setX(animationOffset.getX() + 16); }
+
+        //Increment or decrement the animation offset on the Y axis, based on its current value
+        if(animationOffset.getY() > 0){ animationOffset.setY(animationOffset.getY() - 16); }
+        else if(animationOffset.getY() < 0){ animationOffset.setY(animationOffset.getY() + 16); }
 
     }
 
