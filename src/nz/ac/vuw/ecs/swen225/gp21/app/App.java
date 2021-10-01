@@ -5,7 +5,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.reader.XMLFileReader;
 import nz.ac.vuw.ecs.swen225.gp21.recorder.Recorder;
-import nz.ac.vuw.ecs.swen225.gp21.renderer.RenderView;
+import nz.ac.vuw.ecs.swen225.gp21.renderer.graphics.RenderView;
 
 
 /**
