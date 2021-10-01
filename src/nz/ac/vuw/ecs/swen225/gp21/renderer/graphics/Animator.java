@@ -1,26 +1,39 @@
-package nz.ac.vuw.ecs.swen225.gp21.renderer;
+package nz.ac.vuw.ecs.swen225.gp21.renderer.graphics;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-public class ActorAnimator extends Animator {
+public class Animator {
+
+    //Image to draw on screen when element is rendered
+    BufferedImage image;
 
     //Animation Offset (used to determine top left position of sprite mid-animation)
     Coordinate animationOffset;
 
     /**
-     * Actor Animator Constructor
-     * @param i Image of actor to be displayed at runtime.
+     * Constructor for element animator.
+     *
+     * @param i The elements image that will be rendered at runtime.
      */
-    ActorAnimator(BufferedImage i){
+    Animator(BufferedImage i){
 
-        super(i);
-
-        animationOffset = new Coordinate(0, 0);
+        this.image = i;
+        this.animationOffset = new Coordinate(0, 0);
 
     }
+
+    /**
+     * Get the image associated with the animator.
+     *
+     * @return The BufferedImage containing the animator's image data.
+     */
+    public BufferedImage getImage(){ return image; }
 
     /**
      * Move the animator in a specified direction
@@ -56,3 +69,4 @@ public class ActorAnimator extends Animator {
     }
 
 }
+
