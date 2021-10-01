@@ -49,7 +49,7 @@ public class Item_Push_Block extends Item implements PreMove {
             // now check if the place the block ends up is free
             if (board.validMove(enemies, finalCoordinate, new Actor(itemCoordinate) {}))
             {
-                System.out.println("Apparently its legal to go into: " + finalCoordinate + " from " + itemCoordinate + " from " + actor.getPosition());
+                //System.out.println("Apparently its legal to go into: " + finalCoordinate + " from " + itemCoordinate + " from " + actor.getPosition());
 
                 // it is free so lets move it
                 board.getTile(itemCoordinate).setItem(null);

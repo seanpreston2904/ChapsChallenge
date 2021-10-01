@@ -4,9 +4,6 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 /**
  * Enemy is the abstract class that enemies in the levels will inherit.
  *
@@ -34,15 +31,6 @@ public abstract class Enemy extends Actor {
      */
     public Enemy() {
         super();
-    }
-
-    /**
-     * Alternative constructor which randomly generates.
-     *
-     * @param options - one of this list is choosen as spawn location.
-     */
-    public Enemy(ArrayList<Coordinate> options) {
-        super(options.get(new Random().nextInt(options.size())));
     }
 
     /**
