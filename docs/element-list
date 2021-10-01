@@ -1,4 +1,3 @@
-未命名程序包
 nz.ac.vuw.ecs.swen225.gp21.app
 nz.ac.vuw.ecs.swen225.gp21.domain
 nz.ac.vuw.ecs.swen225.gp21.domain.actor
@@ -11,5 +10,6 @@ nz.ac.vuw.ecs.swen225.gp21.persistency.reader
 nz.ac.vuw.ecs.swen225.gp21.persistency.writer
 nz.ac.vuw.ecs.swen225.gp21.recorder
 nz.ac.vuw.ecs.swen225.gp21.renderer
+nz.ac.vuw.ecs.swen225.gp21.renderer.audio
 nz.ac.vuw.ecs.swen225.gp21.renderer.util
 test.nz.ac.vuw.ecs.swen225.gp21.persistency
