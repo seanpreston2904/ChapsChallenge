@@ -5,7 +5,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.board.Board;
 import nz.ac.vuw.ecs.swen225.gp21.domain.board.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.TileType;
-import nz.ac.vuw.ecs.swen225.gp21.renderer.RenderView;
+import nz.ac.vuw.ecs.swen225.gp21.renderer.graphics.RenderView;
 
 import javax.swing.*;
 import java.awt.*;
