@@ -109,33 +109,62 @@ public class App {
 	 * up a message saying you finished the level.
 	 */
 	public void finishGame() {
-		
+		ImageIcon brokenRobot = new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp21/app/brokenRobot64.jpg");
+		ImageIcon two = new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp21/app/two64.jpg");
+		ImageIcon levelUp =  new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp21/app/levelup64.png");
 		if(domain.getRemainingChips() == 0) {
 			recordGameMenuItem.setEnabled(true);
 			countdown_pan.stop();		
-			JOptionPane.showMessageDialog(getMainFrame(), "You finished the level!");	
+			JOptionPane.showMessageDialog(
+					getMainFrame(),
+					"You finished the level!",
+					"",
+					JOptionPane.INFORMATION_MESSAGE,
+					levelUp);	
+			
+			if(this.level == 1) {
+				
+		      	  int confirm = JOptionPane.showOptionDialog(
+		                    main_frame,
+		                    "Do you want to move onto lv2?",
+		                    "",
+		                    JOptionPane.YES_NO_OPTION,
+		                    JOptionPane.QUESTION_MESSAGE,
+		                    two, null, null);
+		                        	  
+		          if(confirm == 0) {   
+		        	  new App("level2");    	
+		          }	
+		          
+			}
+			
+	        else {
+	        	JOptionPane.showMessageDialog(main_frame, 
+	        			   "You have finished the highest level.\n"
+	        			   + "CTRL-1 to restart lv1,\n"
+	        			   + "CTRL-2 to restart lv2",
+	        			   "",
+	        			   JOptionPane.INFORMATION_MESSAGE,
+	        			   levelUp
+	        			   ); 
+	        }
+			
 		}
 		
 		else {
 			countdown_pan.stop();		
-			JOptionPane.showMessageDialog(getMainFrame(), "You touch an enemy");	
+			JOptionPane.showMessageDialog(
+					main_frame,
+					"You touch an enemy",
+					"",
+					JOptionPane.WARNING_MESSAGE,
+					brokenRobot
+					);	
 		}
 		
 		this.pauseMenuItem.setEnabled(false);
 		this.resumeMenuItem.setEnabled(false);
 		
-		if(this.level == 1) {
-			
-      	  int confirm = JOptionPane.showOptionDialog(
-                    main_frame, "Do you want to move onto lv2?",
-                    "", JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,null , null, null);
-                        	  
-          if(confirm == 0) {   
-        	  new App("level2");    	
-          }  
-            
-		}
 		
 		
 	}
@@ -192,19 +221,29 @@ public class App {
         
         JMenuItem gameInstruction = new JMenuItem("Game instruction");
         gameInstruction.addActionListener(e -> {
+        	ImageIcon icon = new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp21/app/bookIcon64.png");
+
             if(this.level == 1) {
-            	JOptionPane.showMessageDialog(main_frame,
-            			 "CTRL-1/2 = restart a new level,"
-            			 + " SPACE = pause game, ESC = unpause, "
-            			 + "Arrow keys = move, "
-            			 + "CTRL-S = save a game, "
-            			 + "CTRL-R = resume a game, "
-            			 + "CTRL-X = exit a game.");  
+            	JOptionPane.showMessageDialog(main_frame,           			
+            			 "CTRL-1/2 = restart a new level,\n"
+            			 + "CTRL-R = resume a game, \n"
+            			 + "CTRL-X = exit a game,\n"
+            			 + "Arrow keys = move, CTRL-S = save a game,\n"
+            			 + "SPACE = pause game, ESC = unpause,\n"
+            			 + "Collect all keys to open doors.",
+            			 "Game Instructions",
+                         JOptionPane.WARNING_MESSAGE,
+                         icon);  
             }
             
             else {
-            	JOptionPane.showMessageDialog(main_frame,
-           			 "Same rule as in Lv1. Avoid touching bugs and wasp!"); 
+            	JOptionPane.showMessageDialog(main_frame,           			
+           			 "Same rule as in Lv1.\n"
+           			 + "Avoid touching bugs and wasp!",
+           			 "Game Instructions",
+                     JOptionPane.WARNING_MESSAGE,
+                     icon
+           			 ); 
             }
         });
         
