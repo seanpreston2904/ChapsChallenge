@@ -35,6 +35,7 @@ public abstract class Actor {
      */
     public Actor(Coordinate initial) {
         this.position = initial;
+        this.pathName = "abstract";
     }
 
     /**
@@ -162,6 +163,7 @@ public abstract class Actor {
     public BufferedImage getImage() {
         BufferedImage image = null;
         try {
+            // pathname instantiated by subclasses
             image = ImageIO.read(new File(pathName));
         } catch (IOException e) {
             e.printStackTrace();

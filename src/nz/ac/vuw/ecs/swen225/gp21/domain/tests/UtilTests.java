@@ -1,10 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain.tests;
-
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+
 
 /**
  * JUnit test cases
@@ -162,7 +162,7 @@ public class UtilTests {
     }
 
     /**
-     * Now for the most complicated tests. What happens when the changes are equal? Let us prioritize the compass X axis changes over Y axis (i.e. N,S > E,W).
+     * Now for the most complicated tests. What happens when the changes are equal? Let us prioritize the compass X axis changes over Y axis (i.e. N,S E,W).
      */
     @Test
     public void directionTestComplication1() {

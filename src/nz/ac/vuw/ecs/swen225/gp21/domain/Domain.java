@@ -131,8 +131,6 @@ public class Domain {
                 // This is okay, it just means that no item was in this tile. Any other exception is an issue though.
             }
 
-            // NOTE: debugging console version of board for help with marking/testing
-            // printCurrentBoard();
         }
     }
 
@@ -353,50 +351,4 @@ public class Domain {
         this.running = running;
     }
 
-
-    // --------- EXTRA METHODS ------------
-
-    /**
-     * NOTE: Debugging method to print the board to the console.
-     */
-    public void printCurrentBoard() {
-
-        StringBuilder sb = new StringBuilder();
-
-        // loop through each tile to construct the board
-        for (int y = 0; y < board.getDimension().height; y++) {
-            for (int x = 0; x < board.getDimension().width; x++) {
-
-                // when we get to the hero we draw it instead of a tile
-                List<Actor> tempActors = (List<Actor>)actors.clone();
-                tempActors.add(hero);
-
-                boolean actorInThisSpace = false;
-
-                // check for actors to draw instead
-                for (Actor a : tempActors) {
-                    if (a.getPosition().getX() == x && a.getPosition().getY() == y) {
-                        sb.append(a.consoleString());
-                        actorInThisSpace = true;
-                    }
-                }
-                // otherwise draw a tile
-                if (!actorInThisSpace) {
-                    Tile t = board.getTile(new Coordinate(x, y));
-                    sb.append(t.consoleString());
-                }
-
-
-            }
-            sb.append("\n");
-        }
-
-        // output the board
-        System.out.println("Board::: \n\n" + sb.toString());
-
-        // output an info message if found
-        if (hero.listenForMessage() != null) {
-            System.out.println("INFO: " + hero.listenForMessage());
-        }
-    }
 }

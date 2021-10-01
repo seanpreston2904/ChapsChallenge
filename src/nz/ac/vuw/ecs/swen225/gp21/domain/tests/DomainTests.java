@@ -2,11 +2,12 @@ package nz.ac.vuw.ecs.swen225.gp21.domain.tests;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.actor.Actor;
-import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Coordinate;
 import nz.ac.vuw.ecs.swen225.gp21.domain.utils.Direction;
-import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
+import org.junit.Test;
 
 public class DomainTests {
 
@@ -54,6 +55,28 @@ public class DomainTests {
         d.moveActor(hero, Direction.SOUTH);
 
         assertEquals(d.getPlayer().getTreasure(), 1);
+    }
+    /**
+     * Err loading game
+     */
+    @Test
+    public void gameTestErr1() {
+        try {
+            Domain d = new Domain("err.xmlsave");
+        } catch (Exception e) {
+            assert true;
+        }
+    }
+    /**
+     * Save game
+     */
+    @Test
+    public void gameTestSave1() {
+        try {
+            Domain d = new Domain("save.xmlsave");
+        } catch (Exception e) {
+            assert true;
+        }
     }
     /**
      * Win the game.
@@ -161,5 +184,171 @@ public class DomainTests {
 
         // win the game
         assertEquals(d.isRunning(), false);
+    }
+    /**
+     * Play level 2.
+     */
+    @Test
+    public void gameTest5() {
+
+        Domain d = new Domain("level2");
+
+        assertEquals(d.getPlayer().getPosition().getX(), 9);
+        assertEquals(d.getPlayer().getPosition().getY(), 4);
+    }
+    /**
+     * Win level 2.
+     */
+    @Test
+    public void gameTest6() {
+
+        Domain d = new Domain("level2");
+
+        Actor hero = d.getPlayer();
+
+        d.setRunning(true);
+        d.moveActor(hero, Direction.NORTH);
+        d.moveActor(hero, Direction.NORTH);
+        d.moveActor(hero, Direction.NORTH);
+        assertEquals(d.getPlayer().getTreasure(), 1);
+        d.moveActor(hero, Direction.WEST);
+        d.moveActor(hero, Direction.WEST);
+        d.moveActor(hero, Direction.WEST);
+        assertEquals(d.getPlayer().getTreasure(), 2);
+
+        d.moveActor(hero, Direction.EAST);
+        d.moveActor(hero, Direction.EAST);
+        d.moveActor(hero, Direction.EAST);
+
+        d.moveActor(hero, Direction.SOUTH);
+        d.moveActor(hero, Direction.SOUTH);
+        d.moveActor(hero, Direction.SOUTH);
+        d.moveActor(hero, Direction.SOUTH);
+        d.moveActor(hero, Direction.SOUTH);
+        d.moveActor(hero, Direction.SOUTH);
+        assertEquals(d.getPlayer().getTreasure(), 3);
+
+        d.moveActor(hero, Direction.WEST);
+        d.moveActor(hero, Direction.WEST);
+        d.moveActor(hero, Direction.WEST);
+        assertEquals(d.getPlayer().getTreasure(), 4);
+
+        d.moveActor(hero, Direction.WEST);
+        d.moveActor(hero, Direction.WEST);
+        d.moveActor(hero, Direction.WEST);
+        d.moveActor(hero, Direction.WEST);
+        d.moveActor(hero, Direction.WEST);
+        assertEquals(d.getPlayer().getTreasure(), 5);
+
+        d.moveActor(hero, Direction.EAST);
+        d.moveActor(hero, Direction.EAST);
+
+        d.moveActor(hero, Direction.NORTH);
+        d.moveActor(hero, Direction.NORTH);
+        d.moveActor(hero, Direction.NORTH);
+        d.moveActor(hero, Direction.NORTH);
+        d.moveActor(hero, Direction.NORTH);
+        d.moveActor(hero, Direction.NORTH);
+
+        d.moveActor(hero, Direction.WEST);
+        d.moveActor(hero, Direction.WEST);
+        assertEquals(d.getPlayer().getTreasure(), 6);
+
+        d.moveActor(hero, Direction.EAST);
+        d.moveActor(hero, Direction.EAST);
+
+        d.moveActor(hero, Direction.SOUTH);
+        d.moveActor(hero, Direction.SOUTH);
+        d.moveActor(hero, Direction.SOUTH);
+
+        d.moveActor(hero, Direction.WEST);
+        d.moveActor(hero, Direction.WEST);
+
+        assertEquals(d.isRunning(), false);
+
+        assertEquals(d.getPlayer().getPosition().getX(), 1);
+        assertEquals(d.getPlayer().getPosition().getY(), 4);
+    }
+    /**
+     * Lose level 2.
+     */
+    @Test
+    public void gameTest10() {
+
+        Domain d = new Domain("level2");
+        d.setRunning(true);
+
+        d.moveActor(d.getPlayer(), Direction.NORTH);
+        d.moveActor(d.getPlayer(), Direction.NORTH);
+        d.moveActor(d.getPlayer(), Direction.WEST);
+        d.moveActor(d.getPlayer(), Direction.WEST);
+        d.moveActor(d.getPlayer(), Direction.WEST);
+        d.moveActor(d.getPlayer(), Direction.WEST);
+        d.moveActor(d.getPlayer(), Direction.WEST);
+
+        assertEquals(d.isRunning(), false);
+    }
+    @Test
+    public void gameTest11() {
+
+        Domain d = new Domain("level2");
+        d.setRunning(true);
+
+        System.out.print(d.getActors().get(0).getID());
+        System.out.print(d.getActors().get(1).getID());
+        System.out.print(d.getActors().get(2).getID());
+        assertNotEquals(d.getActorByID("enemy46"), null);
+        assertNotEquals(d.getActorByID("enemy42"), null);
+        assertNotEquals(d.getActorByID("enemy44"), null);
+
+        d.moveActor(d.getPlayer(), Direction.NORTH);
+        d.moveActor(d.getPlayer(), Direction.NORTH);
+        d.moveActor(d.getPlayer(), Direction.WEST);
+        d.moveActor(d.getPlayer(), Direction.WEST);
+        d.moveActor(d.getPlayer(), Direction.WEST);
+        d.moveActor(d.getPlayer(), Direction.WEST);
+        d.moveActor(d.getActorByID("enemy42"), Direction.EAST);
+
+        assertNotEquals(d.getActorByID("enemy42"), null);
+
+        assertEquals(d.getPlayer().getPosition().getX(), 5);
+        assertEquals(d.getPlayer().getPosition().getY(), 2);
+        assertEquals(d.isRunning(), false);
+    }
+    /**
+     * Push Block Level 2.
+     */
+    @Test
+    public void gameTest12() {
+
+        Domain d = new Domain("level2");
+        d.setRunning(true);
+
+        d.moveActor(d.getPlayer(), Direction.NORTH);
+        // push a block west a bunch
+        d.moveActor(d.getPlayer(), Direction.WEST);
+        d.moveActor(d.getPlayer(), Direction.WEST);
+        d.moveActor(d.getPlayer(), Direction.WEST);
+        d.moveActor(d.getPlayer(), Direction.WEST);
+        d.moveActor(d.getPlayer(), Direction.WEST);
+
+        assertEquals(d.getPlayer().getPosition().getX(), 4);
+        assertEquals(d.getPlayer().getPosition().getY(), 3);
+    }
+    @Test
+    public void gameTest13() {
+
+        Domain d = new Domain("level2");
+        d.setRunning(true);
+
+        // fail to push to blocks west a bunch
+        d.moveActor(d.getPlayer(), Direction.WEST);
+        d.moveActor(d.getPlayer(), Direction.WEST);
+        d.moveActor(d.getPlayer(), Direction.WEST);
+        d.moveActor(d.getPlayer(), Direction.WEST);
+        d.moveActor(d.getPlayer(), Direction.WEST);
+
+        assertEquals(d.getPlayer().getPosition().getX(), 8);
+        assertEquals(d.getPlayer().getPosition().getY(), 4);
     }
 }
