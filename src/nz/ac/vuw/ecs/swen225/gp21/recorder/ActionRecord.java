@@ -17,11 +17,10 @@ public class ActionRecord {
 	/**
 	   * ActionRecord constructor
 	   * 
-	   * @param Direction The direction moved
-	   * @param String     The id of the actor that is making the action
-	   * @param int       the time when the action took place
-	   **/
-
+	   * @param d The direction moved
+	   * @param a     The id of the actor that is making the action
+	   * @param time       the time when the action took place
+	   */
 	public ActionRecord(Direction d, String a, int time) {
 		setActor(a);
 		setDirection(d); 

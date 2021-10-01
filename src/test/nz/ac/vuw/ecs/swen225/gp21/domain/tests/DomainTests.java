@@ -57,17 +57,6 @@ public class DomainTests {
         assertEquals(d.getPlayer().getTreasure(), 1);
     }
     /**
-     * Err loading game
-     */
-    @Test
-    public void gameTestErr1() {
-        try {
-            Domain d = new Domain("err.xmlsave");
-        } catch (Exception e) {
-            assert true;
-        }
-    }
-    /**
      * Save game
      */
     @Test
