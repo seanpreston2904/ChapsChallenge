@@ -32,7 +32,7 @@ public class Domain {
     boolean running;
 
     /**
-     * The Domain initializes with a board from Persistence, this is the only req. for the Domain to launch.
+     * The Domain initializes with a board or save game from Persistence, this is the only req. for the Domain to launch.
      *
      * @param levelName - the name of the pathway to a level or save file to load.
      *
@@ -80,7 +80,7 @@ public class Domain {
      * Core method that handles the actor movement and checks for exceptions.
      *
      * More formally this moves the given Actor in the given Direction if and only if:
-     * The game is running, the input is not null, and the movement specified meets all criteria of the board.validMove() contract.
+     * The game is running, the input parameters are not null, and the movement specified meets all criteria of the Board.validMove() contract.
      *
      * If this contract is met:
      * - The actor will be moved.
@@ -90,6 +90,10 @@ public class Domain {
      * @param actor - any type of actor enemy or player.
      *
      * @param direction - the way it moves.
+     *
+     * @throws IllegalStateException - if the game is not running when this move is attempted.
+     *
+     * @throws IllegalArgumentException - if the specified actor or direction are null.
      *
      */
     public void moveActor(Actor actor, Direction direction) {
@@ -110,9 +114,7 @@ public class Domain {
         Coordinate moveToCoordinate = actor.getResultingLocation(direction);
 
         // checks on the move to location
-        if (!board.validMove(actors, moveToCoordinate, actor)) {
-            //throw new IllegalArgumentException("chap cannot be moved into this position");
-        } else {
+        if (board.validMove(actors, moveToCoordinate, actor)) {
 
             // if we get here then we move the actor
             actor.setPosition(moveToCoordinate);
@@ -143,6 +145,8 @@ public class Domain {
      * @param moveToCoordinate - the coordinate to check.
      *
      * @return - returns null for no enemies, otherwise returns the enemy.
+     *
+     * @throws IllegalArgumentException - if the specified actors or coordinate are null.
      *
      */
     public static Actor anotherEnemyInThisSpace(List<Actor> actors, Coordinate moveToCoordinate) {
@@ -193,6 +197,8 @@ public class Domain {
      * @param ID - string ID.
      *
      * @return - an Actor found or null.
+     *
+     * @throws IllegalArgumentException - if the specified ID is null.
      *
      */
     public Actor getActorByID(String ID) {

@@ -123,15 +123,28 @@ public class Board {
     /**
      * Utility method to check for walls, doors and other impassable.
      *
+     * More formally this is a contract that returns true if and only if: the input parameters are non null, the given Coordinate is a valid Board coordinate and not a TileType.WALL,
+     * the Actor is not an Enemy and attempting to move onto another Enemy, and there is not an impassible item in this space (or in the case of the player interaction still proves impassible).
+     *
+     * If these conditions are met then this will return true.
+     *
      * @param moveTo - the place to check.
      *
-     * @return - TRUE if it is a valid move.
+     * @return - true if and only if it is a valid move.
+     *
+     * @throws IllegalArgumentException - Input parameter is null.
      *
      */
     public boolean validMove(ArrayList<Actor> enemies, Coordinate moveTo, Actor actor) {
-        // is it null
+        // precondition parameter checks
         if (moveTo == null) {
-            throw new NullPointerException("Illegal moveTo location");
+            throw new IllegalArgumentException("Illegal moveTo location");
+        }
+        if (actor == null) {
+            throw new IllegalArgumentException("Illegal actor to move");
+        }
+        if (enemies == null) {
+            throw new IllegalArgumentException("Illegal enemies given.");
         }
 
         // is it valid index
@@ -163,7 +176,6 @@ public class Board {
 
                 // attempt to interact with
                 if (item instanceof PreMove) {
-                    System.out.println("Pre Moving " + actor.getPosition());
                     return ((PreMove) item).preInteract(this, enemies, actor);
                 }
 
