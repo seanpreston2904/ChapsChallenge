@@ -20,13 +20,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RenderView extends JPanel {
 
     //Frame interval in milliseconds at 60 FPS
-    private static final float FPS_60 = 1000.0f / 60.0f;
+    private static final int FPS_60 = 1000 / 60;
 
     //Size of a tile in pixels
     private static final int TILE_SIZE = 64;
@@ -36,11 +35,11 @@ public class RenderView extends JPanel {
             new Dimension(TILE_SIZE * 9, TILE_SIZE * 9);
 
     //Audio engine
-    private AudioEngine audioEngine;
-    private HashMap<Coordinate, Item_Door> doorObserver;
+    private final AudioEngine audioEngine;
+    private final HashMap<Coordinate, Item_Door> doorObserver;
 
     //Event timer (used to render board)
-    private final Timer timer;
+    private final Timer renderTimer;
 
     //Reference to game domain
     private final Domain game;
@@ -51,8 +50,8 @@ public class RenderView extends JPanel {
     private final HashMap<Tile, TileAnimator> tiles;
 
     //"Out of Time" observers for playing sounds and calculating transitions
-    private ArrayList<Item> inventoryObserver;
-    private HashMap<Actor, Coordinate> enemyObserver;
+    private final ArrayList<Item> inventoryObserver;
+    private final HashMap<Actor, Coordinate> enemyObserver;
     private final Coordinate playerPosObserver;
     private int treasureObserver;
 
@@ -77,7 +76,7 @@ public class RenderView extends JPanel {
         this.setMinimumSize(VIEWPORT_SIZE);
 
         //Construct timer
-        timer = new Timer((int) FPS_60, action -> update());
+        renderTimer = new Timer(FPS_60, action -> update());
 
         //Construct audio engine
         this.audioEngine = new AudioEngine();
@@ -139,6 +138,7 @@ public class RenderView extends JPanel {
         //Construct observer variables
         this.playerPosObserver = game.getPlayer().getPosition();
         this.treasureObserver = game.getPlayer().getTreasure();
+        this.inventoryObserver = new ArrayList<>(game.getPlayer().getInventory());
         this.doorObserver = new HashMap<>();
         this.enemyObserver = new HashMap<>();
 
@@ -161,8 +161,7 @@ public class RenderView extends JPanel {
         //Get all enemies on the board and add them to the enemyObserver
         for (Actor a: actors.keySet()) {
 
-            if(!a.getName().equals("hero")){ enemyObserver.put(a, new Coordinate(
-                    a.getPosition().getX(), a.getPosition().getY())); }
+            if(!a.getName().equals("hero")){ enemyObserver.put(a, a.getPosition()); }
 
         }
 
@@ -233,9 +232,6 @@ public class RenderView extends JPanel {
      */
     private void update() {
 
-        //Repaint the screen
-        repaint();
-
         //Update view offset
         if(viewOffsetX < 0){ viewOffsetX+=16; }
         if(viewOffsetX > 0){ viewOffsetX-=16; }
@@ -243,7 +239,11 @@ public class RenderView extends JPanel {
         if(viewOffsetY > 0){ viewOffsetY-=16; }
 
         //Process actor animations
-        for(Map.Entry<Actor, ActorAnimator> entry : actors.entrySet()){ entry.getValue().tick(); }
+        for(Map.Entry<Actor, ActorAnimator> entry : actors.entrySet()){
+
+            entry.getValue().tick();
+
+        }
 
         //Get player position (for comparison with observer)
         Coordinate playerPos = game.getPlayer().getPosition();
@@ -324,7 +324,8 @@ public class RenderView extends JPanel {
         }
 
         //Update observers.
-        inventoryObserver = new ArrayList<>(game.getPlayer().getInventory());
+        inventoryObserver.clear();
+        inventoryObserver.addAll(game.getPlayer().getInventory());
 
         playerPosObserver.setX(playerPos.getX());
         playerPosObserver.setY(playerPos.getY());
@@ -332,14 +333,19 @@ public class RenderView extends JPanel {
         treasureObserver = game.getPlayer().getTreasure();
 
         for(Actor a: enemyObserver.keySet()){
+
             enemyObserver.get(a).setX(a.getPosition().getX());
             enemyObserver.get(a).setY(a.getPosition().getY());
+
         }
 
         //If a door needs to be removed from the observer list, remove it.
         if (toRemove != null) {
             doorObserver.remove(toRemove);
         }
+
+        //Repaint the screen
+        repaint();
 
     }
 
@@ -403,14 +409,14 @@ public class RenderView extends JPanel {
      * Starts the renderer.
      */
     public void startRender() {
-        timer.start();
+        renderTimer.start();
     }
 
     /**
      * Stops the renderer.
      */
     public void stopRender() {
-        timer.stop();
+        renderTimer.stop();
     }
 
     /**

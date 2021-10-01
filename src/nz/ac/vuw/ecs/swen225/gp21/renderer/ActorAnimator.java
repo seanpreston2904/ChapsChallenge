@@ -7,7 +7,8 @@ import java.awt.image.BufferedImage;
 
 public class ActorAnimator extends Animator {
 
-    Coordinate animationOffset;         //Animation Offset (used to determine top left position of sprite mid-animation)
+    //Animation Offset (used to determine top left position of sprite mid-animation)
+    Coordinate animationOffset;
 
     /**
      * Actor Animator Constructor
@@ -18,6 +19,7 @@ public class ActorAnimator extends Animator {
         super(i);
 
         animationOffset = new Coordinate(0, 0);
+
     }
 
     /**
