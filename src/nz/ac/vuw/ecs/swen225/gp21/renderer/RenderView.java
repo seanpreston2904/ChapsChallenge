@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RenderView extends JPanel {
@@ -35,8 +36,8 @@ public class RenderView extends JPanel {
             new Dimension(TILE_SIZE * 9, TILE_SIZE * 9);
 
     //Audio engine
-    AudioEngine audioEngine;
-    HashMap<Coordinate, Item_Door> doorObserver;
+    private AudioEngine audioEngine;
+    private HashMap<Coordinate, Item_Door> doorObserver;
 
     //Event timer (used to render board)
     private final Timer timer;
@@ -49,8 +50,9 @@ public class RenderView extends JPanel {
     private final HashMap<Item, ItemAnimator> items;
     private final HashMap<Tile, TileAnimator> tiles;
 
-    //"Out of Time" observers for playing sounds
+    //"Out of Time" observers for playing sounds and calculating transitions
     private ArrayList<Item> inventoryObserver;
+    private HashMap<Actor, Coordinate> enemyObserver;
     private final Coordinate playerPosObserver;
     private int treasureObserver;
 
@@ -138,6 +140,7 @@ public class RenderView extends JPanel {
         this.playerPosObserver = game.getPlayer().getPosition();
         this.treasureObserver = game.getPlayer().getTreasure();
         this.doorObserver = new HashMap<>();
+        this.enemyObserver = new HashMap<>();
 
         //Get all doors on the board and add them to the doorObserver
         for (int x = 0; x < game.getBoard().getDimension().getWidth(); x++) {
@@ -149,6 +152,18 @@ public class RenderView extends JPanel {
                     doorObserver.put(new Coordinate(x, y), (Item_Door) t.getItem());
 
             }
+        }
+
+        //Get all actors on the board and add them to the observer list
+        //TODO: I just realized I really should be adding this to the Animator classes. Let's get it working first
+        //      then I can worr- WAIT I ALREADY LOOP OVER THE BOARD ONCE WHY AM I DOING IT ANOTHER
+        //      TWO TIMES??????????????????????????????????????????
+        //Get all enemies on the board and add them to the enemyObserver
+        for (Actor a: actors.keySet()) {
+
+            if(!a.getName().equals("hero")){ enemyObserver.put(a, new Coordinate(
+                    a.getPosition().getX(), a.getPosition().getY())); }
+
         }
 
     }
@@ -246,6 +261,27 @@ public class RenderView extends JPanel {
             audioEngine.playItemSound();
         }
 
+        //Loop through enemies and apply transitions
+        for(Map.Entry<Actor, Coordinate> entry : this.enemyObserver.entrySet()){
+
+                if(entry.getValue().getX() > entry.getKey().getPosition().getX()){
+                    actors.get(entry.getKey()).setAnimationOffset(Direction.WEST);
+                }
+
+                if(entry.getValue().getX() < entry.getKey().getPosition().getX()){
+                    actors.get(entry.getKey()).setAnimationOffset(Direction.EAST);
+                }
+
+                if(entry.getValue().getY() > entry.getKey().getPosition().getY()){
+                    actors.get(entry.getKey()).setAnimationOffset(Direction.NORTH);
+                }
+
+                if(entry.getValue().getY() < entry.getKey().getPosition().getY()){
+                    actors.get(entry.getKey()).setAnimationOffset(Direction.SOUTH);
+                }
+
+        }
+
         //If the player has moved, play movement sound
         if (playerPosObserver.getX() != playerPos.getX() || playerPosObserver.getY() != playerPos.getY()) {
 
@@ -266,13 +302,13 @@ public class RenderView extends JPanel {
             //If the player moved down, shift the view offset back upwards
             else if(playerPosObserver.getY() > playerPos.getY()){
                 if(playerPos.getY() > 3 && playerPos.getY() < boardSize.getHeight() - 5) this.viewOffsetY = -64;
-                actors.get(game.getPlayer()).setAnimationOffset(Direction.SOUTH);
+                actors.get(game.getPlayer()).setAnimationOffset(Direction.NORTH);
             }
 
             //If the player moved down, shift the view offset back upwards
             else if(playerPosObserver.getY() < playerPos.getY()){
                 if(playerPos.getY() > 4 && playerPos.getY() < boardSize.getHeight() - 4) this.viewOffsetY = 64;
-                actors.get(game.getPlayer()).setAnimationOffset(Direction.NORTH);
+                actors.get(game.getPlayer()).setAnimationOffset(Direction.SOUTH);
             }
 
         }
@@ -294,6 +330,11 @@ public class RenderView extends JPanel {
         playerPosObserver.setY(playerPos.getY());
 
         treasureObserver = game.getPlayer().getTreasure();
+
+        for(Actor a: enemyObserver.keySet()){
+            enemyObserver.get(a).setX(a.getPosition().getX());
+            enemyObserver.get(a).setY(a.getPosition().getY());
+        }
 
         //If a door needs to be removed from the observer list, remove it.
         if (toRemove != null) {

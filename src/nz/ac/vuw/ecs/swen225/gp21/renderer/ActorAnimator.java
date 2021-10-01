@@ -29,8 +29,8 @@ public class ActorAnimator extends Animator {
         //Set the actor's animation offset based on the direction of movement
         switch (d){
 
-            case NORTH: animationOffset.setY(-64); break;
-            case SOUTH: animationOffset.setY(64); break;
+            case NORTH: animationOffset.setY(64); break;
+            case SOUTH: animationOffset.setY(-64); break;
             case EAST: animationOffset.setX(-64); break;
             case WEST: animationOffset.setX(64); break;
 
