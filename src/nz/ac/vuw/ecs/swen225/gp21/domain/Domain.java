@@ -20,7 +20,6 @@ import java.util.Random;
  */
 public class Domain {
 
-    //   BOARD   //
     // Board object
     Board board;
     // Player object
@@ -29,14 +28,13 @@ public class Domain {
     ArrayList<Actor> actors;
     // Treasure count
     int treasure;
-
-    // game state
+    // Game state
     boolean running;
 
     /**
      * The Domain initializes with a board from Persistence, this is the only req. for the Domain to launch.
      *
-     * @param - the name of the pathway to a level or save file to load.
+     * @param levelName - the name of the pathway to a level or save file to load.
      *
      */
     public Domain(String levelName) {
@@ -73,9 +71,6 @@ public class Domain {
 
         // start off not running
         this.running = false;
-
-        // TODO remove debugging print board
-        printCurrentBoard();
     }
 
     //  GAME LOGIC //
@@ -84,18 +79,32 @@ public class Domain {
     /**
      * Core method that handles the actor movement and checks for exceptions.
      *
-     * @param actor
-     * @param direction
+     * More formally this moves the given Actor in the given Direction if and only if:
+     * The game is running, the input is not null, and the movement specified meets all criteria of the board.validMove() contract.
+     *
+     * If this contract is met:
+     * - The actor will be moved.
+     * - Endgame state will be checked for.
+     * - Item interaction will occur, if possible.
+     *
+     * @param actor - any type of actor enemy or player.
+     *
+     * @param direction - the way it moves.
+     *
      */
     public void moveActor(Actor actor, Direction direction) {
 
+        // precondition checks game state
         if (running == false) {
             throw new IllegalStateException("Illegal State Exception. Not running but attempting moveActor().");
         }
-
-        // precondition checks
+        // precondition checks actor
+        if (actor == null) {
+            throw new IllegalArgumentException("Move Actor is Null");
+        }
+        // precondition checks direction
         if (direction == null) {
-            throw new IllegalArgumentException("Move Actor Direction is Null");
+            throw new IllegalArgumentException("Move Direction is Null");
         }
 
         Coordinate moveToCoordinate = actor.getResultingLocation(direction);
@@ -110,38 +119,8 @@ public class Domain {
             // clear previous info states
             actor.setInfoMessage(null);
 
-            // check for exit
-            if (board.getTile(moveToCoordinate).getType() == TileType.EXIT) {
-
-                // end the game
-                running = false;
-
-                return;
-            }
-
-            // POST MOVE CHECKS for the player stepping on an enemy of the enemy stepping on a player
-            if (actor instanceof Player) {
-                if (anotherEnemyInThisSpace(actors, moveToCoordinate) != null) {
-
-                    // end the game
-                    running = false;
-
-                    return;
-                }
-            }
-            // B) if an enemy attempts to move
-            else {
-                // check if its a player it just stepped on
-                ArrayList<Actor> heroList = new ArrayList<>(); heroList.add(hero);
-
-                if (anotherEnemyInThisSpace(heroList, moveToCoordinate) != null) {
-
-                    // end the game
-                    running = false;
-
-                    return;
-                }
-            }
+            // check for end game
+            checkForEndGame(actor, moveToCoordinate);
 
             // call the item's interact event
             try {
@@ -150,15 +129,18 @@ public class Domain {
                 // This is okay, it just means that no item was in this tile. Any other exception is an issue though.
             }
 
-            // TODO remove debugging console version of board
-            printCurrentBoard();
+            // NOTE: debugging console version of board for help with marking/testing
+            // printCurrentBoard();
         }
     }
 
     /**
      * Simple utility method to check a location for enemy actors.
      *
-     * @param moveToCoordinate
+     * More formally this will return the first Actor from the list of actors given in the specified coordinate, or return null if none is found.
+     *
+     *
+     * @param moveToCoordinate - the coordinate to check.
      *
      * @return - returns null for no enemies, otherwise returns the enemy.
      *
@@ -169,13 +151,18 @@ public class Domain {
             throw new IllegalArgumentException("Move to location is Null");
         }
 
+        if (actors == null) {
+            throw new IllegalArgumentException("List of actors is Null");
+        }
+
         // loop through all the enemies
         for (Actor enemy : actors) {
             if (enemy.getPosition().getX() == moveToCoordinate.getX() && enemy.getPosition().getY() == moveToCoordinate.getY()) {
-                // note that this dude is standing here:
+                // note that this enemy is standing here:
                 return enemy;
             }
         }
+
         return null;
     }
 
@@ -183,6 +170,8 @@ public class Domain {
      * Side method that handles random movement.
      *
      * This is called by a tick event in app for other actors/enemies.
+     *
+     * @return - a random Direction coordinate.
      *
      */
     public static Direction randomlyMoveActor() {
@@ -199,12 +188,18 @@ public class Domain {
     /**
      * Get an actor from the board (hero or enemy) by ID.
      *
+     * More formally this method will return an Actor from the Domain where the ID parameter equals the ID of the actor. Or return null if none is found.
+     *
      * @param ID - string ID.
      *
-     * @return
+     * @return - an Actor found or null.
      *
      */
     public Actor getActorByID(String ID) {
+
+        if (ID == null) {
+            throw new IllegalArgumentException("ID given is Null");
+        }
 
         // first check player ID
         if (ID.equals(getPlayer().getID())) {
@@ -214,7 +209,7 @@ public class Domain {
         else {
 
             for (Actor enemy : getActors()) {
-                System.out.print("ENEMY: " + enemy.getID());
+                // check if the ID matches
                 if (enemy.getID().equals(ID)) {
                     return enemy;
                 }
@@ -223,13 +218,12 @@ public class Domain {
         return null;
     }
 
-    // INVENTORY //
-    // - treasure
-    // - keys
-    // - other ... ?
 
     /**
      * When you step on an item you interact with the item.
+     *
+     * @param actor - the actor moved.
+     *
      */
     public void interactWithItem(Actor actor) {
         Coordinate current = actor.getPosition();
@@ -259,6 +253,49 @@ public class Domain {
         }
 
         this.treasure = board.getTotalTreasures();
+    }
+
+    /**
+     * When you make a move there is the potential for the game to be over.
+     *
+     * @param actor - the actor moved.
+     *
+     * @param moveToCoordinate - the coordinate moved into.
+     *
+     */
+    public void checkForEndGame(Actor actor, Coordinate moveToCoordinate) {
+        // check for exit
+        if (board.getTile(moveToCoordinate).getType() == TileType.EXIT) {
+
+            // end the game
+            running = false;
+
+            return;
+        }
+
+        // POST MOVE CHECKS for the player stepping on an enemy of the enemy stepping on a player
+        if (actor instanceof Player) {
+            if (anotherEnemyInThisSpace(actors, moveToCoordinate) != null) {
+
+                // end the game
+                running = false;
+
+                return;
+            }
+        }
+        // B) if an enemy attempts to move
+        else {
+            // check if its a player it just stepped on
+            ArrayList<Actor> heroList = new ArrayList<>(); heroList.add(hero);
+
+            if (anotherEnemyInThisSpace(heroList, moveToCoordinate) != null) {
+
+                // end the game
+                running = false;
+
+                return;
+            }
+        }
     }
 
     /**
@@ -314,7 +351,7 @@ public class Domain {
     // --------- EXTRA METHODS ------------
 
     /**
-     * TODO: Debugging method to print the board to the console.
+     * NOTE: Debugging method to print the board to the console.
      */
     public void printCurrentBoard() {
 
@@ -348,8 +385,10 @@ public class Domain {
             sb.append("\n");
         }
 
+        // output the board
         System.out.println("Board::: \n\n" + sb.toString());
 
+        // output an info message if found
         if (hero.listenForMessage() != null) {
             System.out.println("INFO: " + hero.listenForMessage());
         }
